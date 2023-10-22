@@ -144,14 +144,18 @@ public final class main
 				newGameNoGui = true ;
 		}
 
-	/**/// very temporary lines
-	/**/ ItemDescriptions descriptions = new ItemDescriptions( ) ;
-	/**/ descriptions.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "items.xml" ) ;
+	/**/// temporary lines
+	ItemDescriptions descriptions = new ItemDescriptions( ) ;
+	descriptions.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "items.xml" ) ;
 
-		/* ........ */
+		GameWindow window = new GameWindow( ) ;
+		window.setVisible( true );
+		window.randomPixelFadeIn( java.awt.Color.black );
 
-		System.out.println( );
-		System.out.println( "bye :*" );
+	/* ............ */
+
+		///System.out.println( );
+		///System.out.println( "bye :*" );
 	}
 
 }

@@ -77,18 +77,101 @@ public class ItemDescriptions
 			if ( itemNode.getNodeType() == Node.ELEMENT_NODE ) {
 				Element itemElement = (Element) itemNode ;
 
-				String itemLabel = itemElement.getAttribute( "label" ) ; // the label of item
+				final String itemLabel = itemElement.getAttribute( "label" ) ; // the label of item
 				DescriptionOfItem newDescription = new DescriptionOfItem ( itemLabel );
 
-				System.out.println( "<item label=\"" + newDescription.getLabel () + "\">" );
+				// how long, in seconds, it falls
+				double itemWeight = 0.0 ;
+
+				NodeList weightNodes = itemElement.getElementsByTagName( "weight" );
+				if ( weightNodes.getLength () > 0 ) {
+					String weight = weightNodes.item( 0 ).getTextContent (); // in milliseconds
+					try { // parseDouble can throw NumberFormatException
+						itemWeight = Double.parseDouble( weight ) / 1000.0 ;
+					} catch ( NumberFormatException e ) { }
+				}
+
+				newDescription.setWeight( itemWeight );
+
+				// how many seconds this item moves one single isometric unit
+				double itemSpeed = 0.0 ;
+
+				NodeList speedNodes = itemElement.getElementsByTagName( "speed" );
+				if ( speedNodes.getLength () > 0 ) {
+					String speed = speedNodes.item( 0 ).getTextContent (); // in milliseconds
+					try { // parseDouble can throw NumberFormatException
+						itemSpeed = Double.parseDouble( speed ) / 1000.0 ;
+					} catch ( NumberFormatException e ) { }
+				}
+
+				newDescription.setSpeed( itemSpeed );
+
+				// mortal or harmless
+				boolean isMortal = false ;
+
+				NodeList mortalNodes = itemElement.getElementsByTagName( "mortal" );
+				if ( mortalNodes.getLength () > 0 ) {
+					String mortal = mortalNodes.item( 0 ).getTextContent ();
+					if ( mortal.equals( "true" ) )
+						isMortal = true ;
+				}
+
+				newDescription.setMortal( isMortal );
+
+				// how many various orientations
+				byte variousOrientations = 0 ;
+
+				NodeList orientationsNodes = itemElement.getElementsByTagName( "orientations" );
+				if ( orientationsNodes.getLength () > 0 ) {
+					String orientations = orientationsNodes.item( 0 ).getTextContent ();
+					try { // parseByte can throw NumberFormatException
+						variousOrientations = Byte.parseByte( orientations );
+					} catch ( NumberFormatException e ) { }
+				}
+
+				newDescription.setHowManyOrientations( variousOrientations );
+
+				// delay, in seconds, between frames in the animation sequence
+				double itemDelayBetweenFrames = 0.0 ;
+
+				NodeList framesDelayNodes = itemElement.getElementsByTagName( "framesDelay" );
+				if ( framesDelayNodes.getLength () > 0 ) {
+					String framesDelay = framesDelayNodes.item( 0 ).getTextContent (); // in milliseconds
+					try { // parseDouble can throw NumberFormatException
+						itemDelayBetweenFrames = Double.parseDouble( framesDelay ) / 1000.0 ;
+					} catch ( NumberFormatException e ) { }
+				}
+
+				newDescription.setDelayBetweenFrames( itemDelayBetweenFrames );
+
+			/* .................. */
+
+				// three spatial dimensions
+				int itemWidthX = 0 ;
+				int itemWidthY = 0 ;
+				int itemHeight = 0 ;
 
 				String widthX = itemElement.getElementsByTagName( "widthX" ).item( 0 ).getTextContent ();
-				String widthY = itemElement.getElementsByTagName( "widthY" ).item( 0 ).getTextContent ();
-				String height = itemElement.getElementsByTagName( "height" ).item( 0 ).getTextContent ();
+				try { // parseInt can throw NumberFormatException
+					itemWidthX = Integer.parseInt( widthX );
+				} catch ( NumberFormatException e ) { }
+				newDescription.setWidthX( itemWidthX );
 
-				System.out.println( "   widthX = " + widthX );
-				System.out.println( "   widthY = " + widthY );
-				System.out.println( "   height = " + height );
+				String widthY = itemElement.getElementsByTagName( "widthY" ).item( 0 ).getTextContent ();
+				try { // parseInt can throw NumberFormatException
+					itemWidthY = Integer.parseInt( widthY );
+				} catch ( NumberFormatException e ) { }
+				newDescription.setWidthY( itemWidthY );
+
+				String height = itemElement.getElementsByTagName( "height" ).item( 0 ).getTextContent ();
+				try { // parseInt can throw NumberFormatException
+					itemHeight = Integer.parseInt( height );
+				} catch ( NumberFormatException e ) { }
+				newDescription.setHeight( itemHeight );
+
+				System.out.println( newDescription.toString() );
+
+				this.descriptionsOfItems.put( itemLabel, newDescription );
 			}
 		}
 
