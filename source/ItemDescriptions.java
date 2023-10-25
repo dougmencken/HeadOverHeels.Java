@@ -155,27 +155,27 @@ public class ItemDescriptions
 	{
 		if ( element == null || description == null ) return ;
 
-		// how long, in seconds, it falls
-		double itemWeight = 0.0 ;
+		// how long, in milliseconds, it falls
+		int itemWeight = 0 ;
 
 		NodeList weightNodes = element.getElementsByTagName( "weight" );
 		if ( weightNodes.getLength () > 0 ) {
-			String weight = weightNodes.item( 0 ).getTextContent (); // in milliseconds
+			String weight = weightNodes.item( 0 ).getTextContent ();
 			try { // parseInt can throw NumberFormatException
-				itemWeight = Integer.parseInt( weight ) / 1000.0 ;
+				itemWeight = Integer.parseInt( weight );
 			} catch ( NumberFormatException e ) { }
 		}
 
 		description.setWeight( itemWeight );
 
-		// how many seconds this item moves one single isometric unit
-		double itemSpeed = 0.0 ;
+		// how many milliseconds this item moves one single isometric unit
+		int itemSpeed = 0 ;
 
 		NodeList speedNodes = element.getElementsByTagName( "speed" );
 		if ( speedNodes.getLength () > 0 ) {
-			String speed = speedNodes.item( 0 ).getTextContent (); // in milliseconds
+			String speed = speedNodes.item( 0 ).getTextContent ();
 			try { // parseInt can throw NumberFormatException
-				itemSpeed = Integer.parseInt( speed ) / 1000.0 ;
+				itemSpeed = Integer.parseInt( speed );
 			} catch ( NumberFormatException e ) { }
 		}
 
@@ -229,14 +229,14 @@ public class ItemDescriptions
 			}
 		}
 
-		// delay, in seconds, between frames in the animation sequence
-		double itemDelayBetweenFrames = 0.0 ;
+		// delay, in milliseconds, between frames in the animation sequence
+		int itemDelayBetweenFrames = 0 ;
 
 		NodeList betweenFramesNodes = element.getElementsByTagName( "betweenFrames" );
 		if ( betweenFramesNodes.getLength () > 0 ) {
-			String betweenFrames = betweenFramesNodes.item( 0 ).getTextContent (); // in milliseconds
+			String betweenFrames = betweenFramesNodes.item( 0 ).getTextContent ();
 			try { // parseInt can throw NumberFormatException
-				itemDelayBetweenFrames = Integer.parseInt( betweenFrames ) / 1000.0 ;
+				itemDelayBetweenFrames = Integer.parseInt( betweenFrames );
 			} catch ( NumberFormatException e ) { }
 		}
 

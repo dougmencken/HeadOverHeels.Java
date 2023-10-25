@@ -40,20 +40,20 @@ public class DescriptionOfItem implements Cloneable
 	public void setHeight ( int wz ) {  this.height = wz ;  }
 
 	/**
-	 * The weight of the item in seconds, higher for the bigger speed of falling, zero for no gravity (no falling)
+	 * The weight of the item in milliseconds, higher for the bigger speed of falling, zero for no gravity (no falling)
 	 */
-	private double weight = 0.0 ;
+	private int weight = 0 ;
 
-	public double getWeight () {  return weight ;  }
-	public void setWeight( double newWeight ) {  this.weight = newWeight ;  }
+	public int getWeight () {  return weight ;  }
+	public void setWeight( int newWeight ) {  this.weight = newWeight ;  }
 
 	/**
-	 * The time in seconds the item takes to move one single isometric unit
+	 * The time in milliseconds the item takes to move one single isometric unit
 	 */
-	private double speed = 0.0 ;
+	private int speed = 0 ;
 
-	public double getSpeed () {  return speed ;  }
-	public void setSpeed( double newSpeed ) {  this.speed = newSpeed ;  }
+	public int getSpeed () {  return speed ;  }
+	public void setSpeed( int newSpeed ) {  this.speed = newSpeed ;  }
 
 	/**
 	 * When true, this item takes one life from the character on touch
@@ -84,12 +84,12 @@ public class DescriptionOfItem implements Cloneable
 	public void setHeightOfFrame( int newHeightOfFrame ) {  this.heightOfFrame = newHeightOfFrame ;  }
 
 	/**
-	 * The delay, in seconds, between frames in the animation sequence
+	 * The delay, in milliseconds, between frames in the animation sequence
 	 */
-	private double delayBetweenFrames = 0.0 ;
+	private int delayBetweenFrames = 0 ;
 
-	public double getDelayBetweenFrames () {  return delayBetweenFrames ;  }
-	public void setDelayBetweenFrames( double newDelay ) {  this.delayBetweenFrames = newDelay ;  }
+	public int getDelayBetweenFrames () {  return delayBetweenFrames ;  }
+	public void setDelayBetweenFrames( int newDelay ) {  this.delayBetweenFrames = newDelay ;  }
 
 	/**
 	 * The file with shadows for this item
@@ -270,15 +270,15 @@ public class DescriptionOfItem implements Cloneable
 		text.append( "<height>" + getHeight () + "</height>" );
 		text.append( newline );
 
-		if ( getWeight () > 0.0 ) {
+		if ( getWeight () > 0 ) {
 			text.append( indent );
-			text.append( "<weight>" + Math.round( 1000.0 * getWeight () ) + "</weight>" );
+			text.append( "<weight>" + getWeight () + "</weight>" );
 			text.append( newline );
 		}
 
-		if ( getSpeed () > 0.0 ) {
+		if ( getSpeed () > 0 ) {
 			text.append( indent );
-			text.append( "<speed>" + Math.round( 1000.0 * getSpeed () ) + "</speed>" );
+			text.append( "<speed>" + getSpeed () + "</speed>" );
 			text.append( newline );
 		}
 
@@ -306,9 +306,9 @@ public class DescriptionOfItem implements Cloneable
 			text.append( newline );
 		}
 
-		if ( getDelayBetweenFrames () > 0.0 ) {
+		if ( getDelayBetweenFrames () > 0 ) {
 			text.append( indent );
-			text.append( "<betweenFrames>" + Math.round( 1000.0 * getDelayBetweenFrames () ) + "</betweenFrames>" );
+			text.append( "<betweenFrames>" + getDelayBetweenFrames () + "</betweenFrames>" );
 			text.append( newline );
 		}
 
