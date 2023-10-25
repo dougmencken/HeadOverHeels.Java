@@ -8,20 +8,22 @@
 
 package head.over.heels ;
 
-/**
- * A room drawn in isometric perspective
- */
-
-public class Room extends DrawableAndMediated
+public abstract class DrawableAndMediated implements Drawable, Mediated
 {
 
-	public Room ()
-	{
-	}
+	/* mediated */
 
-	public void draw ()
+	private Mediator mediator ;
+
+	public void setMediator ( Mediator mediator ) {  this.mediator = mediator ;  }
+
+	public Mediator getMediator () {  return this.mediator ;  }
+
+	/* constructor */
+
+	public DrawableAndMediated ()
 	{
-		/* ......... */
+		this.mediator = null ;
 	}
 
 }

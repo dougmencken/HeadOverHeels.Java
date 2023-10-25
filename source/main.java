@@ -147,6 +147,8 @@ public final class main
 	/**/// temporary lines
 	ItemDescriptions descriptions = new ItemDescriptions( ) ;
 	descriptions.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "items.xml" ) ;
+	/////// ItemDescriptions descriptionsToo = new ItemDescriptions( ) ;
+	/////// descriptions.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "new.items.xml" ) ;
 
 		GameWindow window = new GameWindow( ) ;
 		window.setVisible( true );

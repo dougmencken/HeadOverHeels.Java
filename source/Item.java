@@ -12,13 +12,13 @@ public abstract class Item extends ShadyAndMediated
 {
 
 	// creates an item by a description
-	public Item( final DescriptionOfItem description, int z, String way )
+	public Item( DescriptionOfItem description, int z, String way )
 	{
 		this.descriptionOfItem = description ;
 	}
 
 	// the copy constructor
-	public Item( final Item item )
+	public Item( Item item )
 	{
 		this.descriptionOfItem = item.descriptionOfItem ;
 	}

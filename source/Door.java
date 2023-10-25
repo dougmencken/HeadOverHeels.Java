@@ -9,19 +9,19 @@
 package head.over.heels ;
 
 /**
- * A room drawn in isometric perspective
+ * A door to the room. It is really the three free items, the two jambs and the lintel
  */
 
-public class Room extends DrawableAndMediated
+public class Door ///implements Mediated
 {
 
-	public Room ()
-	{
-	}
+	private String labelOfDoor ;
 
-	public void draw ()
+	public String getLabel () {  return labelOfDoor ;  }
+
+	public Door( String label )
 	{
-		/* ......... */
+		this.labelOfDoor = label ;
 	}
 
 }

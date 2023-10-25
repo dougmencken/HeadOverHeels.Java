@@ -93,7 +93,6 @@ class ContentOfGameWindow extends JComponent
 		int width = getWhatToDraw().getWidth () ;
 		int height = getWhatToDraw().getHeight () ;
 		int howManyPixels = width * height ;
-		//~//~//java.util.BitSet bits = new java.util.BitSet( howManyPixels ); // bit map of howManyPixels bits
 
 		OffscreenImage filled = new OffscreenImage( width, height );
 		filled.fillWithColor( color );
@@ -106,32 +105,43 @@ class ContentOfGameWindow extends JComponent
 			repaint ();
 		}
 
-		// the vector of pixels to copy
-		//*//java.util.Vector< java.awt.Point > pixelsToCopy = new java.util.Vector< java.awt.Point >( howManyPixels );
-		//*//for ( int y = 0 ; y < height ; y ++ )
-			//*//for ( int x = 0 ; x < width ; x ++ )
-				//*//pixelsToCopy.add( new java.awt.Point( x, y ) );
-
+		// precalculate the sequence of unique random pixels to copy
+		java.awt.Point [] pixelsToCopy = new java.awt.Point[ howManyPixels ];
+		java.util.BitSet bits = new java.util.BitSet( howManyPixels );	// the bit map of howManyPixels bits
+										// for the uniqueness of random pixels
 		java.util.Random random = new java.util.Random () ;
 
-		// the set of copied pixels
-		java.util.Set< java.awt.Point > copiedPixels = new java.util.HashSet< java.awt.Point >( howManyPixels );
-
-		while ( copiedPixels.size() < howManyPixels ) //// ( pixelsToCopy.size() > 0 )
+		for ( int index = 0 ; index < howManyPixels ; )
 		{
-			//*//int index = random.nextInt( pixelsToCopy.size() ); /* random between 0 and size - 1 */
-			//*//java.awt.Point xy = pixelsToCopy.elementAt( index );
-			//*//int x = xy.x ;
-			//*//int y = xy.y ;
-			//*//pixelsToCopy.removeElementAt( index );
-
 			int x = random.nextInt( width  ); // random between 0 and  width - 1
 			int y = random.nextInt( height ); // random between 0 and height - 1
 
-			boolean unique = copiedPixels.add( new java.awt.Point( x, y ) );
-			if ( unique )
-				this.whatToDraw.setRGB( x, y, pixelsOfResult[ x + y * width ] );
+			if ( ! bits.get( x + y * width ) )
+			{
+				pixelsToCopy[ index ++ ] = new java.awt.Point( x, y );
+				bits.set( x + y * width ) ;
+			}
 		}
+
+		// now paint the pixels
+		int chunk = ( howManyPixels >> 9 ) - 1 ;
+
+		long before = System.currentTimeMillis () ;
+		for ( int i = 0 ; i < howManyPixels ; i ++ ) {
+			int x = pixelsToCopy[ i ].x ;
+			int y = pixelsToCopy[ i ].y ;
+
+			this.whatToDraw.setRGB( x, y, pixelsOfResult[ x + y * width ] );
+
+			try {
+				if ( i % chunk == 0 )		// after painting a chuck
+					Thread.sleep( 1 );	// wait a millisecond
+			} catch ( InterruptedException e ) {}
+		}
+		long after = System.currentTimeMillis () ;
+
+		double secondsInFade = (double) (after - before) / 1000.0 ;
+		System.out.println( "random-pixel-faded in " + secondsInFade + " seconds" );
 
 		this.whatToDraw = new OffscreenImage( result );
 		repaint ();
