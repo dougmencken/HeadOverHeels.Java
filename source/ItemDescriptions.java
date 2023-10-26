@@ -95,10 +95,6 @@ public class ItemDescriptions
 		Element root = xml.getDocumentElement() ;
 		if ( root == null || root.getTagName() != "items" ) return false ;
 
-	/** *** ./HeadOverHeels.Java.sh > gamedata/new.items.xml *** **/
-	/*-_-*/ System.out.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ); System.out.println() ;
-	/*-_o*/ System.out.println( "<items>" ); System.out.println() ;
-
 		NodeList itemNodes = xml.getElementsByTagName( "item" );
 		for ( int i = 0 ; i < itemNodes.getLength() ; i ++ )
 		{
@@ -137,9 +133,9 @@ public class ItemDescriptions
 				// and at last
 				this.descriptionsOfItems.put( itemLabel, newDescription );
 
-	/*o_O*/ ////////////if ( itemLabel.equals( "head" ) || itemLabel.equals( "heels" ) || itemLabel.equals( "reincarnation-fish" ) )
-		/*O_o*/ {  System.out.println( newDescription.toString() ); System.out.println() ;  }
-
+				if ( itemLabel.equals( "head" ) || itemLabel.equals( "heels" )
+						|| itemLabel.equals( "reincarnation-fish" ) || itemLabel.equals( "charles-robot" ) )
+				{  System.out.println( newDescription.toString() ); System.out.println() ;  }
 			}
 		}
 
@@ -156,8 +152,6 @@ public class ItemDescriptions
 				final String doorLabel = doorElement.getAttribute( "label" ) ; // the label of door
 				DescriptionOfDoor doorDescription = new DescriptionOfDoor ( doorLabel );
 
-		/*o_o*/ System.out.println( doorDescription.toString() );  System.out.println() ;
-
 				// the three parts of door
 				DescriptionOfItem lintel = doorDescription.getLintel () ;
 				DescriptionOfItem leftJamb = doorDescription.getLeftJamb ();
@@ -169,8 +163,6 @@ public class ItemDescriptions
 				this.descriptionsOfItems.put(    lintel.getLabel(), lintel );
 			}
 		}
-
-	/*O_O*/ System.out.println( "</items>" ); System.out.println() ;
 
 		this.alreadyRead = true ;
 		return true ;
@@ -231,14 +223,12 @@ public class ItemDescriptions
 
 			// the width and height in pixels of a single frame
 			Node widthNode = picture.getElementsByTagName( "width" ).item( 0 );
-			if ( widthNode == null ) widthNode = element.getElementsByTagName( "frameWidth" ).item( 0 );
 			if ( widthNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setWidthOfFrame( Integer.parseInt( widthNode.getTextContent () ) );
 				} catch ( NumberFormatException e ) { }
 			}
 			Node heightNode = picture.getElementsByTagName( "height" ).item( 0 );
-			if ( heightNode == null ) heightNode = element.getElementsByTagName( "frameHeight" ).item( 0 );
 			if ( heightNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setHeightOfFrame( Integer.parseInt( heightNode.getTextContent () ) );
@@ -280,14 +270,12 @@ public class ItemDescriptions
 
 			// the width and height in pixels of a single frame of the item’s shadow
 			Node widthNode = shadow.getElementsByTagName( "width" ).item( 0 );
-			if ( widthNode == null ) widthNode = element.getElementsByTagName( "shadowWidth" ).item( 0 );
 			if ( widthNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setWidthOfShadow( Integer.parseInt( widthNode.getTextContent () ) );
 				} catch ( NumberFormatException e ) { }
 			}
 			Node heightNode = shadow.getElementsByTagName( "height" ).item( 0 );
-			if ( heightNode == null ) heightNode = element.getElementsByTagName( "shadowHeight" ).item( 0 );
 			if ( heightNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setHeightOfShadow( Integer.parseInt( heightNode.getTextContent () ) );
