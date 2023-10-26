@@ -191,6 +191,8 @@ public class DescriptionOfItem implements Cloneable
 
 	public boolean equals( DescriptionOfItem that )
 	{
+		if ( that == null ) return false ;
+
 		return	this.label.equals( that.label )
 				&& this.widthX == that.widthX && this.widthY == that.widthY && this.height == that.height
 				&& this.weight == that.weight && this.speed == that.speed

@@ -144,11 +144,17 @@ public final class main
 				newGameNoGui = true ;
 		}
 
+
 	/**/// temporary lines
 	ItemDescriptions descriptions = new ItemDescriptions( ) ;
 	descriptions.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "items.xml" ) ;
-	/////// ItemDescriptions descriptionsToo = new ItemDescriptions( ) ;
-	/////// descriptions.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "new.items.xml" ) ;
+	ItemDescriptions descriptionsToo = new ItemDescriptions( ) ;
+	descriptionsToo.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "new.items.xml" ) ;
+	if ( descriptions.equals( descriptionsToo ) )
+		System.out.println( "✔️ the descriptions in both items.xml and new.items.xml describe the same items alike" );
+	else
+		System.out.println( "❌ new.items.xml is not like items.xml" );
+
 
 		GameWindow window = new GameWindow( ) ;
 		window.setVisible( true );

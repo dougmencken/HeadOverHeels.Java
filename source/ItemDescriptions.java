@@ -30,14 +30,39 @@ import org.xml.sax.SAXException ;
 public class ItemDescriptions
 {
 
-	private TreeMap < String, DescriptionOfItem > descriptionsOfItems ;
+	private TreeMap < String, DescriptionOfItem >
+	        descriptionsOfItems = new TreeMap < String, DescriptionOfItem > () ;
 
-	private boolean alreadyRead ;
+	private transient boolean alreadyRead = false ;
 
-	public ItemDescriptions ()
+
+	public ItemDescriptions () { }
+
+	public boolean equals( Object that )
 	{
-		this.descriptionsOfItems = new TreeMap < String, DescriptionOfItem > () ;
-		this.alreadyRead = false ;
+		return ( that instanceof ItemDescriptions ) ? this.equals( (ItemDescriptions) that ) : false ;
+	}
+
+	/**
+	 * See if both this and that describe the same items alike
+	 */
+	public boolean equals( ItemDescriptions that )
+	{
+		if ( that == null ) return false ;
+
+		if ( this.descriptionsOfItems.size () != that.descriptionsOfItems.size () )
+			return false ;
+
+		for ( String label : this.descriptionsOfItems.keySet() )
+		{
+			DescriptionOfItem thisDescription = this.descriptionsOfItems.get( label );
+			DescriptionOfItem thatDescription = that.descriptionsOfItems.get( label );
+
+			if ( thatDescription == null // get() returns null when the key is not in the map
+				|| ! thisDescription.equals( thatDescription ) ) return false ;
+		}
+
+		return true ;
 	}
 
 	/**
