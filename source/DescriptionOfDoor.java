@@ -22,8 +22,8 @@ public class DescriptionOfDoor extends DescriptionOfItem
 	private DescriptionOfItem rightJamb ;
 
 	public DescriptionOfItem getLintel () {  return this.lintel ;  }
-	public DescriptionOfItem getLeftJamb () {  return this.lintel ;  }
-	public DescriptionOfItem getRightJamb () {  return this.lintel ;  }
+	public DescriptionOfItem getLeftJamb () {  return this.leftJamb ;  }
+	public DescriptionOfItem getRightJamb () {  return this.rightJamb ;  }
 
 	private String scenery = "none" ;
 
@@ -66,11 +66,11 @@ public class DescriptionOfDoor extends DescriptionOfItem
 
 		final int lintelSmallerWidth = 9 ;
 		final int lintelBroaderWidth = 32 ;
-		if ( getScenery().equals( "north" ) || getScenery().equals( "south" ) ) {
+		if ( this.doorAt.equals( "north" ) || this.doorAt.equals( "south" ) ) {
 			descriptionOfLintel.setWidthX( lintelSmallerWidth );
 			descriptionOfLintel.setWidthY( lintelBroaderWidth );
 		} else
-		   if ( getScenery().equals( "west" ) || getScenery().equals( "east" ) ) {
+		   if ( this.doorAt.equals( "west" ) || this.doorAt.equals( "east" ) ) {
 			descriptionOfLintel.setWidthX( lintelBroaderWidth );
 			descriptionOfLintel.setWidthY( lintelSmallerWidth );
 		}
