@@ -46,11 +46,11 @@ public class DescriptionOfDoor extends DescriptionOfItem
 		super.setHowManyOrientations( (byte) 1 );
 
 		// the door's label is %scenery%-door-%at%
-		int whereDoorInLabel = doorLabel.indexOf( "door-" );
-		if ( whereDoorInLabel > 0 /* it is found and isn't at the very beginning */ )
+		int doorInLabel = doorLabel.indexOf( "door-" );
+		if ( doorInLabel > 0 /* it is found and isn't at the very beginning */ )
 		{
-			this.scenery = doorLabel.substring( 0, whereDoorInLabel - 1 );
-			this.doorAt = doorLabel.substring( whereDoorInLabel + 5 );
+			this.scenery = doorLabel.substring( 0, doorInLabel - 1 );
+			this.doorAt = doorLabel.substring( doorInLabel + 5 );
 		}
 
 		this.lintel = this.cloneAsLintelOfDoor() ;

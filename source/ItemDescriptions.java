@@ -11,7 +11,6 @@ package head.over.heels ;
 import java.util.TreeMap ;
 
 import java.io.File ;
-import java.io.IOException ;
 
 import javax.xml.parsers.DocumentBuilderFactory ;
 import javax.xml.parsers.DocumentBuilder ;
@@ -21,7 +20,7 @@ import org.w3c.dom.Document ;
 import org.w3c.dom.Element ;
 import org.w3c.dom.Node ;
 import org.w3c.dom.NodeList ;
-import org.xml.sax.SAXException ;
+
 
 /**
  * All the descriptions of the game's items as read from items.xml
@@ -72,7 +71,6 @@ public class ItemDescriptions
 	{
 		if ( this.alreadyRead ) return true ;
 
-		File xmlFile = new File( nameOfXMLFile );
 		DocumentBuilder builder = null ;
 		try {
 			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder() ;
@@ -83,13 +81,14 @@ public class ItemDescriptions
 
 		Document xml = null ;
 		try {
-			xml = builder.parse( xmlFile );
-		} catch ( SAXException x ) {
-			return false ;
-		} catch ( IOException io ) {
-			System.err.println( "can't read file \"" + nameOfXMLFile + "\" (" + xmlFile.getAbsolutePath () + ")" );
-			return false ;
+			File xmlFile = new File( nameOfXMLFile );
+			if ( xmlFile.exists() && xmlFile.canRead() )
+				xml = builder.parse( xmlFile );
+			else
+				System.out.println( "can't read file \"" + nameOfXMLFile + "\"" );
 		}
+		catch ( org.xml.sax.SAXException x ) {  return false ;  }
+		catch ( java.io.IOException io ) {  return false ;  }
 		if ( xml == null ) return false ;
 
 		Element root = xml.getDocumentElement() ;
@@ -132,10 +131,6 @@ public class ItemDescriptions
 
 				// and at last
 				this.descriptionsOfItems.put( itemLabel, newDescription );
-
-				if ( itemLabel.equals( "head" ) || itemLabel.equals( "heels" )
-						|| itemLabel.equals( "reincarnation-fish" ) || itemLabel.equals( "charles-robot" ) )
-				{  System.out.println( newDescription.toString() ); System.out.println() ;  }
 			}
 		}
 

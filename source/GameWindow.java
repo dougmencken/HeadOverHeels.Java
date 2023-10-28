@@ -10,7 +10,7 @@ package head.over.heels ;
 
 import javax.swing.JFrame ;
 import javax.swing.JComponent ;
-import javax.swing.Timer;
+import javax.swing.Timer ;
 
 import java.awt.Color ;
 
@@ -21,7 +21,7 @@ class ContentOfGameWindow extends JComponent
 	/**
 	 * The buffer to draw on and then copy the whole buffer to the screen
 	 */
-	private OffscreenImage whatToDraw ;
+	private volatile OffscreenImage whatToDraw ;
 
 	OffscreenImage getWhatToDraw () {  return whatToDraw ;  }
 
@@ -53,6 +53,11 @@ class ContentOfGameWindow extends JComponent
 		}
 	}
 
+	public void update( java.awt.Graphics g )
+	{
+		paintComponent( g );
+	}
+
 	public void paint( java.awt.Graphics g )
 	{
 		paintComponent( g );
@@ -62,7 +67,7 @@ class ContentOfGameWindow extends JComponent
 	{
 		super.paintComponent( g );
 
-		g.drawImage( getWhatToDraw(), 0, 0, this );
+		g.drawImage( this.whatToDraw, 0, 0, this );
 
 		///java.awt.Graphics2D g2d = (java.awt.Graphics2D) g.create ();
 		///g2d.drawImage( getWhatToDraw(), 0, 0, this );
@@ -71,13 +76,17 @@ class ContentOfGameWindow extends JComponent
 
 	void startRepaintTimer ()
 	{
-		this.repaintTimer = new Timer( /* delay */ 10 /* milliseconds */
-						, new java.awt.event.ActionListener () {
-			public void actionPerformed( java.awt.event.ActionEvent e ) {
-				repaint () ;
-			}
-		} ) ;
-		this.repaintTimer.start ();
+		if ( this.repaintTimer == null ) {
+			this.repaintTimer = new Timer( /* delay */ 10 /* milliseconds */
+							, new java.awt.event.ActionListener () {
+				public void actionPerformed( java.awt.event.ActionEvent e ) {
+					repaint () ;
+				}
+			} ) ;
+		}
+		if ( ! this.repaintTimer.isRunning () )
+			this.repaintTimer.start ();
+		else	this.repaintTimer.restart ();
 	}
 
 	void stopRepaintTimer ()
@@ -90,61 +99,18 @@ class ContentOfGameWindow extends JComponent
 
 	void randomPixelFade( boolean fadeIn, Color color )
 	{
-		int width = getWhatToDraw().getWidth () ;
-		int height = getWhatToDraw().getHeight () ;
-		int howManyPixels = width * height ;
-
-		OffscreenImage filled = new OffscreenImage( width, height );
+		OffscreenImage filled = new OffscreenImage( this.whatToDraw.getWidth (), this.whatToDraw.getHeight () );
 		filled.fillWithColor( color );
 
 		OffscreenImage result = fadeIn ? this.whatToDraw : filled ;
-		int [] pixelsOfResult = ( (java.awt.image.DataBufferInt) result.getRaster().getDataBuffer () ).getData() ;
 
 		if ( fadeIn ) {
 			this.whatToDraw = filled ;
 			repaint ();
 		}
 
-		// precalculate the sequence of unique random pixels to copy
-		java.awt.Point [] pixelsToCopy = new java.awt.Point[ howManyPixels ];
-		java.util.BitSet bits = new java.util.BitSet( howManyPixels );	// the bit map of howManyPixels bits
-										// for the uniqueness of random pixels
-		java.util.Random random = new java.util.Random () ;
-
-		for ( int index = 0 ; index < howManyPixels ; )
-		{
-			int x = random.nextInt( width  ); // random between 0 and  width - 1
-			int y = random.nextInt( height ); // random between 0 and height - 1
-
-			if ( ! bits.get( x + y * width ) )
-			{
-				pixelsToCopy[ index ++ ] = new java.awt.Point( x, y );
-				bits.set( x + y * width ) ;
-			}
-		}
-
-		// now paint the pixels
-		int chunk = ( howManyPixels >> 9 ) - 1 ;
-
-		long before = System.currentTimeMillis () ;
-		for ( int i = 0 ; i < howManyPixels ; i ++ ) {
-			int x = pixelsToCopy[ i ].x ;
-			int y = pixelsToCopy[ i ].y ;
-
-			this.whatToDraw.setRGB( x, y, pixelsOfResult[ x + y * width ] );
-
-			try {
-				if ( i % chunk == 0 )		// after painting a chuck
-					Thread.sleep( 1 );	// wait a millisecond
-			} catch ( InterruptedException e ) {}
-		}
-		long after = System.currentTimeMillis () ;
-
-		double secondsInFade = (double) (after - before) / 1000.0 ;
-		System.out.println( "random-pixel-faded in " + secondsInFade + " seconds" );
-
-		this.whatToDraw = new OffscreenImage( result );
-		repaint ();
+		RandomPixelFade transition = new RandomPixelFade ( /* from */ this.whatToDraw, /* to */ result );
+		transition.go( );
 	}
 
 }
@@ -155,20 +121,38 @@ public class GameWindow extends JFrame
 
 	private ContentOfGameWindow contentPane ;
 
+	private GamePreferences preferences ;
 
-	public GameWindow ()
+
+	public GameWindow ( int width, int height )
 	{
 		super( "Foot and Mouth (Java)" );
 
 		addMouseListener( new java.awt.event.MouseAdapter ()
 		{
-			boolean toggle = true ;
+			static final int ToBlack   = 0 ;
+			static final int ToBlue    = 1 ;
+			static final int ToRed     = 2 ;
+			static final int ToMagenta = 3 ;
+			static final int ToGreen   = 4 ;
+			static final int ToCyan    = 5 ;
+			static final int ToYellow  = 6 ;
+			static final int ToWhite   = 7 ;
+
+			int toColor = ToRed ;
 
 			public void mouseReleased( java.awt.event.MouseEvent e ) {
-				toggle = ! toggle ;
+				toColor ++ ;
+				if ( toColor > 7 ) toColor = 0 ;
 
-				if ( toggle )	randomPixelFadeOut( Color.blue ) ;
-				else		randomPixelFadeOut( Color.yellow ) ;
+				if      ( toColor ==   ToBlack ) randomPixelFadeOut( Color.black ) ;
+				else if ( toColor ==    ToBlue ) randomPixelFadeOut( Color.blue ) ;
+				else if ( toColor ==     ToRed ) randomPixelFadeOut( Color.red ) ;
+				else if ( toColor == ToMagenta ) randomPixelFadeOut( Color.magenta ) ;
+				else if ( toColor ==   ToGreen ) randomPixelFadeOut( Color.green ) ;
+				else if ( toColor ==    ToCyan ) randomPixelFadeOut( Color.cyan ) ;
+				else if ( toColor ==  ToYellow ) randomPixelFadeOut( Color.yellow ) ;
+				else if ( toColor ==   ToWhite ) randomPixelFadeOut( Color.white ) ;
 			}
 		} ) ;
 		addKeyListener( new java.awt.event.KeyAdapter ()
@@ -190,17 +174,35 @@ public class GameWindow extends JFrame
 			}
 		} ) ;
 
-		setSize( 640, 480 );
+		this.preferences = new GamePreferences( "preferences.xml" );
+		this.preferences.setScreenWidth( width );
+		this.preferences.setScreenHeight( height );
+		this.preferences.readPreferences ();
+
+		setSize( this.preferences.getScreenWidth (), this.preferences.getScreenHeight () );
+		setResizable( false );
 		setLocationRelativeTo( null ); // to center this JFrame on the screen
 
 		this.contentPane = new ContentOfGameWindow( getWidth(), getHeight() );
 		setContentPane( this.contentPane );
 	}
 
+	public GameWindow ()
+	{
+		this( GamePreferences.constants.Default_Screen_Width, GamePreferences.constants.Default_Screen_Height );
+	}
+
 	public void quit ()
 	{
+		writePreferences ();
 		setVisible( false );
 		dispose ();
+	}
+
+	public void writePreferences ()
+	{
+		if ( this.preferences != null )
+			this.preferences.writePreferences ();
 	}
 
 	public void dispose ()

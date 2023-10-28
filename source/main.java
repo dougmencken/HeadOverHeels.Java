@@ -58,6 +58,9 @@ public final class main
 		knownOptions.add( new KnownOption( "height", true, "the height of the game's screen, default is the value from preferences or =480" ) );
 		knownOptions.add( new KnownOption( "begin-game", false, "no menus, just begin the new game" ) );
 
+		int  width = 256 ;
+		int height = 192 ;
+
 		boolean newGameNoGui = false ;
 
 		if ( arguments.length > 0 )
@@ -127,16 +130,16 @@ public final class main
 			if ( options.containsKey( "width" ) )
 			{
 				try { // parseInt can throw NumberFormatException
-					int width = Integer.parseInt( options.get( "width" ) );
-					System.out.println( "the width of the game's screen = " + width );
+					width = Integer.parseInt( options.get( "width" ) );
+					GamePreferences.keepThisWidthOfScreen ();
 				} catch ( NumberFormatException e ) { }
 			}
 
 			if ( options.containsKey( "height" ) )
 			{
 				try { // parseInt can throw NumberFormatException
-					int height = Integer.parseInt( options.get( "height" ) );
-					System.out.println( "the height of the game's screen = " + height );
+					height = Integer.parseInt( options.get( "height" ) );
+					GamePreferences.keepThisHeightOfScreen();
 				} catch ( NumberFormatException e ) { }
 			}
 
@@ -149,7 +152,7 @@ public final class main
 	descriptions.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "items.xml" ) ;
 	/**/// ❌ ✔️
 
-		GameWindow window = new GameWindow( ) ;
+		GameWindow window = new GameWindow( width, height ) ;
 		window.setVisible( true );
 		window.randomPixelFadeIn( java.awt.Color.black );
 
