@@ -10,7 +10,6 @@ package head.over.heels ;
 
 import javax.swing.JFrame ;
 import javax.swing.JComponent ;
-import javax.swing.Timer ;
 
 import java.awt.Color ;
 
@@ -25,7 +24,33 @@ class ContentOfGameWindow extends JComponent
 
 	OffscreenImage getWhatToDraw () {  return whatToDraw ;  }
 
-	private Timer repaintTimer ;
+	class RepaintTimer extends javax.swing.Timer
+	{
+		RepaintTimer( JComponent repaintMe )
+		{
+			super( /* delay */ 10 /* milliseconds */ ,
+				new java.awt.event.ActionListener () {
+					public void actionPerformed( java.awt.event.ActionEvent e ) {
+						if ( repaintMe != null )
+							repaintMe.repaint ();
+					}
+				} ) ;
+		}
+
+		public void start () {
+			System.out.println( "starting the repaint timer" );
+			super.start ();
+		}
+
+		public void stop () {
+			System.out.println( "stopping the repaint timer" );
+			super.stop ();
+		}
+	}
+
+	private RepaintTimer repaintTimer ;
+
+	private ImageTransition transition ;
 
 
 	ContentOfGameWindow ( int width, int height )
@@ -67,6 +92,11 @@ class ContentOfGameWindow extends JComponent
 	{
 		super.paintComponent( g );
 
+	java.awt.Graphics2D gg = this.whatToDraw.createGraphics ();
+	java.awt.image.BufferedImage fontImage = head.over.heels.gui.Font.imageOFont ;
+	gg.drawImage( fontImage, this.whatToDraw.getWidth() - fontImage.getWidth(), 0, this );
+	gg.dispose ();
+
 		g.drawImage( this.whatToDraw, 0, 0, this );
 
 		///java.awt.Graphics2D g2d = (java.awt.Graphics2D) g.create ();
@@ -77,12 +107,7 @@ class ContentOfGameWindow extends JComponent
 	void startRepaintTimer ()
 	{
 		if ( this.repaintTimer == null ) {
-			this.repaintTimer = new Timer( /* delay */ 10 /* milliseconds */
-							, new java.awt.event.ActionListener () {
-				public void actionPerformed( java.awt.event.ActionEvent e ) {
-					repaint () ;
-				}
-			} ) ;
+			this.repaintTimer = new RepaintTimer( this );
 		}
 		if ( ! this.repaintTimer.isRunning () )
 			this.repaintTimer.start ();
@@ -99,6 +124,9 @@ class ContentOfGameWindow extends JComponent
 
 	void randomPixelFade( boolean fadeIn, Color color )
 	{
+		if ( ! isTransitionFinished () )
+			this.transition.waitForFinishing ();
+
 		OffscreenImage filled = new OffscreenImage( this.whatToDraw.getWidth (), this.whatToDraw.getHeight () );
 		filled.fillWithColor( color );
 
@@ -109,8 +137,19 @@ class ContentOfGameWindow extends JComponent
 			repaint ();
 		}
 
-		RandomPixelFade transition = new RandomPixelFade ( /* from */ this.whatToDraw, /* to */ result );
-		transition.go( );
+		this.transition = new RandomPixelFade ( /* from */ this.whatToDraw, /* to */ result );
+		this.transition.go( );
+	}
+
+	boolean isTransitionFinished ()
+	{
+		return ( this.transition != null ) ? this.transition.isFinished () : /* not ever started */ true ;
+	}
+
+	void waitForTransitionToFinish ()
+	{
+		while ( ! isTransitionFinished () )
+			this.transition.waitForFinishing ();
 	}
 
 }
@@ -157,22 +196,28 @@ public class GameWindow extends JFrame
 		} ) ;
 		addKeyListener( new java.awt.event.KeyAdapter ()
 		{
-			public void keyPressed( java.awt.event.KeyEvent e ) {
-				/* do nothing */
-			}
 			public void keyReleased( java.awt.event.KeyEvent e ) {
-				quit() ;
+				quitGame ();
 			}
 			public void keyTyped( java.awt.event.KeyEvent e ) {
-				quit() ;
+				/* do nothing */
 			}
 		} ) ;
 		addWindowListener( new java.awt.event.WindowAdapter ()
 		{
 			public void windowClosing( java.awt.event.WindowEvent e ) {
-				quit() ;
+				quitGame ();
 			}
 		} ) ;
+		/* addFocusListener( new java.awt.event.FocusListener ()
+		{
+			public void focusGained( java.awt.event.FocusEvent e ) {
+				System.out.println( "the window got focus" );
+			}
+			public void focusLost( java.awt.event.FocusEvent e ) {
+				System.out.println( "the window lost focus" );
+			}
+		} ) ; */
 
 		this.preferences = new GamePreferences( "preferences.xml" );
 		this.preferences.setScreenWidth( width );
@@ -182,33 +227,45 @@ public class GameWindow extends JFrame
 		setSize( this.preferences.getScreenWidth (), this.preferences.getScreenHeight () );
 		setResizable( false );
 		setLocationRelativeTo( null ); // to center this JFrame on the screen
+		setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
 
 		this.contentPane = new ContentOfGameWindow( getWidth(), getHeight() );
 		setContentPane( this.contentPane );
+
+	head.over.heels.gui.Font test = new head.over.heels.gui.Font( "test", "fulvous" ); // 😙
 	}
 
 	public GameWindow ()
 	{
-		this( GamePreferences.constants.Default_Screen_Width, GamePreferences.constants.Default_Screen_Height );
+		this( GamePreferences.constants.Default_Screen_Width,
+				GamePreferences.constants.Default_Screen_Height );
 	}
 
-	public void quit ()
+	public void quitGame ()
 	{
 		writePreferences ();
-		setVisible( false );
+		randomPixelFadeOut( Color.black );
+		finishPaintingContent ();
 		dispose ();
 	}
 
-	public void writePreferences ()
+	private void writePreferences ()
 	{
 		if ( this.preferences != null )
 			this.preferences.writePreferences ();
 	}
 
+	private void finishPaintingContent ()
+	{
+		// if there's any unfinished transition, wait for it to complete
+		while ( ! this.contentPane.isTransitionFinished () )
+			this.contentPane.waitForTransitionToFinish ();
+
+		this.contentPane.stopRepaintTimer ();
+	}
+
 	public void dispose ()
 	{
-		this.contentPane.stopRepaintTimer ();
-
 		System.out.println( );
 		System.out.println( "bye :*" );
 

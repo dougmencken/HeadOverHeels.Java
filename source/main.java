@@ -150,8 +150,6 @@ public final class main
 	/**/// temporary lines
 	ItemDescriptions descriptions = new ItemDescriptions( ) ;
 	descriptions.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "items.xml" ) ;
-
-	head.over.heels.gui.Font test = new head.over.heels.gui.Font( "test", "fulvous" ); // 😙
 	/**/// ❌ ✔️
 
 		GameWindow window = new GameWindow( width, height ) ;

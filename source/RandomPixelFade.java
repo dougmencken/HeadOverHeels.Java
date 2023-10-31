@@ -63,7 +63,7 @@ public class RandomPixelFade extends ImageTransition
 			int x = pixelsToCopy[ i ].x ;
 			int y = pixelsToCopy[ i ].y ;
 
-			getImageFrom ().setRGB( x, y, pixelsOfResult[ x + y * width ] );
+			getImageFrom().setRGB( x, y, pixelsOfResult[ x + y * width ] );
 
 			try {
 				if ( i % chunk == 0 )		// after painting a chunk
@@ -74,8 +74,6 @@ public class RandomPixelFade extends ImageTransition
 
 		double secondsInFade = (double) (after - before) / 1000.0 ;
 		System.out.println( "random-pixel-faded in " + secondsInFade + " seconds" );
-
-		markAsFinished ();
 	}
 
 }

@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage ;
 // new java.awt.Color( 0x33, 0xd1, 0x3f ) /* "lime green" */
 // new java.awt.Color( 0xff, 0xe4, 0x01 ) /* "vivid yellow" */
 
-import java.awt.Color ;
 import java.awt.Graphics2D ;
 
 
@@ -27,10 +26,10 @@ public class OffscreenImage extends BufferedImage
 
 	public OffscreenImage( OffscreenImage toCopy ) // the copy constructor
 	{
-		this( toCopy, toCopy.getWidth (), toCopy.getHeight (), new Color( 0, 0, 0, /* alpha */ 0 ) );
+		this( toCopy, toCopy.getWidth (), toCopy.getHeight (), new java.awt.Color( 0, 0, 0, /* alpha */ 0 ) );
 	}
 
-	public OffscreenImage( OffscreenImage toCopy, int newWidth, int newHeight, Color backColor )
+	public OffscreenImage( OffscreenImage toCopy, int newWidth, int newHeight, java.awt.Color backColor )
 	{
 		this( newWidth, newHeight );
 
@@ -47,7 +46,7 @@ public class OffscreenImage extends BufferedImage
 		g.dispose ();
 	}
 
-	public void fillWithColor ( Color fillColor )
+	public void fillWithColor ( java.awt.Color fillColor )
 	{
 		Graphics2D g = super.createGraphics ();
 
