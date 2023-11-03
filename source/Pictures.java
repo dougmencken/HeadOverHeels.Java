@@ -76,9 +76,14 @@ public class Pictures
 		}
 	}
 
-	public static void colorize( BufferedImage picture, Color to )
+	public static void colorizeWhite( BufferedImage picture, Color to )
 	{
 		Pictures.replaceColor( picture, Color.white, to );
+	}
+
+	public static void colorizeBlack( BufferedImage picture, Color to )
+	{
+		Pictures.replaceColor( picture, Color.black, to );
 	}
 
 	public static void replaceColor( BufferedImage picture, Color from, Color to )
@@ -105,7 +110,7 @@ public class Pictures
 		}
 	}
 
-	public static BufferedImage cloneWithAlphaChannelAndReplacingColor( BufferedImage picture, Color from, Color to )
+	public static BufferedImage cloneAsARGBWithReplacingColor( BufferedImage picture, Color from, Color to )
 	{
 		if ( picture == null || from == null || to == null ) throw new IllegalArgumentException ();
 
@@ -126,7 +131,7 @@ public class Pictures
 		return copy ;
 	}
 
-	public static BufferedImage cloneWithAlphaChannel ( BufferedImage picture )
+	public static BufferedImage cloneAsARGB ( BufferedImage picture )
 	{
 		if ( picture == null ) throw new IllegalArgumentException ();
 
@@ -140,6 +145,106 @@ public class Pictures
 		}
 
 		return copy ;
+	}
+
+	public static BufferedImage cloneSubpictureAsARGB ( BufferedImage picture, int x, int y, int w, int h )
+	{
+		if ( picture == null ) throw new IllegalArgumentException ();
+
+		BufferedImage part ;
+		synchronized ( picture ) {
+			part = new BufferedImage( w, h, BufferedImage.TYPE_INT_ARGB );
+			for ( int iy = 0 ; iy < h ; iy ++ )
+				for ( int ix = 0 ; ix < w ; ix ++ )
+					part.setRGB( ix, iy, picture.getRGB( x + ix, y + iy ) );
+		}
+
+		return part ;
+	}
+
+	public static BufferedImage cloneAsIndexedColor ( BufferedImage picture )
+	{
+		java.util.Set < Integer > colors
+			= new java.util.TreeSet < Integer > (	/*new java.util.Comparator < Integer > ()
+								{
+									public int compare( Integer one, Integer other ) {
+										long unsignedOne = one.longValue() & 0xffffffffL ;
+										long unsignedOther = other.longValue() & 0xffffffffL ;
+										     if ( unsignedOne < unsignedOther ) return -1 ;
+										else if ( unsignedOne > unsignedOther ) return  1 ;
+										return 0 ;
+									}
+								}*/
+							    ) ;
+		int indexOfTransparent = -1 ;
+
+		int  width = picture.getWidth ();
+		int height = picture.getHeight ();
+
+		synchronized ( picture ) {
+			for ( int y = 0 ; y < height ; y ++ )
+				for ( int x = 0 ; x < width ; x ++ ) {
+					int argb = picture.getRGB( x, y );
+					if ( ( ( argb >> 24 ) & 0xff ) == 0 ) indexOfTransparent = colors.size ();
+					colors.add( argb );
+				}
+		}
+
+		int howManyColors = colors.size ();
+		if ( howManyColors > 256 )
+			throw new IllegalArgumentException( "the picture has " + howManyColors + " various colors, it's more than 256" );
+
+		Object [] array = colors.toArray ();
+		int [] colorMap = new int [ howManyColors ];
+		for ( int i = 0 ; i < howManyColors ; ++ i )
+			colorMap[ i ] = ( (Integer) array[ i ] ).intValue ();
+
+		int bits = 8 ;
+		     if ( howManyColors <=  2 ) bits = 1 ;
+		else if ( howManyColors <=  4 ) bits = 2 ;
+		else if ( howManyColors <= 16 ) bits = 4 ;
+
+		java.awt.image.IndexColorModel indexedColors
+						= new java.awt.image.IndexColorModel (
+							/* bits per pixel */ bits,
+							/* size */ howManyColors, /* colors */ colorMap, /* first index in colors */ 0,
+							/* has alpha */ indexOfTransparent >= 0,
+							/* transIndex */ indexOfTransparent,
+							/* transferType */ java.awt.image.DataBuffer.TYPE_BYTE );
+
+		int imageType = ( bits < 8 ) ? BufferedImage.TYPE_BYTE_BINARY : BufferedImage.TYPE_BYTE_INDEXED ;
+		BufferedImage newPicture = new BufferedImage( width, height, imageType, indexedColors );
+
+		synchronized ( picture ) {
+			for ( int y = 0 ; y < height ; y ++ )
+				for ( int x = 0 ; x < width ; x ++ )
+					newPicture.setRGB( x, y, picture.getRGB( x, y ) );
+		}
+
+		return newPicture ;
+	}
+
+	public static boolean listColorModelIfIndexed ( BufferedImage picture )
+	{
+		java.awt.image.ColorModel colors = picture.getColorModel ();
+		if ( colors instanceof java.awt.image.IndexColorModel ) {
+			listIndexColorModel( (java.awt.image.IndexColorModel) colors );
+			return true ;
+		}
+
+		return false ;
+	}
+
+	public static void listIndexColorModel ( java.awt.image.IndexColorModel indexedColors )
+	{
+		int [] colorMapRGBs = new int[ indexedColors.getMapSize() ];
+		indexedColors.getRGBs( colorMapRGBs );
+
+		for ( int i = 0 ; i < colorMapRGBs.length ; ++ i ) {
+			System.out.print( "indexed colors [ " + i + " ] = " + String.format( "0x%08x", colorMapRGBs[ i ] ) );
+			if ( i == indexedColors.getTransparentPixel () ) System.out.print( " *transparent*" );
+			System.out.println() ;
+		}
 	}
 
 	private Pictures() {} // no instances

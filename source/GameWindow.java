@@ -92,9 +92,29 @@ class ContentOfGameWindow extends JComponent
 	{
 		super.paintComponent( g );
 
+	String comical = "*COMICAL*" ;
+	String dazzling = "*DAZZLING*" ;
+	String enthralling = "*ENTHRALLING*" ;
+
+	head.over.heels.gui.Font font = new head.over.heels.gui.Font( "test", "fulvous" ); // 😙
+
+	java.awt.image.BufferedImage comicalImage = font.getImageOfString( comical );
+	java.awt.image.BufferedImage dazzlingImage = font.getImageOfString( dazzling );
+	java.awt.image.BufferedImage enthrallingImage = font.getImageOfString( enthralling );
+
 	java.awt.Graphics2D gg = this.whatToDraw.createGraphics ();
-	java.awt.image.BufferedImage fontImage = head.over.heels.gui.Font.imageOFont ;
-	gg.drawImage( fontImage, this.whatToDraw.getWidth() - fontImage.getWidth(), 0, this );
+
+	int centerY = ( this.whatToDraw.getHeight() - ( comicalImage.getHeight() + dazzlingImage.getHeight() + enthrallingImage.getHeight() ) ) >> 1 ;
+	int atY = centerY ;
+
+	gg.drawImage( comicalImage, ( this.whatToDraw.getWidth() - comicalImage.getWidth() ) >> 1, atY, this );
+	atY += comicalImage.getHeight();
+
+	gg.drawImage( dazzlingImage, ( this.whatToDraw.getWidth() - dazzlingImage.getWidth() ) >> 1, atY, this );
+	atY += dazzlingImage.getHeight();
+
+	gg.drawImage( enthrallingImage, ( this.whatToDraw.getWidth() - enthrallingImage.getWidth() ) >> 1, atY, this );
+
 	gg.dispose ();
 
 		g.drawImage( this.whatToDraw, 0, 0, this );
@@ -231,8 +251,6 @@ public class GameWindow extends JFrame
 
 		this.contentPane = new ContentOfGameWindow( getWidth(), getHeight() );
 		setContentPane( this.contentPane );
-
-	head.over.heels.gui.Font test = new head.over.heels.gui.Font( "test", "fulvous" ); // 😙
 	}
 
 	public GameWindow ()

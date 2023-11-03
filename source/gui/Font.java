@@ -20,95 +20,324 @@ import head.over.heels.Pictures ;
 
 public class Font
 {
-
-	public /*private*/ static BufferedImage imageOFont ;
-
-	private static TableOfLetters lettersMapping ;
+	/**
+	 * The mapping between the letter and the textual bitmap of this letter
+	 */
+	private static java.util.Map < String /* letter */, String [] /* bitmap */ > letterToImage ;
 
 	private String fontName ;
 	private String fontColor ;
 
+	private int spacingX ;
+	private int spacingY ;
+
+	public int getSpacingX () {  return this.spacingX ;  }
+	public int getSpacingY () {  return this.spacingY ;  }
+
+	public void setSpacingX ( int newHorizontalSpacing ) {  this.spacingX = newHorizontalSpacing ;  }
+	public void setSpacingY ( int newVerticalSpacing ) {  this.spacingY = newVerticalSpacing ;  }
+
+	public static final int Default_Spacing_H = 3 ;
+	public static final int Default_Spacing_V = 5 ;
+
+	private String wildLetter = "?" ;
+
+	public void setWildLetter( String newWild ) {  this.wildLetter = newWild ;  }
+
 	public Font( String name, String color )
 	{
-		this( name, color, false );
+		this( name, color, false, Default_Spacing_H, Default_Spacing_V );
+	}
+
+	public Font( String name, String color, boolean doubleHeight )
+	{
+		this( name, color, doubleHeight, Default_Spacing_H, Default_Spacing_V );
+	}
+
+	public Font( String name, String color, int spaceTwitter /* spaceX */, int spaceY )
+	{
+		this( name, color, false, spaceTwitter, spaceY );
 	}
 
 	/**
 	 * @param name the name of this font
 	 * @param color the color of letters
 	 * @param doubleHeight true for the double height stretching of letters
+	 * @param spaceTwitter or spaceX, the horizontal spacing between letters
+	 * @param spaceY the vertical spacing
 	 */
-	public Font( String name, String color, boolean doubleHeight )
+	public Font( String name, String color, boolean doubleHeight, int spaceTwitter /* spaceX */, int spaceY )
 	{
 		this.fontName = name ;
 		this.fontColor = color ;
 
-		// read the image of font once
-		if ( Font.imageOFont == null ) {
+		this.spacingY = spaceY ;
+		this.spacingX = spaceTwitter ;
+
+		// the mapping is filled once for all the instances of the font
+		if ( Font.letterToImage != null ) return ;
+
+		BufferedImage imageOFont = null ;
+		{
+			// read the image of font
 			String nameOfFontFile = "gamedata" + java.io.File.separator + "font.png" ;
-			Font.imageOFont = Pictures.readFromPNG( nameOfFontFile );
-			if ( Font.imageOFont == null ) {
+			BufferedImage fontFromPNG = Pictures.readFromPNG( nameOfFontFile );
+			if ( fontFromPNG == null ) {
 				System.err.println( "oops, can’t get the image of letters from file \"" + nameOfFontFile + "\"" );
 				return ;
 			}
+
+			// recolor the font image in "black on transparent"
+
+			imageOFont = Pictures.cloneAsARGBWithReplacingColor( fontFromPNG,
+								java.awt.Color.magenta, new java.awt.Color( 255, 0, 255, /* alpha */ 0 ) );
+								// maybe it's some old version of the font's image with the magenta background
+			// white to black
+			Pictures.colorizeWhite( imageOFont, java.awt.Color.black );
 		}
 
-		// the image of font may have the magenta background
-		Font.imageOFont = Pictures.cloneWithAlphaChannelAndReplacingColor( Font.imageOFont,
-								java.awt.Color.magenta, new java.awt.Color( 255, 0, 255, /* alpha */ 0 ) ); ;
+		imageOFont = Pictures.cloneAsIndexedColor( imageOFont );
 
-		// add the black tint
-		BufferedImage blackLetters = Pictures.exactCopy( Font.imageOFont );
-		Pictures.replaceColor( blackLetters, Colors.white, Colors.black );
+		java.io.File newFontPNG = new java.io.File( head.over.heels.FilesystemPaths.getGameStorageInHome (), "font.new.png" );
+		Pictures.saveAsPNG( imageOFont, newFontPNG.getAbsolutePath () );
 
-		int tintOffset = 2 ;
-		BufferedImage fontWithoutTint = Pictures.exactCopy( Font.imageOFont );
+		final int fontImageWidth = imageOFont.getWidth() ;
+		final int fontImageHeight = imageOFont.getHeight() ;
+
+		// the size of the font image is 272 x 609 pixels,
+		// or 16 x 21 letters 17 x 29 pixels each, it's "monospaced" yeah ;)
+
+		// metrics are
+		//      17 x 29 = 14 x 25 the letter itself + the space between letters 3 x 29,
+		//      height 29 = 1 above + 4 + 16 + 5 + 3 below
+		//           baseline is at +8 (+5) lines
+		//           (cap) height is 16
+		//           ascent is at baseline + cap height + 1, three lines
+
+		final int singleCharWidth = 17 ; // 14 + spacing 3
+		final int singleCharHeight = 29 ; // space 1 above + ( 3 + 1 ) ascent + 16 + 5 descent + spacing 3 below
+
+		// decompose the font into the letters
+
+		final int lettersPerLine = 16 ;
+		final int linesInFont = 21 ;
+
+		if ( fontImageHeight != singleCharHeight * linesInFont )
+			System.out.println( "the height " + fontImageHeight + " of the font image"
+						+ " isn't equal to " + ( singleCharHeight * linesInFont )
+							+ " = the height of a single letter " + singleCharHeight
+								+ " x " + linesInFont + " lines" );
+
+		if ( fontImageWidth != singleCharWidth * lettersPerLine )
+			System.out.println( "the width " + fontImageWidth + " of the font image"
+						+ " isn't equal to " + ( singleCharWidth * lettersPerLine )
+							+ " = the width of a single letter " + singleCharWidth
+								+ " x " + lettersPerLine + " letters in a line" );
+
+		BufferedImage [] letters = new BufferedImage[ linesInFont * lettersPerLine ];
+
+		final int charStepX = fontImageWidth / lettersPerLine ;
+		final int charStepY = fontImageHeight / linesInFont ;
+
+		final int spacing = 3 ;
+		final int lineWidth = charStepX - spacing ;
+		final int yShift = 1 ;
+		final int netHeight = charStepY - spacing - yShift ;
+
+		int i = 0 ;
+		for ( int y = 0 ; y < fontImageHeight ; y += charStepY )
+			for ( int x = 0 ; x < fontImageWidth; x += charStepX )
+				letters[ i ++ ] = Pictures.cloneAsIndexedColor (
+							Pictures.cloneSubpictureAsARGB (
+								Pictures.cloneSubpictureAsARGB ( imageOFont, x, y, charStepX, charStepY ),
+									0, yShift, lineWidth, netHeight ) );
+
+		// generate the textual bitmaps
+		java.util.Vector < String [] > lettersInStrings = new java.util.Vector < String [] > ( letters.length ) ;
+
+		for ( int ii = 0 ; ii < letters.length ; ii ++ )
+		{
+			String [] letterIn = new String [ netHeight ];
+			int atLine = 0 ;
+
+			BufferedImage imageOfLetter = letters[ ii ];
+			if ( imageOfLetter.getType() == BufferedImage.TYPE_BYTE_BINARY
+					&& imageOfLetter.getColorModel() instanceof java.awt.image.IndexColorModel
+						&& imageOfLetter.getColorModel().getPixelSize() == 1 )
+			{
+				/////Pictures.listColorModelIfIndexed( letter );
+
+				byte [] bitmap = ( (java.awt.image.DataBufferByte) imageOfLetter.getRaster().getDataBuffer() ).getData() ;
+				StringBuilder line = new StringBuilder( );
+				for ( int b = 0 ; b < bitmap.length ; ++ b ) {
+					String binary = String.format( "%8s", Integer.toBinaryString( bitmap[ b ] & 0xff ) ).replace( ' ', '0' );
+
+					int transPixel = ( (java.awt.image.IndexColorModel) imageOfLetter.getColorModel() ).getTransparentPixel ();
+					if ( transPixel == 0 )
+						binary = binary.replace( '0', ' ' );
+					else if ( transPixel == 1 )
+						binary = binary.replace( '1', ' ' );
+
+					line.append( binary );
+					/////System.out.print( String.format( "(%02x)", bitmap[ b ] ) );
+
+					if ( ( b + 1 ) % ( 1 + ( ( lineWidth - 1 ) >> 3 ) ) == 0 ) {
+						line.setLength( lineWidth );
+						letterIn[ atLine ++ ] = line.toString() ;
+						line.setLength( 0 );
+						/////System.out.println() ;
+					}
+				}
+
+				lettersInStrings.add ( letterIn );
+			}
+		}
+
+		if ( letters.length != lettersInStrings.size () )
+			throw new RuntimeException( "letters.length != lettersInStrings.size ()" );
+
+		// read the list of letters
+		LettersFile listOfLetters = new LettersFile( "gamedata" + java.io.File.separator + "letters.utf8" );
+
+		// at last make and fill the mapping
+		Font.letterToImage = new java.util.TreeMap < String, String [] > () ;
+		int howManyLetters = lettersInStrings.size ();
+		for ( int index = 0 ; index < howManyLetters ; ++ index )
+			Font.letterToImage.put( listOfLetters.letterAt( index ).trim (), // without trim() 'a\0' will not be equal to 'a\0\0\0\0\0'
+						lettersInStrings.elementAt( index ) );
+
+		for ( String letter : Font.letterToImage.keySet() )
+			System.out.print( letter );
+		System.out.println( );
+		System.out.println( listOfLetters );
 
 
 	java.io.File storageInHome = head.over.heels.FilesystemPaths.getGameStorageInHome ();
-	java.io.File newFontImage = new java.io.File( storageInHome, "font.png" );
-	Pictures.saveAsPNG( fontWithoutTint, newFontImage.getAbsolutePath () );
 
-
-		{
-			java.awt.Graphics2D fontGraphics = Font.imageOFont.createGraphics ();
-
-			for ( int off = 1 ; off <= tintOffset ; off ++ )
-				fontGraphics.drawImage( blackLetters, off, off, null );
-
-			fontGraphics.drawImage( fontWithoutTint, 0, 0, null );
-			fontGraphics.dispose ();
-		}
-
-	/* .................. */
-
-		// read the list of letters once for all fonts
-		Font.lettersMapping = new TableOfLetters( "gamedata" + java.io.File.separator + "letters.utf8" );
-		System.out.println( lettersMapping );
-
-		// stretch for the double height
-		if ( doubleHeight )
-			System.out.println( "I don't know how" );
+	System.out.println ();
+	for ( int jj = 0 ; jj < lettersInStrings.size () ; jj ++ ) {
+		String [] lines = lettersInStrings.elementAt( jj );
+		BufferedImage ofLetter = bitmapInStringsToImage( lines, 1, 2, Font.Default_Spacing_H, Font.Default_Spacing_V );
+		java.io.File letterPNG = new java.io.File( storageInHome, "letter" + jj + ".png" );
+		Pictures.saveAsPNG( ofLetter, letterPNG.getAbsolutePath () );
+		for ( int ll = 0 ; ll < lines.length ; ++ ll )
+			System.out.println( "\"" + lines[ ll ] + "\"" );
+		System.out.println ();
 	}
 
-	// ?? //private Font( Font f ) {} // doesn't copy
+	listOfLetters.writeTo( new java.io.File( storageInHome, "letters.new.utf8" ) );
+
+
+/////		// stretch for the double height
+/////		if ( doubleHeight )
+/////			System.out.println( "move it somewhere" );
+	}
+
+	public BufferedImage getImageOfString( String text )
+	{
+		char [] letters = text.toCharArray() ;
+		int howManyLetters = letters.length ;
+		while ( howManyLetters > 0 && letters[ howManyLetters - 1 ] == 0 ) {  -- howManyLetters ;  }
+
+		int width = 0 ;
+		int height = 0 ;
+		BufferedImage [] images = new BufferedImage [ howManyLetters ];
+		for ( int i = 0 ; i < howManyLetters ; ++ i ) {
+			BufferedImage image = getImageOfLetter( String.valueOf( letters[ i ] ) );
+			images[ i ] = image ;
+
+			width += image.getWidth ();
+			if ( height < image.getHeight () ) height += image.getHeight ();
+		}
+
+		BufferedImage imageOfString = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+
+		java.awt.Graphics2D g = imageOfString.createGraphics ();
+		int atX = 0 ;
+		for ( int i = 0 ; i < howManyLetters ; ++ i ) {
+			g.drawImage( images[ i ], atX, 0, null );
+			atX += images[ i ].getWidth ();
+		}
+		g.dispose ();
+
+		return imageOfString ;
+	}
+
+	public BufferedImage getImageOfLetter( String letter )
+	{
+		BufferedImage image = Font.imageOf( letter, this.spacingX, this.spacingY );
+		return ( image != null ) ? image : Font.imageOf( this.wildLetter, this.spacingX, this.spacingY );
+	}
+
+	public static BufferedImage imageOf( String letter, int hSpace, int vSpace )
+	{
+		if ( Font.letterToImage == null ) return null ;
+		if ( ! Font.letterToImage.containsKey( letter ) ) return null ;
+
+		return bitmapInStringsToImage( Font.letterToImage.get( letter ), hSpace, vSpace );
+	}
+
+	public static BufferedImage bitmapInStringsToImage( String [] lines )
+	{
+		return bitmapInStringsToImage( lines, 0, 0, 0, 0 );
+	}
+
+	public static BufferedImage bitmapInStringsToImage( String [] lines, int spaceTwitter, int spaceY )
+	{
+		return bitmapInStringsToImage( lines, 0, 0, spaceTwitter, spaceY );
+	}
+
+	public static BufferedImage bitmapInStringsToImage( String [] lines, int xShift, int yShift, int spaceTwitter, int spaceY )
+	{
+		if ( lines == null ) return null ;
+
+		int bitsHeight = lines.length ;
+		int bitsWidth  = lines[ 0 ].length ();
+		int  width = xShift + bitsWidth  + spaceTwitter ;
+		int height = yShift + bitsHeight + spaceY ;
+
+		int [] colors = new int [] {  0xff000000 ,    // opaque black
+		                              0x00ffffff  };  // transparent white
+
+		java.awt.image.IndexColorModel colorModel
+						= new java.awt.image.IndexColorModel (
+							/* bits per pixel */ 1,
+							/* color map size */ 2, /* map */ colors, /* first entry in map */ 0,
+							/* has alpha */ true,
+							/* transIndex */ 1,
+							/* transferType */ java.awt.image.DataBuffer.TYPE_BYTE );
+
+		BufferedImage image = new BufferedImage( width, height, BufferedImage.TYPE_BYTE_BINARY, colorModel );
+
+		// at first fill it with transparency
+		for ( int y = 0 ; y < height ; y ++ )
+			for ( int x = 0 ; x < width ; x ++ )
+				image.setRGB( x, y, /* transparent */ colors[ 1 ] ) ;
+
+		for ( int y = 0 ; y < bitsHeight ; y ++ )
+			for ( int x = 0 ; x < bitsWidth ; x ++ )
+				if ( lines[ y ].charAt( x ) != ' ' )
+					image.setRGB( x + xShift, y + yShift, /* opaque */ colors[ 0 ] ) ;
+
+		return image ;
+	}
 
 }
 
 
 /**
- * The mapping between the image of letter from the font's picture file and the UTF-8 code of this letter
+ * The list of letters that the font draws, stored in a file
  */
-class TableOfLetters
+class LettersFile
 {
 
-	String [] letters ;
+	private java.util.Vector < String > letters ;
 
-	TableOfLetters( String nameOFile )
+	LettersFile( String nameOFile )
 	{
 		java.io.File lettersFile = new java.io.File( nameOFile );
 		if ( ! lettersFile.exists() || ! lettersFile.isFile() || ! lettersFile.canRead() ) {
-			System.out.println( "can't read file \"" + nameOFile + "\" with the list of letters drawn in the font" );
+			System.out.println( "can't read file \"" + nameOFile + "\" with the list of letters that the font draws" );
 			return ;
 		}
 
@@ -130,12 +359,12 @@ class TableOfLetters
 		}
 		System.out.println( "🧐 file \"" + nameOFile + "\" lists " + howManyLetters + " letters" );
 
-		this.letters = new String [ howManyLetters ];
-		int inTable = 0;
+		this.letters = new java.util.Vector < String > ( howManyLetters );
+
 		for ( int inBytes = 0 ; inBytes < bytesRead ; ) {
 			short b = (short) ( ( (int) bytes[ inBytes ] ) & 0xff );
 			if ( b == 0 ) {
-				letters[ inTable ++ ] = "" ;
+				this.letters.add( "" );
 				inBytes ++ ;
 			} else {
 				byte [] letter = new byte [ 5 ];
@@ -150,13 +379,44 @@ class TableOfLetters
 				letter[ bytesInLetter ] = 0 ; // end of string
 
 				try {
-					this.letters[ inTable ] = new String( letter, "UTF-8" );
+					this.letters.add( new String( letter, "UTF-8" ) );
 				} catch ( java.io.UnsupportedEncodingException e ) {
-					this.letters[ inTable ] = "" ; // 🤔
+					this.letters.add( "" ); // 🤔
 				}
-                                inTable ++ ;
                         }
 		}
+	}
+
+	public String letterAt( int i )
+	{
+		return letters.elementAt( i );
+	}
+
+	public boolean writeTo( java.io.File file )
+	{
+		int howManyLetters = letters.size () ;
+		int howManyBytes = 0 ;
+
+		java.util.Vector < byte [] > lettersUtf8 = new java.util.Vector < byte [] > ( howManyLetters ) ;
+		for ( String letter : this.letters ) {
+			byte [] utf8 = LettersFile.letterToUtf8( letter );
+			lettersUtf8.add( utf8 );
+			howManyBytes += utf8.length ;
+		}
+
+		byte [] bytes = new byte [ howManyBytes ];
+		int inBytes = 0 ;
+		for ( byte [] utf8letter : lettersUtf8 )
+			for ( int j = 0 ; j < utf8letter.length ; ++ j )
+				bytes[ inBytes ++ ] = utf8letter[ j ];
+
+		try ( java.io.FileOutputStream stream = new java.io.FileOutputStream( file ) )
+		{
+			stream.write( bytes );
+		}
+		catch ( java.io.IOException e ) {  return false ;  }
+
+		return true ;
 	}
 
 	public String toString ()
@@ -166,11 +426,13 @@ class TableOfLetters
 		StringBuilder out = new StringBuilder( );
 		String newline = System.getProperty( "line.separator" );
 
-		for ( int i = 0 ; i < this.letters.length ; ++ i )
-		{
-			String letter = this.letters[ i ];
+		out.append( this.letters.size () );
+		out.append( " letters" );
+		out.append( newline );
 
-			short [] utf16 = TableOfLetters.letterToUtf16( letter );
+		for ( String letter : this.letters )
+		{
+			short [] utf16 = LettersFile.letterToUtf16( letter );
 			out.append( "\"" );
 			for ( int c = 0 ; c < utf16.length ; c ++ ) {
 				out.append( "\\u" + String.format( "%04x", utf16[ c ] ) );
@@ -185,7 +447,7 @@ class TableOfLetters
 			if ( letter.length() == 0 ) out.append( " " );
 
 			out.append( " // utf8 { " );
-			byte [] bytesUtf8 = TableOfLetters.letterToUtf8( letter );
+			byte [] bytesUtf8 = LettersFile.letterToUtf8( letter );
 			for ( int b = 0 ; b < bytesUtf8.length ; b ++ ) {
 				out.append( "0x" + String.format( "%02x", bytesUtf8[ b ] ) );
 				if ( b + 1 < bytesUtf8.length ) out.append( ", " );
