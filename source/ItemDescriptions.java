@@ -52,10 +52,10 @@ public class ItemDescriptions
 		if ( this.descriptionsOfItems.size () != that.descriptionsOfItems.size () )
 			return false ;
 
-		for ( String label : this.descriptionsOfItems.keySet() )
+		for ( String kind : this.descriptionsOfItems.keySet() )
 		{
-			DescriptionOfItem thisDescription = this.descriptionsOfItems.get( label );
-			DescriptionOfItem thatDescription = that.descriptionsOfItems.get( label );
+			DescriptionOfItem thisDescription = this.descriptionsOfItems.get( kind );
+			DescriptionOfItem thatDescription = that.descriptionsOfItems.get( kind );
 
 			if ( thatDescription == null // get() returns null when the key is not in the map
 				|| ! thisDescription.equals( thatDescription ) ) return false ;
@@ -101,8 +101,8 @@ public class ItemDescriptions
 			if ( itemNode.getNodeType() == Node.ELEMENT_NODE ) {
 				Element itemElement = (Element) itemNode ;
 
-				final String itemLabel = itemElement.getAttribute( "label" ) ; // the label of item
-				DescriptionOfItem newDescription = new DescriptionOfItem ( itemLabel );
+				final String kindOfItem = itemElement.getAttribute( "kind" ) ; // the kind of item
+				DescriptionOfItem newDescription = new DescriptionOfItem ( kindOfItem );
 
 				// spatial dimensions
 				int itemWidthX = 0 ;
@@ -130,7 +130,7 @@ public class ItemDescriptions
 				readDescriptionFurther( itemElement, newDescription );
 
 				// and at last
-				this.descriptionsOfItems.put( itemLabel, newDescription );
+				this.descriptionsOfItems.put( kindOfItem, newDescription );
 			}
 		}
 
@@ -144,8 +144,20 @@ public class ItemDescriptions
 			if ( doorNode.getNodeType() == Node.ELEMENT_NODE ) {
 				Element doorElement = (Element) doorNode ;
 
-				final String doorLabel = doorElement.getAttribute( "label" ) ; // the label of door
-				DescriptionOfDoor doorDescription = new DescriptionOfDoor ( doorLabel );
+				String doorScenery = doorElement.getAttribute( "scenery" ) ;
+				String doorAt = doorElement.getAttribute( "at" ) ;
+
+	if ( doorScenery.isEmpty() || doorAt.isEmpty() ) {
+	String typeOfDoor = doorElement.getAttribute( "type" ) ;
+	if ( ! typeOfDoor.isEmpty () ) {
+		// the door's kind is %scenery%-door-%at%
+		int doorInKind = typeOfDoor.indexOf( "door-" );
+		if ( doorInKind > 0 /* it is found and isn't at the very beginning */ ) {
+			doorScenery = typeOfDoor.substring( 0, doorInKind - 1 );
+			doorAt = typeOfDoor.substring( doorInKind + 5 );
+		}
+	} }
+				DescriptionOfDoor doorDescription = new DescriptionOfDoor ( doorScenery, doorAt );
 
 				// the three parts of door
 				DescriptionOfItem lintel = doorDescription.getLintel () ;
@@ -153,9 +165,9 @@ public class ItemDescriptions
 				DescriptionOfItem rightJamb = doorDescription.getRightJamb ();
 
 				// and at last
-				this.descriptionsOfItems.put(  leftJamb.getLabel(), leftJamb );
-				this.descriptionsOfItems.put( rightJamb.getLabel(), rightJamb );
-				this.descriptionsOfItems.put(    lintel.getLabel(), lintel );
+				this.descriptionsOfItems.put(  leftJamb.getKind(), leftJamb );
+				this.descriptionsOfItems.put( rightJamb.getKind(), rightJamb );
+				this.descriptionsOfItems.put(    lintel.getKind(), lintel );
 			}
 		}
 
@@ -231,7 +243,7 @@ public class ItemDescriptions
 			}
 		} else
 		{
-			if ( description.getLabel().startsWith( "invisible-wall" ) )
+			if ( description.getKind().startsWith( "invisible-wall" ) )
 			{
 				description.setNameOfPicturesFile( "" );
 				description.setWidthOfFrame( 64 );

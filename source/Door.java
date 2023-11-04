@@ -8,6 +8,7 @@
 
 package head.over.heels ;
 
+
 /**
  * A door to the room. It is really the three free items, the two jambs and the lintel
  */
@@ -15,13 +16,13 @@ package head.over.heels ;
 public class Door ///implements Mediated
 {
 
-	private String labelOfDoor ;
+	private String kindOfDoor ;
 
-	public String getLabel () {  return labelOfDoor ;  }
+	public String getKind () {  return this.kindOfDoor ;  }
 
-	public Door( String label )
+	public Door( String kind )
 	{
-		this.labelOfDoor = label ;
+		this.kindOfDoor = kind ;
 	}
 
 }

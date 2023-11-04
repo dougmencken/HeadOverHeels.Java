@@ -36,22 +36,17 @@ public class DescriptionOfDoor extends DescriptionOfItem
 	public static final int  WIDTH_OF_DOOR_IMAGE = 82 ;
 	public static final int HEIGHT_OF_DOOR_IMAGE = 140 ;
 
-	public DescriptionOfDoor ( String doorLabel )
+	public DescriptionOfDoor ( String sceneryOfDoor, String where )
 	{
-		super( doorLabel );
+		super( /* item's kind is %scenery%-door-%at% */ sceneryOfDoor + "-door-" + where );
 
-		super.setNameOfPicturesFile( doorLabel + ".png" );
+		this.scenery = sceneryOfDoor ;
+		this.doorAt = where ;
+
+		super.setNameOfPicturesFile( super.getKind() + ".png" );
 		super.setWidthOfFrame( WIDTH_OF_DOOR_IMAGE );
 		super.setHeightOfFrame( HEIGHT_OF_DOOR_IMAGE );
 		super.setHowManyOrientations( (byte) 1 );
-
-		// the door's label is %scenery%-door-%at%
-		int doorInLabel = doorLabel.indexOf( "door-" );
-		if ( doorInLabel > 0 /* it is found and isn't at the very beginning */ )
-		{
-			this.scenery = doorLabel.substring( 0, doorInLabel - 1 );
-			this.doorAt = doorLabel.substring( doorInLabel + 5 );
-		}
 
 		this.lintel = this.cloneAsLintelOfDoor() ;
 		this.leftJamb = this.cloneAsLeftJambOfDoor() ;
@@ -61,7 +56,7 @@ public class DescriptionOfDoor extends DescriptionOfItem
 	private DescriptionOfItem cloneAsLintelOfDoor()
 	{
 		DescriptionOfItem descriptionOfLintel = super.clone() ;
-		descriptionOfLintel.setLabel( super.getLabel () + "~lintel" );
+		descriptionOfLintel.setKind( super.getKind () + "~lintel" );
 		descriptionOfLintel.markAsPartOfDoor () ;
 
 		final int lintelSmallerWidth = 9 ;
@@ -82,7 +77,7 @@ public class DescriptionOfDoor extends DescriptionOfItem
 	private DescriptionOfItem cloneAsLeftJambOfDoor()
 	{
 		DescriptionOfItem descriptionOfLeftJamb = super.clone() ;
-		descriptionOfLeftJamb.setLabel( super.getLabel () + "~leftjamb" );
+		descriptionOfLeftJamb.setKind( super.getKind () + "~leftjamb" );
 		descriptionOfLeftJamb.markAsPartOfDoor() ;
 
 		descriptionOfLeftJamb.setWidthX( 9 );
@@ -95,7 +90,7 @@ public class DescriptionOfDoor extends DescriptionOfItem
 	private DescriptionOfItem cloneAsRightJambOfDoor()
 	{
 		DescriptionOfItem descriptionOfRightJamb = super.clone() ;
-		descriptionOfRightJamb.setLabel( super.getLabel () + "~rightjamb" );
+		descriptionOfRightJamb.setKind( super.getKind () + "~rightjamb" );
 		descriptionOfRightJamb.markAsPartOfDoor() ;
 
 		descriptionOfRightJamb.setWidthX( 9 );
@@ -114,7 +109,7 @@ public class DescriptionOfDoor extends DescriptionOfItem
 
 	public String toString ()
 	{
-		return "<door label=\"" + this.scenery + "-door-" + this.doorAt + "\"/>" ;
+		return "<door at=\"" + this.doorAt + "\" scenery=\"" + this.scenery + "\"/>" ;
 	}
 
 }

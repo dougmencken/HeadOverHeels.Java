@@ -18,10 +18,10 @@ import java.util.Vector ;
 public class DescriptionOfItem implements Cloneable
 {
 
-	private String label ;
+	private String kind ;
 
-	public String getLabel () {  return label ;  }
-	protected void setLabel ( String newLabel ) {  this.label = newLabel ;  }
+	public String getKind () {  return kind ;  }
+	protected void setKind ( String newKind ) {  this.kind = newKind ;  }
 
 	/**
 	 * The three spatial dimensions of the item, along the x, along the y, and height along the z
@@ -177,11 +177,11 @@ public class DescriptionOfItem implements Cloneable
 	protected void markAsPartOfDoor () {  this.partOfDoor = true ;  }
 
 	/*
-	 * Create new description of items with this label
+	 * Create new description of items of this kind
 	 */
-	public DescriptionOfItem ( String itemLabel )
+	public DescriptionOfItem ( String kindOfItem )
 	{
-		this.label = itemLabel ;
+		this.kind = kindOfItem ;
 	}
 
 	public boolean equals( Object that )
@@ -193,7 +193,7 @@ public class DescriptionOfItem implements Cloneable
 	{
 		if ( that == null ) return false ;
 
-		return	this.label.equals( that.label )
+		return	this.kind.equals( that.kind )
 				&& this.widthX == that.widthX && this.widthY == that.widthY && this.height == that.height
 				&& this.weight == that.weight && this.speed == that.speed
 				&& this.mortal == that.mortal
@@ -212,10 +212,10 @@ public class DescriptionOfItem implements Cloneable
 	/**
 	 * Returns a copy of this DescriptionOfItem for which copy.equals(this) is true
 	 */
-	/* @Override */
+	@Override
 	public DescriptionOfItem clone() /* doesn't throw CloneNotSupportedException */
 	{
-		DescriptionOfItem theClone = new DescriptionOfItem( this.label );
+		DescriptionOfItem theClone = new DescriptionOfItem( this.kind );
 
 		theClone.widthX = this.widthX ;
 		theClone.widthY = this.widthY ;
@@ -257,7 +257,7 @@ public class DescriptionOfItem implements Cloneable
 		String newline = System.getProperty( "line.separator" );
 		String indent = "    " ;
 
-		text.append( "<item label=\"" + getLabel () + "\">" );
+		text.append( "<item kind=\"" + getKind () + "\">" );
 		text.append( newline );
 
 		text.append( indent );

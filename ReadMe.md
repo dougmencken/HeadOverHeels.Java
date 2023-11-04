@@ -4,13 +4,13 @@ The Java port of the free and open source remake of the Jon Ritman's and Bernie 
 
 It is being made from the remake in C++ https://github.com/dougmencken/HeadOverHeels
 
-## Compile
+## Compile (once)
 
 ```
 ./CompileMe.sh
 ```
 
-## Run
+## Run (anywhere)
 
 ```
 ./HeadOverHeels.Java.sh

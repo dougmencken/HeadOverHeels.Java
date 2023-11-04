@@ -92,20 +92,29 @@ class ContentOfGameWindow extends JComponent
 	{
 		super.paintComponent( g );
 
+	String HEAD = "HEAD" ;
+	String over = "over" ;
+	String HEELS = "HEELS" ;
+
 	String comical = "*COMICAL*" ;
 	String dazzling = "*DAZZLING*" ;
 	String enthralling = "*ENTHRALLING*" ;
 
 	head.over.heels.gui.Font font = new head.over.heels.gui.Font( "test", "fulvous" ); // 😙
 
-	java.awt.image.BufferedImage comicalImage = font.getImageOfString( comical );
-	java.awt.image.BufferedImage dazzlingImage = font.getImageOfString( dazzling );
-	java.awt.image.BufferedImage enthrallingImage = font.getImageOfString( enthralling );
+	java.awt.image.BufferedImage hohImage = font.composeRawImageOfString( "\"" + HEAD + " " + over + " " + HEELS + "\"" );
+
+	java.awt.image.BufferedImage comicalImage = font.composeRawImageOfString( comical );
+	java.awt.image.BufferedImage dazzlingImage = font.composeRawImageOfString( dazzling );
+	java.awt.image.BufferedImage enthrallingImage = font.composeRawImageOfString( enthralling );
 
 	java.awt.Graphics2D gg = this.whatToDraw.createGraphics ();
 
-	int centerY = ( this.whatToDraw.getHeight() - ( comicalImage.getHeight() + dazzlingImage.getHeight() + enthrallingImage.getHeight() ) ) >> 1 ;
+	int centerY = ( this.whatToDraw.getHeight() - ( hohImage.getHeight() + 33 + comicalImage.getHeight() + dazzlingImage.getHeight() + enthrallingImage.getHeight() ) ) >> 1 ;
 	int atY = centerY ;
+
+	gg.drawImage( hohImage, ( this.whatToDraw.getWidth() - hohImage.getWidth() ) >> 1, atY, this );
+	atY += hohImage.getHeight() + 33 ;
 
 	gg.drawImage( comicalImage, ( this.whatToDraw.getWidth() - comicalImage.getWidth() ) >> 1, atY, this );
 	atY += comicalImage.getHeight();
