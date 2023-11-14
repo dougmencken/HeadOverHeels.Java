@@ -51,8 +51,8 @@ public class Pictures
 				{
 					Color original = new Color( picture.getRGB( x, y ) );
 
-					// convert every color but the fully transparent
-					if ( Colors.isFullyTransparent( original ) ) continue ;
+					// skip the fully transparent pixels
+					if ( Colours.isFullyTransparent( original ) ) continue ;
 
 					/* imagine the color as the linear geometric vector c { r, g, b }
 					   this color turns into the shade of gray r=g=b =w with vector b { w, w, w }
@@ -245,6 +245,31 @@ public class Pictures
 			if ( i == indexedColors.getTransparentPixel () ) System.out.print( " *transparent*" );
 			System.out.println() ;
 		}
+	}
+
+	public static BufferedImage cloneWithTwiceTheHeight ( BufferedImage before )
+	{
+		if ( before == null ) return null ;
+
+		BufferedImage after ;
+		synchronized ( before ) {
+			int  width = before.getWidth ();
+			int height = before.getHeight ();
+			int type = before.getType ();
+
+			if ( type == BufferedImage.TYPE_BYTE_BINARY || type == BufferedImage.TYPE_BYTE_INDEXED )
+				after = new BufferedImage( width, height << 1, type, (java.awt.image.IndexColorModel) before.getColorModel() );
+			else
+				after = new BufferedImage( width, height << 1, type );
+
+			for ( int y = 0 ; y < height ; y ++ )
+				for ( int x = 0 ; x < width ; x ++ ) {
+					after.setRGB( x, 2*y, before.getRGB( x, y ) );
+					after.setRGB( x, 2*y + 1, before.getRGB( x, y ) );
+				}
+		}
+
+		return after ;
 	}
 
 	private Pictures() {} // no instances

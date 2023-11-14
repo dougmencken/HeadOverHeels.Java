@@ -8,9 +8,10 @@
 
 package head.over.heels.gui ;
 
+import java.awt.Color ;
 import java.awt.image.BufferedImage ;
 
-import head.over.heels.Colors ;
+import head.over.heels.Colours ;
 import head.over.heels.Pictures ;
 
 
@@ -26,7 +27,7 @@ public class Font
 	private static java.util.Map < String /* letter */, String [] /* bitmap */ > letterToImage ;
 
 	private String fontName ;
-	private String fontColor ;
+	private Color fontColor ;
 
 	private int spacingX ;
 	private int spacingY ;
@@ -39,6 +40,10 @@ public class Font
 
 	public static final int Default_Spacing_H = 3 ;
 	public static final int Default_Spacing_V = 5 ;
+
+	private boolean doubleHeight = false ;
+
+	public static final int Shadow_Shift = 2 ;
 
 	private String wildLetter = "?" ;
 
@@ -69,31 +74,34 @@ public class Font
 	public Font( String name, String color, boolean doubleHeight, int spaceTwitter /* spaceX */, int spaceY )
 	{
 		this.fontName = name ;
-		this.fontColor = color ;
+		this.fontColor = Colours.byName( color );
+
+		this.doubleHeight = doubleHeight ;
 
 		this.spacingY = spaceY ;
 		this.spacingX = spaceTwitter ;
 
-		// the mapping is filled once for all the instances of the font
-		if ( Font.letterToImage != null ) return ;
+		if ( Font.letterToImage == null ) // once for all the instances of the font
+			readImageOFont( "gamedata" + java.io.File.separator + "font.png" );
+	}
 
+	private void readImageOFont( String fontFile )
+	{
 		BufferedImage imageOFont = null ;
 		{
-			// read the image of font
-			String nameOfFontFile = "gamedata" + java.io.File.separator + "font.png" ;
-			BufferedImage fontFromPNG = Pictures.readFromPNG( nameOfFontFile );
+			BufferedImage fontFromPNG = Pictures.readFromPNG( fontFile );
 			if ( fontFromPNG == null ) {
-				System.err.println( "oops, can’t get the image of letters from file \"" + nameOfFontFile + "\"" );
+				System.err.println( "oops, can’t get the image of letters from file \"" + fontFile + "\"" );
 				return ;
 			}
 
 			// recolor the font image in "black on transparent"
 
 			imageOFont = Pictures.cloneAsARGBWithReplacingColor( fontFromPNG,
-								java.awt.Color.magenta, new java.awt.Color( 255, 0, 255, /* alpha */ 0 ) );
+								Color.magenta, new Color( 255, 0, 255, /* alpha */ 0 ) );
 								// maybe it's some old version of the font's image with the magenta background
 			// white to black
-			Pictures.colorizeWhite( imageOFont, java.awt.Color.black );
+			Pictures.colorizeWhite( imageOFont, Color.black );
 		}
 
 		imageOFont = Pictures.cloneAsIndexedColor( imageOFont );
@@ -208,40 +216,60 @@ public class Font
 			System.out.print( letter );
 		System.out.println( );
 
-	////	System.out.println( listOfLetters );
-
-	for ( String letter : Font.letterToImage.keySet() ) {
-		System.out.println();
-		System.out.println( "|" + letter + "|" );
-		System.out.println();
-		System.out.println( Font.dumpTextualBitmap( ".add( \"", Font.letterToImage.get( letter ), "\" ); // " ) );
+		// uncomment to dump the images of letters as lines of text
+		//for ( String letter : Font.letterToImage.keySet() ) {
+		//	System.out.println();
+		//	System.out.println( "|" + letter + "|" );
+		//	System.out.println();
+		//	System.out.println( Font.dumpTextualBitmap( ".add( \"", Font.letterToImage.get( letter ), "\" ); // " ) );
+		//}
 	}
 
-	java.io.File storageInHome = head.over.heels.FilesystemPaths.getGameStorageInHome ();
-
-	listOfLetters.writeTo( new java.io.File( storageInHome, "letters.new.utf8" ) );
-
-
-/////		// stretch for the double height
-/////		if ( doubleHeight )
-/////			System.out.println( "move it somewhere" );
+	public BufferedImage composeImageOfString( String text )
+	{
+		return composeImageOfString( text, true, this.doubleHeight );
 	}
 
-	public BufferedImage composeRawImageOfString( String text )
+	public BufferedImage composeImageOfString( String text, boolean withShadow )
+	{
+		return composeImageOfString( text, withShadow, this.doubleHeight );
+	}
+
+	/**
+	 * @param text the string of text to render using the font
+	 * @param withShadow true to add shadow to the letters
+	 * @param with2xHeight true to stretch the letters twice in height
+	 */
+	private BufferedImage composeImageOfString( String text, boolean withShadow, boolean with2xHeight )
 	{
 		char [] letters = text.toCharArray() ;
 		int howManyLetters = letters.length ;
 		while ( howManyLetters > 0 && letters[ howManyLetters - 1 ] == 0 ) {  -- howManyLetters ;  }
 
+		BufferedImage [] images = new BufferedImage [ howManyLetters ];
+		BufferedImage [] shadows = new BufferedImage [ howManyLetters ];
 		int width = 0 ;
 		int height = 0 ;
-		BufferedImage [] images = new BufferedImage [ howManyLetters ];
+
 		for ( int i = 0 ; i < howManyLetters ; ++ i ) {
-			BufferedImage image = getImageOfLetter( String.valueOf( letters[ i ] ) );
+			String letter = String.valueOf( letters[ i ] );
+
+			BufferedImage image = getImageOfLetter( letter );
+			if ( with2xHeight ) image = Pictures.cloneWithTwiceTheHeight( image );
 			images[ i ] = image ;
 
 			width += image.getWidth ();
-			if ( height < image.getHeight () ) height += image.getHeight ();
+			if ( height < image.getHeight () ) height = image.getHeight ();
+
+			if ( withShadow ) {
+				BufferedImage shadow = getImageOfLetterInBlack( letter );
+				shadows[ i ] = with2xHeight ? Pictures.cloneWithTwiceTheHeight( shadow ) : shadow ;
+			}
+		}
+
+		if ( withShadow ) {
+			width += Font.Shadow_Shift ;
+			height += Font.Shadow_Shift ;
 		}
 
 		BufferedImage imageOfString = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
@@ -249,7 +277,11 @@ public class Font
 		java.awt.Graphics2D g = imageOfString.createGraphics ();
 		int atX = 0 ;
 		for ( int i = 0 ; i < howManyLetters ; ++ i ) {
+			if ( withShadow )
+				g.drawImage( shadows[ i ], atX + Font.Shadow_Shift, Font.Shadow_Shift, null );
+
 			g.drawImage( images[ i ], atX, 0, null );
+
 			atX += images[ i ].getWidth ();
 		}
 		g.dispose ();
@@ -259,17 +291,23 @@ public class Font
 
 	public BufferedImage getImageOfLetter( String letter )
 	{
-		BufferedImage image = Font.imageOf( letter, this.spacingX, this.spacingY );
-		return ( image != null ) ? image : Font.imageOf( this.wildLetter, this.spacingX, this.spacingY );
+		BufferedImage image = Font.imageOf( letter, this.fontColor, this.spacingX, this.spacingY );
+		return ( image != null ) ? image : Font.imageOf( this.wildLetter, this.fontColor, this.spacingX, this.spacingY );
 	}
 
-	public static BufferedImage imageOf( String letter, int hSpace, int vSpace )
+	public BufferedImage getImageOfLetterInBlack( String letter )
+	{
+		BufferedImage image = Font.imageOf( letter, Color.black, this.spacingX, this.spacingY );
+		return ( image != null ) ? image : Font.imageOf( this.wildLetter, Color.black, this.spacingX, this.spacingY );
+	}
+
+	public static BufferedImage imageOf( String letter, Color color, int hSpace, int vSpace )
 	{
 		if ( letter.isEmpty () ) return null ;
 		if ( Font.letterToImage == null ) return null ;
 		if ( ! Font.letterToImage.containsKey( letter ) ) return null ;
 
-		return bitmapInStringsToImage( Font.letterToImage.get( letter ), hSpace, vSpace );
+		return bitmapInStringsToImage( Font.letterToImage.get( letter ), color, hSpace, vSpace );
 	}
 
 	public static BufferedImage bitmapInStringsToImage( String [] lines )
@@ -282,7 +320,26 @@ public class Font
 		return bitmapInStringsToImage( lines, 0, 0, spaceTwitter, spaceY );
 	}
 
+	/**
+	 * The default palette is opaque black 0xff000000 on 0x00ffffff transparent white
+	 */
 	public static BufferedImage bitmapInStringsToImage( String [] lines, int xShift, int yShift, int spaceTwitter, int spaceY )
+	{
+		return bitmapInStringsToImage( lines, Color.black, xShift, yShift, spaceTwitter, spaceY );
+	}
+
+	public static BufferedImage bitmapInStringsToImage( String [] lines, Color color )
+	{
+		return bitmapInStringsToImage( lines, color, 0, 0, 0, 0 );
+	}
+
+	public static BufferedImage bitmapInStringsToImage( String [] lines, Color color, int spaceTwitter, int spaceY )
+	{
+		return bitmapInStringsToImage( lines, color, 0, 0, spaceTwitter, spaceY );
+	}
+
+	public static BufferedImage bitmapInStringsToImage( String [] lines, Color color,
+								int xShift, int yShift, int spaceTwitter, int spaceY )
 	{
 		if ( lines == null ) return null ;
 
@@ -291,13 +348,14 @@ public class Font
 		int  width = xShift + bitsWidth  + spaceTwitter ;
 		int height = yShift + bitsHeight + spaceY ;
 
-		int [] colors = new int [] {  0xff000000 ,    // opaque black
-		                              0x00ffffff  };  // transparent white
+		int fore = color.getRGB ();
+		int back = ~ fore ; // flip da bits
+		int [] palette = new int [] {  fore, back  };
 
 		java.awt.image.IndexColorModel colorModel
 						= new java.awt.image.IndexColorModel (
 							/* bits per pixel */ 1,
-							/* color map size */ 2, /* map */ colors, /* first entry in map */ 0,
+							/* color map size */ 2, /* map */ palette, /* first entry in map */ 0,
 							/* has alpha */ true,
 							/* transIndex */ 1,
 							/* transferType */ java.awt.image.DataBuffer.TYPE_BYTE );
@@ -307,12 +365,12 @@ public class Font
 		// at first fill it with transparency
 		for ( int y = 0 ; y < height ; y ++ )
 			for ( int x = 0 ; x < width ; x ++ )
-				image.setRGB( x, y, /* transparent */ colors[ 1 ] ) ;
+				image.setRGB( x, y, /* transparent */ palette[ 1 ] ) ;
 
 		for ( int y = 0 ; y < bitsHeight ; y ++ )
 			for ( int x = 0 ; x < bitsWidth ; x ++ )
 				if ( lines[ y ].charAt( x ) != ' ' )
-					image.setRGB( x + xShift, y + yShift, /* opaque */ colors[ 0 ] ) ;
+					image.setRGB( x + xShift, y + yShift, /* opaque */ palette[ 0 ] ) ;
 
 		return image ;
 	}
@@ -331,6 +389,17 @@ public class Font
 						.append( System.getProperty( "line.separator" ) );
 
 		return out ;
+	}
+
+	public static void main( String [] arguments )
+	{
+		String nameOfLettersFile = "letters.new.utf8" ;
+		if ( arguments.length > 0 ) nameOfLettersFile = arguments[ 0 ] ;
+
+		LettersFile listOfLetters = new LettersFile (); // ( "letters.utf8" );
+		System.out.println( listOfLetters );
+
+		listOfLetters.writeTo( new java.io.File( head.over.heels.FilesystemPaths.getGameStorageInHome (), nameOfLettersFile ) );
 	}
 
 }

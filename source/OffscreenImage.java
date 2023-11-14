@@ -10,9 +10,6 @@ package head.over.heels ;
 
 import java.awt.image.BufferedImage ;
 
-// new java.awt.Color( 0x33, 0xd1, 0x3f ) /* "lime green" */
-// new java.awt.Color( 0xff, 0xe4, 0x01 ) /* "vivid yellow" */
-
 import java.awt.Graphics2D ;
 
 

@@ -55,7 +55,7 @@ class ContentOfGameWindow extends JComponent
 
 	ContentOfGameWindow ( int width, int height )
 	{
-		setBackground( Color.red );
+		setBackground( Colours.reducedRed );
 		setSize( width, height );
 
 		startRepaintTimer ();
@@ -100,13 +100,14 @@ class ContentOfGameWindow extends JComponent
 	String dazzling = "*DAZZLING*" ;
 	String enthralling = "*ENTHRALLING*" ;
 
-	head.over.heels.gui.Font font = new head.over.heels.gui.Font( "test", "fulvous" ); // 😙
+	head.over.heels.gui.Font hohFont = new head.over.heels.gui.Font( "HoH", "fulvous", /* 2x height */ true ); // 😙
+	head.over.heels.gui.Font redFont = new head.over.heels.gui.Font( "test", "red" );
 
-	java.awt.image.BufferedImage hohImage = font.composeRawImageOfString( "\"" + HEAD + " " + over + " " + HEELS + "\"" );
+	java.awt.image.BufferedImage hohImage = hohFont.composeImageOfString( "\"" + HEAD + " " + over + " " + HEELS + "\"" );
 
-	java.awt.image.BufferedImage comicalImage = font.composeRawImageOfString( comical );
-	java.awt.image.BufferedImage dazzlingImage = font.composeRawImageOfString( dazzling );
-	java.awt.image.BufferedImage enthrallingImage = font.composeRawImageOfString( enthralling );
+	java.awt.image.BufferedImage comicalImage = redFont.composeImageOfString( comical );
+	java.awt.image.BufferedImage dazzlingImage = redFont.composeImageOfString( dazzling );
+	java.awt.image.BufferedImage enthrallingImage = redFont.composeImageOfString( enthralling );
 
 	java.awt.Graphics2D gg = this.whatToDraw.createGraphics ();
 
@@ -206,21 +207,23 @@ public class GameWindow extends JFrame
 			static final int ToCyan    = 5 ;
 			static final int ToYellow  = 6 ;
 			static final int ToWhite   = 7 ;
+			static final int ToGray    = 8 ;
 
 			int toColor = ToRed ;
 
 			public void mouseReleased( java.awt.event.MouseEvent e ) {
-				toColor ++ ;
-				if ( toColor > 7 ) toColor = 0 ;
+				++ toColor ;
+				if ( toColor > 8 ) toColor = 0 ;
 
-				if      ( toColor ==   ToBlack ) randomPixelFadeOut( Color.black ) ;
-				else if ( toColor ==    ToBlue ) randomPixelFadeOut( Color.blue ) ;
-				else if ( toColor ==     ToRed ) randomPixelFadeOut( Color.red ) ;
-				else if ( toColor == ToMagenta ) randomPixelFadeOut( Color.magenta ) ;
-				else if ( toColor ==   ToGreen ) randomPixelFadeOut( Color.green ) ;
-				else if ( toColor ==    ToCyan ) randomPixelFadeOut( Color.cyan ) ;
-				else if ( toColor ==  ToYellow ) randomPixelFadeOut( Color.yellow ) ;
-				else if ( toColor ==   ToWhite ) randomPixelFadeOut( Color.white ) ;
+				if      ( toColor ==   ToBlack ) randomPixelFadeOut( Colours.black ) ;
+				else if ( toColor ==    ToBlue ) randomPixelFadeOut( Colours.reducedBlue ) ;
+				else if ( toColor ==     ToRed ) randomPixelFadeOut( Colours.reducedRed ) ;
+				else if ( toColor == ToMagenta ) randomPixelFadeOut( Colours.magenta ) ;
+				else if ( toColor ==   ToGreen ) randomPixelFadeOut( Colours.green ) ;
+				else if ( toColor ==    ToCyan ) randomPixelFadeOut( Colours.cyan ) ;
+				else if ( toColor ==  ToYellow ) randomPixelFadeOut( Colours.yellow ) ;
+				else if ( toColor ==   ToWhite ) randomPixelFadeOut( Colours.white ) ;
+				else if ( toColor ==    ToGray ) randomPixelFadeOut( Colours.grey75white ) ;
 			}
 		} ) ;
 		addKeyListener( new java.awt.event.KeyAdapter ()
