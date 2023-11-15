@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage ;
 
 import head.over.heels.Colours ;
 import head.over.heels.Pictures ;
+import head.over.heels.FilesystemPaths ;
 
 
 /**
@@ -82,33 +83,241 @@ public class Font
 		this.spacingX = spaceTwitter ;
 
 		if ( Font.letterToImage == null ) // once for all the instances of the font
-			readImageOFont( "gamedata" + java.io.File.separator + "font.png" );
+		{
+			BufferedImage font = Font.readImageOFont( new java.io.File( FilesystemPaths.getPathToGameData(), "font.png" ) );
+			java.util.Vector < String [] > imagesOfLetters = Font.decomposeImageOFont( font );
+			LettersFile listOfLetters = new LettersFile( new java.io.File( FilesystemPaths.getPathToGameData(), "letters.utf8" ) );
+			Font.fillTheMapping( listOfLetters, imagesOfLetters );
+
+	System.out.println ();
+	{
+		String [] lines = Font.letterToImage.get( "!" );
+		////System.out.println( Font.dumpTextualBitmap( "newlines[ l++ ] = \"", lines, "\" ; // " ) );
+
+String [] newlines = new String [ lines.length ] ;
+int l = 0;
+newlines[ l++ ] = "              " ; // 0
+newlines[ l++ ] = "              " ; // 1
+newlines[ l++ ] = "              " ; // 2
+newlines[ l++ ] = "     0000     " ; // 3
+newlines[ l++ ] = "     0000     " ; // 4
+newlines[ l++ ] = "     0000     " ; // 5
+newlines[ l++ ] = "     0000     " ; // 6
+newlines[ l++ ] = "     0000     " ; // 7
+newlines[ l++ ] = "     0000     " ; // 8
+newlines[ l++ ] = "     0000     " ; // 9
+newlines[ l++ ] = "     0000     " ; // 10
+newlines[ l++ ] = "     0000     " ; // 11
+newlines[ l++ ] = "     0000     " ; // 12
+newlines[ l++ ] = "     0000     " ; // 13
+newlines[ l++ ] = "     0000     " ; // 14
+newlines[ l++ ] = "              " ; // 15
+newlines[ l++ ] = "              " ; // 16
+newlines[ l++ ] = "     0000     " ; // 17
+newlines[ l++ ] = "     0000     " ; // 18
+newlines[ l++ ] = "     0000     " ; // 19
+newlines[ l++ ] = "              " ; // 20
+newlines[ l++ ] = "              " ; // 21
+newlines[ l++ ] = "              " ; // 22
+newlines[ l++ ] = "              " ; // 23
+newlines[ l++ ] = "              " ; // 24
+
+		Font.letterToImage.put( "!", newlines );
+	}
+	{
+		String [] lines = Font.letterToImage.get( "¡" );
+		////System.out.println( Font.dumpTextualBitmap( "newlines[ l++ ] = \"", lines, "\" ; // " ) );
+
+String [] newlines = new String [ lines.length ] ;
+int l = 0;
+newlines[ l++ ] = "              " ; // 0
+newlines[ l++ ] = "              " ; // 1
+newlines[ l++ ] = "              " ; // 2
+newlines[ l++ ] = "              " ; // 3
+newlines[ l++ ] = "              " ; // 4
+newlines[ l++ ] = "              " ; // 5
+newlines[ l++ ] = "     0000     " ; // 6
+newlines[ l++ ] = "     0000     " ; // 7
+newlines[ l++ ] = "     0000     " ; // 8
+newlines[ l++ ] = "              " ; // 9
+newlines[ l++ ] = "              " ; // 10
+newlines[ l++ ] = "     0000     " ; // 11
+newlines[ l++ ] = "     0000     " ; // 12
+newlines[ l++ ] = "     0000     " ; // 13
+newlines[ l++ ] = "     0000     " ; // 14
+newlines[ l++ ] = "     0000     " ; // 15
+newlines[ l++ ] = "     0000     " ; // 16
+newlines[ l++ ] = "     0000     " ; // 17
+newlines[ l++ ] = "     0000     " ; // 18
+newlines[ l++ ] = "     0000     " ; // 19
+newlines[ l++ ] = "     0000     " ; // 20
+newlines[ l++ ] = "     0000     " ; // 21
+newlines[ l++ ] = "     0000     " ; // 22
+newlines[ l++ ] = "              " ; // 23
+newlines[ l++ ] = "              " ; // 24
+
+		Font.letterToImage.put( "¡", newlines );
+	}
+	{
+		String [] lines = Font.letterToImage.get( "?" );
+		////System.out.println( Font.dumpTextualBitmap( "newlines[ l++ ] = \"", lines, "\" ; // " ) );
+
+String [] newlines = new String [ lines.length ] ;
+int l = 0;
+newlines[ l++ ] = "              " ; // 0
+newlines[ l++ ] = "              " ; // 1
+newlines[ l++ ] = "  0000000000  " ; // 2
+newlines[ l++ ] = "  0000000000  " ; // 3
+newlines[ l++ ] = "00000000000000" ; // 4
+newlines[ l++ ] = "00000000000000" ; // 5
+newlines[ l++ ] = "0000      0000" ; // 6
+newlines[ l++ ] = "0000      0000" ; // 7
+newlines[ l++ ] = "0000    000000" ; // 8
+newlines[ l++ ] = "        000000" ; // 9
+newlines[ l++ ] = "      000000  " ; // 10
+newlines[ l++ ] = "      000000  " ; // 11
+newlines[ l++ ] = "      0000    " ; // 12
+newlines[ l++ ] = "      0000    " ; // 13
+newlines[ l++ ] = "      0000    " ; // 14
+newlines[ l++ ] = "              " ; // 15
+newlines[ l++ ] = "              " ; // 16
+newlines[ l++ ] = "      0000    " ; // 17
+newlines[ l++ ] = "      0000    " ; // 18
+newlines[ l++ ] = "      0000    " ; // 19
+newlines[ l++ ] = "              " ; // 20
+newlines[ l++ ] = "              " ; // 21
+newlines[ l++ ] = "              " ; // 22
+newlines[ l++ ] = "              " ; // 23
+newlines[ l++ ] = "              " ; // 24
+
+		Font.letterToImage.put( "?", newlines );
+	}
+	{
+		String [] lines = Font.letterToImage.get( "¿" );
+		////System.out.println( Font.dumpTextualBitmap( "newlines[ l++ ] = \"", lines, "\" ; // " ) );
+
+String [] newlines = new String [ lines.length ] ;
+int l = 0;
+newlines[ l++ ] = "              " ; // 0
+newlines[ l++ ] = "              " ; // 1
+newlines[ l++ ] = "              " ; // 2
+newlines[ l++ ] = "              " ; // 3
+newlines[ l++ ] = "              " ; // 4
+newlines[ l++ ] = "              " ; // 5
+newlines[ l++ ] = "    0000      " ; // 6
+newlines[ l++ ] = "    0000      " ; // 7
+newlines[ l++ ] = "    0000      " ; // 8
+newlines[ l++ ] = "              " ; // 9
+newlines[ l++ ] = "              " ; // 10
+newlines[ l++ ] = "    0000      " ; // 11
+newlines[ l++ ] = "    0000      " ; // 12
+newlines[ l++ ] = "    0000      " ; // 13
+newlines[ l++ ] = "  000000      " ; // 14
+newlines[ l++ ] = "  000000      " ; // 15
+newlines[ l++ ] = "000000        " ; // 16
+newlines[ l++ ] = "000000    0000" ; // 17
+newlines[ l++ ] = "0000      0000" ; // 18
+newlines[ l++ ] = "0000      0000" ; // 19
+newlines[ l++ ] = "00000000000000" ; // 20
+newlines[ l++ ] = "00000000000000" ; // 21
+newlines[ l++ ] = "  0000000000  " ; // 22
+newlines[ l++ ] = "  0000000000  " ; // 23
+newlines[ l++ ] = "              " ; // 24
+
+		Font.letterToImage.put( "¿", newlines );
+	}
+	{
+		String [] lines = Font.letterToImage.get( "\"" );
+		System.out.println( Font.dumpTextualBitmap( "newlines[ l++ ] = \"", lines, "\" ; // " ) );
+
+String [] newlines = new String [ lines.length ] ;
+int l = 0;
+newlines[ l++ ] = "              " ; // 0
+newlines[ l++ ] = "              " ; // 1
+newlines[ l++ ] = "   000  000   " ; // 2
+newlines[ l++ ] = "   000  000   " ; // 3
+newlines[ l++ ] = "   000  000   " ; // 4
+newlines[ l++ ] = "   000  000   " ; // 5
+newlines[ l++ ] = "   000  000   " ; // 6
+newlines[ l++ ] = "              " ; // 7
+newlines[ l++ ] = "              " ; // 8
+newlines[ l++ ] = "              " ; // 9
+newlines[ l++ ] = "              " ; // 10
+newlines[ l++ ] = "              " ; // 11
+newlines[ l++ ] = "              " ; // 12
+newlines[ l++ ] = "              " ; // 13
+newlines[ l++ ] = "              " ; // 14
+newlines[ l++ ] = "              " ; // 15
+newlines[ l++ ] = "              " ; // 16
+newlines[ l++ ] = "              " ; // 17
+newlines[ l++ ] = "              " ; // 18
+newlines[ l++ ] = "              " ; // 19
+newlines[ l++ ] = "              " ; // 20
+newlines[ l++ ] = "              " ; // 21
+newlines[ l++ ] = "              " ; // 22
+newlines[ l++ ] = "              " ; // 23
+newlines[ l++ ] = "              " ; // 24
+
+		Font.letterToImage.put( "\"", newlines );
+	}
+	{
+		String [] lines = Font.letterToImage.get( "'" );
+		System.out.println( Font.dumpTextualBitmap( "newlines[ l++ ] = \"", lines, "\" ; // " ) );
+
+String [] newlines = new String [ lines.length ] ;
+int l = 0;
+newlines[ l++ ] = "              " ; // 0
+newlines[ l++ ] = "              " ; // 1
+newlines[ l++ ] = "      000     " ; // 2
+newlines[ l++ ] = "      000     " ; // 3
+newlines[ l++ ] = "      000     " ; // 4
+newlines[ l++ ] = "      000     " ; // 5
+newlines[ l++ ] = "      000     " ; // 6
+newlines[ l++ ] = "      000     " ; // 7
+newlines[ l++ ] = "              " ; // 8
+newlines[ l++ ] = "              " ; // 9
+newlines[ l++ ] = "              " ; // 10
+newlines[ l++ ] = "              " ; // 11
+newlines[ l++ ] = "              " ; // 12
+newlines[ l++ ] = "              " ; // 13
+newlines[ l++ ] = "              " ; // 14
+newlines[ l++ ] = "              " ; // 15
+newlines[ l++ ] = "              " ; // 16
+newlines[ l++ ] = "              " ; // 17
+newlines[ l++ ] = "              " ; // 18
+newlines[ l++ ] = "              " ; // 19
+newlines[ l++ ] = "              " ; // 20
+newlines[ l++ ] = "              " ; // 21
+newlines[ l++ ] = "              " ; // 22
+newlines[ l++ ] = "              " ; // 23
+newlines[ l++ ] = "              " ; // 24
+
+		Font.letterToImage.put( "'", newlines );
 	}
 
-	private void readImageOFont( String fontFile )
+			Font.composeAndWriteImageOFont( new java.io.File( FilesystemPaths.getGameStorageInHome (), "font.new.png" ) );
+		}
+	}
+
+	private static BufferedImage readImageOFont( java.io.File imageFile )
 	{
-		BufferedImage imageOFont = null ;
-		{
-			BufferedImage fontFromPNG = Pictures.readFromPNG( fontFile );
-			if ( fontFromPNG == null ) {
-				System.err.println( "oops, can’t get the image of letters from file \"" + fontFile + "\"" );
-				return ;
-			}
+		if ( imageFile == null ) return null ;
 
-			// recolor the font image in "black on transparent"
-
-			imageOFont = Pictures.cloneAsARGBWithReplacingColor( fontFromPNG,
-								Color.magenta, new Color( 255, 0, 255, /* alpha */ 0 ) );
-								// maybe it's some old version of the font's image with the magenta background
-			// white to black
-			Pictures.colorizeWhite( imageOFont, Color.black );
+		BufferedImage fontFromPNG = Pictures.readFromPNG( imageFile );
+		if ( fontFromPNG == null ) {
+			System.err.println( "oops, can’t get the image of letters from file \"" + imageFile.getPath() + "\"" );
+			return null ;
 		}
 
-		imageOFont = Pictures.cloneAsIndexedColor( imageOFont );
+		// uncomment for some old version of the font's image with the magenta background
+		///fontFromPNG = Pictures.cloneAsARGBWithReplacingColor( fontFromPNG,
+		///					Color.magenta, new Color( 255, 0, 255, /* alpha */ 0 ) );
 
-	////	java.io.File newFontPNG = new java.io.File( head.over.heels.FilesystemPaths.getGameStorageInHome (), "font.new.png" );
-	////	Pictures.saveAsPNG( imageOFont, newFontPNG.getAbsolutePath () );
+		return Pictures.cloneAsIndexedColor( fontFromPNG );
+	}
 
+	private static java.util.Vector < String [] > decomposeImageOFont( BufferedImage imageOFont )
+	{
 		final int fontImageWidth = imageOFont.getWidth() ;
 		final int fontImageHeight = imageOFont.getHeight() ;
 
@@ -197,19 +406,18 @@ public class Font
 			}
 		}
 
-		if ( letters.length != lettersInStrings.size () )
-			throw new RuntimeException( "letters.length != lettersInStrings.size ()" );
+		return lettersInStrings ;
+	}
 
-		// read the list of letters
-		LettersFile listOfLetters = new LettersFile( "gamedata" + java.io.File.separator + "letters.utf8" );
-
-		// at last make and fill the mapping
+	private static void fillTheMapping ( LettersFile listOfLetters, java.util.Vector < String [] > imagesOfLetters )
+	{
 		Font.letterToImage = new java.util.TreeMap < String, String [] > () ;
-		int howManyLetters = lettersInStrings.size ();
+
+		int howManyLetters = imagesOfLetters.size ();
 		for ( int index = 0 ; index < howManyLetters ; ++ index ) {
 			String letter = listOfLetters.letterAt( index ) ;
 			if ( ! letter.isEmpty () )
-				Font.letterToImage.put( letter, lettersInStrings.elementAt( index ) );
+				Font.letterToImage.put( letter, imagesOfLetters.elementAt( index ) );
 		}
 
 		for ( String letter : Font.letterToImage.keySet() )
@@ -391,6 +599,74 @@ public class Font
 		return out ;
 	}
 
+	private static void composeAndWriteImageOFont( java.io.File newFile )
+	{
+		if ( Font.letterToImage == null ) return ;
+
+		// compose the image of font
+
+		final int lettersPerLine = 16 ; // 32 ;
+		final int spacing = 3 ;
+		final int yShift = 1 ;
+
+		LettersFile listOfLetters = new LettersFile( );
+		int lettersThere = listOfLetters.howManyLetters ();
+		int linesInFont = ( ( lettersThere - 1 ) / lettersPerLine ) + 1 ;
+
+		String [] someLetter = Font.letterToImage.get( "O" );
+		int heightOfLetter = someLetter.length ;
+		int  widthOfLetter = someLetter[ 0 ].length ();
+
+		int stepX = widthOfLetter + spacing ;
+		int stepY = heightOfLetter + spacing + yShift ;
+
+		int [] palette = new int []  {	0xff000000 ,	// opaque black
+						0x00ffffff  };	// transparent white
+
+		java.awt.image.IndexColorModel colorModel
+						= new java.awt.image.IndexColorModel (
+							/* bits per pixel */ 1,
+							/* color map size */ 2, /* map */ palette, /* first entry in map */ 0,
+							/* has alpha */ true,
+							/* transIndex */ 1,
+							/* transferType */ java.awt.image.DataBuffer.TYPE_BYTE );
+
+		BufferedImage imageOFont = new BufferedImage( lettersPerLine * stepX, linesInFont * stepY,
+									BufferedImage.TYPE_BYTE_BINARY, colorModel );
+		// fill it with transparency
+		java.awt.Graphics2D g = imageOFont.createGraphics ();
+		g.setColor( new Color( palette[ 1 ] ) );
+		g.fillRect( 0, 0, imageOFont.getWidth (), imageOFont.getHeight () );
+		g.dispose ();
+
+		// paint the letters
+
+		int letterX = 0 ;
+		int letterY = 0 ;
+
+		for ( int l = 0 ; l < lettersThere ; )
+		{
+			String letter = listOfLetters.letterAt( l );
+			if ( ! letter.isEmpty() ) {
+				String [] lines = Font.letterToImage.get( letter );
+
+				for ( int y = 0 ; y < heightOfLetter ; y ++ )
+					for ( int x = 0 ; x < widthOfLetter ; x ++ )
+						if ( lines[ y ].charAt( x ) != ' ' )
+							imageOFont.setRGB( letterX + x, letterY + yShift + y, /* opaque */ palette[ 0 ] ) ;
+			}
+
+			if ( ( ++ l ) % lettersPerLine == 0 ) {
+				letterX = 0 ;
+				letterY += stepY ;
+			} else
+				letterX += stepX ;
+		}
+
+		// and at last
+		Pictures.saveAsPNG( imageOFont, newFile );
+	}
+
 	public static void main( String [] arguments )
 	{
 		String nameOfLettersFile = "letters.new.utf8" ;
@@ -399,7 +675,7 @@ public class Font
 		LettersFile listOfLetters = new LettersFile (); // ( "letters.utf8" );
 		System.out.println( listOfLetters );
 
-		listOfLetters.writeTo( new java.io.File( head.over.heels.FilesystemPaths.getGameStorageInHome (), nameOfLettersFile ) );
+		listOfLetters.writeTo( new java.io.File( FilesystemPaths.getGameStorageInHome (), nameOfLettersFile ) );
 	}
 
 }
@@ -418,22 +694,26 @@ class LettersFile
 		this.letters = generateListOfLetters () ;
 	}
 
+	LettersFile( String nameOFile )
+	{
+		this( new java.io.File( nameOFile ) );
+	}
+
 	/**
 	 * Reads the list of letters from the file
 	 */
-	LettersFile( String nameOFile )
+	LettersFile( java.io.File file )
 	{
-		java.io.File lettersFile = new java.io.File( nameOFile );
-		if ( ! lettersFile.exists() || ! lettersFile.isFile() || ! lettersFile.canRead() ) {
-			System.out.println( "there's no file \"" + nameOFile + "\" with the list of letters" );
+		if ( ! file.exists() || ! file.isFile() || ! file.canRead() ) {
+			System.out.println( "there's no file \"" + file.getPath () + "\" with the list of letters" );
 			this.letters = generateListOfLetters () ;
 			return ;
 		}
 
-		int lengthOFile = (int) lettersFile.length () ;
+		int lengthOFile = (int) file.length () ;
 		byte [] bytes = new byte [ lengthOFile ];
 		int bytesRead = 0 ;
-		try ( java.io.FileInputStream stream = new java.io.FileInputStream( lettersFile ) )
+		try ( java.io.FileInputStream stream = new java.io.FileInputStream( file ) )
 		{
 			bytesRead = stream.read( bytes );
 		}
@@ -446,7 +726,7 @@ class LettersFile
 			if ( ( b == 0 ) || ( ( b & 0x80 ) == 0 ) || ( ( b & 0xC0 ) == 0xC0 ) )
 				howManyLetters++;
 		}
-		System.out.println( "🧐 file \"" + nameOFile + "\" lists " + howManyLetters + " letters" );
+		System.out.println( "🧐 file \"" + file.getPath () + "\" lists " + howManyLetters + " letters" );
 
 		this.letters = new java.util.Vector < String > ( howManyLetters );
 
@@ -481,6 +761,11 @@ class LettersFile
 				this.letters.add( newLetter );
                         }
 		}
+	}
+
+	public int howManyLetters ()
+	{
+		return letters.size ();
 	}
 
 	public String letterAt( int i )

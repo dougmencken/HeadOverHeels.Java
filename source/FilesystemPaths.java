@@ -32,6 +32,11 @@ public class FilesystemPaths
 		return storageInHome ;
 	}
 
+	public static File getPathToGameData ()
+	{
+		return new File( "gamedata" );
+	}
+
 	private FilesystemPaths() {} // no instances
 
 }

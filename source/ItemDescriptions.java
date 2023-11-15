@@ -67,7 +67,7 @@ public class ItemDescriptions
 	/**
 	 * Load the descriptions of items from the XML file
 	 */
-	boolean readDescriptionsFromFile ( String nameOfXMLFile )
+	boolean readDescriptionsFromFile ( File xmlFile )
 	{
 		if ( this.alreadyRead ) return true ;
 
@@ -81,11 +81,10 @@ public class ItemDescriptions
 
 		Document xml = null ;
 		try {
-			File xmlFile = new File( nameOfXMLFile );
 			if ( xmlFile.exists() && xmlFile.canRead() )
 				xml = builder.parse( xmlFile );
 			else
-				System.out.println( "can't read file \"" + nameOfXMLFile + "\"" );
+				System.out.println( "can't read file \"" + xmlFile.getPath () + "\"" );
 		}
 		catch ( org.xml.sax.SAXException x ) {  return false ;  }
 		catch ( java.io.IOException io ) {  return false ;  }
@@ -147,16 +146,6 @@ public class ItemDescriptions
 				String doorScenery = doorElement.getAttribute( "scenery" ) ;
 				String doorAt = doorElement.getAttribute( "at" ) ;
 
-	if ( doorScenery.isEmpty() || doorAt.isEmpty() ) {
-	String typeOfDoor = doorElement.getAttribute( "type" ) ;
-	if ( ! typeOfDoor.isEmpty () ) {
-		// the door's kind is %scenery%-door-%at%
-		int doorInKind = typeOfDoor.indexOf( "door-" );
-		if ( doorInKind > 0 /* it is found and isn't at the very beginning */ ) {
-			doorScenery = typeOfDoor.substring( 0, doorInKind - 1 );
-			doorAt = typeOfDoor.substring( doorInKind + 5 );
-		}
-	} }
 				DescriptionOfDoor doorDescription = new DescriptionOfDoor ( doorScenery, doorAt );
 
 				// the three parts of door

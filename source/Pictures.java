@@ -27,17 +27,27 @@ public class Pictures
 		return new BufferedImage( colorModel, picture.copyData( null ), colorModel.isAlphaPremultiplied (), null );
 	}
 
-	public static boolean saveAsPNG ( BufferedImage picture, String path )
+	public static boolean saveAsPNG ( BufferedImage picture, String where )
+	{
+		return saveAsPNG( picture, new java.io.File( where ) );
+	}
+
+	public static boolean saveAsPNG ( BufferedImage picture, java.io.File file )
 	{
 		try {
-			return javax.imageio.ImageIO.write( picture, "png", new java.io.File( path ) );
+			return javax.imageio.ImageIO.write( picture, "png", file );
 		} catch ( java.io.IOException e ) {  return false ;  }
 	}
 
-	public static BufferedImage readFromPNG ( String name )
+	public static BufferedImage readFromPNG ( String what )
+	{
+		return readFromPNG( new java.io.File( what ) );
+	}
+
+	public static BufferedImage readFromPNG ( java.io.File file )
 	{
 		try {
-			return javax.imageio.ImageIO.read( new java.io.File( name ) ) ;
+			return javax.imageio.ImageIO.read( file ) ;
 		} catch ( java.io.IOException e ) {  return null ;  }
 	}
 

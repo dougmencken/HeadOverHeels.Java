@@ -149,7 +149,7 @@ public final class main
 
 	/**/// temporary lines
 	ItemDescriptions descriptions = new ItemDescriptions( ) ;
-	descriptions.readDescriptionsFromFile( "gamedata" + java.io.File.separator + "items.xml" ) ;
+	descriptions.readDescriptionsFromFile( new java.io.File( FilesystemPaths.getPathToGameData(), "items.xml" ) ) ;
 	/**/// ❌ ✔️
 
 		GameWindow window = new GameWindow( width, height ) ;
