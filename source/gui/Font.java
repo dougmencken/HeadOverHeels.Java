@@ -468,42 +468,8 @@ public class Font
 		}
 
 		{
-			String [] lines = Font.letterToImage.get( "‘" );
-			////System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
-
-			/* String [] newlines = new String [ lines.length ] ;
-			int l = 0 ;
-			newlines[ l++ ] = "              " ; // 0
-			newlines[ l++ ] = "       00     " ; // 1
-			newlines[ l++ ] = "      000     " ; // 2
-			newlines[ l++ ] = "     000      " ; // 3
-			newlines[ l++ ] = "     000      " ; // 4
-			newlines[ l++ ] = "     0000     " ; // 5
-			newlines[ l++ ] = "     0000     " ; // 6
-			newlines[ l++ ] = "     0000     " ; // 7
-			newlines[ l++ ] = "              " ; // 8
-			newlines[ l++ ] = "              " ; // 9
-			newlines[ l++ ] = "              " ; // 10
-			newlines[ l++ ] = "              " ; // 11
-			newlines[ l++ ] = "              " ; // 12
-			newlines[ l++ ] = "              " ; // 13
-			newlines[ l++ ] = "              " ; // 14
-			newlines[ l++ ] = "              " ; // 15
-			newlines[ l++ ] = "              " ; // 16
-			newlines[ l++ ] = "              " ; // 17
-			newlines[ l++ ] = "              " ; // 18
-			newlines[ l++ ] = "              " ; // 19
-			newlines[ l++ ] = "              " ; // 20
-			newlines[ l++ ] = "              " ; // 21
-			newlines[ l++ ] = "              " ; // 22
-			newlines[ l++ ] = "              " ; // 23
-			newlines[ l++ ] = "              " ; // 24
-
-			Font.letterToImage.put( "‘", newlines ); */
-		}
-		{
-			String [] lines = Font.letterToImage.get( "’" );
-			////System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
+			///String [] lines = Font.letterToImage.get( "’" );
+			///System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
 
 			/* String [] newlines = new String [ lines.length ] ;
 			int l = 0 ;
@@ -534,74 +500,6 @@ public class Font
 			newlines[ l++ ] = "              " ; // 24
 
 			Font.letterToImage.put( "’", newlines ); */
-		}
-		{
-			String [] lines = Font.letterToImage.get( "“" );
-			////System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
-
-			/* String [] newlines = new String [ lines.length ] ;
-			int l = 0 ;
-			newlines[ l++ ] = "              " ; // 0
-			newlines[ l++ ] = "   00    00   " ; // 1
-			newlines[ l++ ] = "  000   000   " ; // 2
-			newlines[ l++ ] = " 000   000    " ; // 3
-			newlines[ l++ ] = " 000   000    " ; // 4
-			newlines[ l++ ] = " 0000  0000   " ; // 5
-			newlines[ l++ ] = " 0000  0000   " ; // 6
-			newlines[ l++ ] = " 0000  0000   " ; // 7
-			newlines[ l++ ] = "              " ; // 8
-			newlines[ l++ ] = "              " ; // 9
-			newlines[ l++ ] = "              " ; // 10
-			newlines[ l++ ] = "              " ; // 11
-			newlines[ l++ ] = "              " ; // 12
-			newlines[ l++ ] = "              " ; // 13
-			newlines[ l++ ] = "              " ; // 14
-			newlines[ l++ ] = "              " ; // 15
-			newlines[ l++ ] = "              " ; // 16
-			newlines[ l++ ] = "              " ; // 17
-			newlines[ l++ ] = "              " ; // 18
-			newlines[ l++ ] = "              " ; // 19
-			newlines[ l++ ] = "              " ; // 20
-			newlines[ l++ ] = "              " ; // 21
-			newlines[ l++ ] = "              " ; // 22
-			newlines[ l++ ] = "              " ; // 23
-			newlines[ l++ ] = "              " ; // 24
-
-			Font.letterToImage.put( "“", newlines ); */
-		}
-		{
-			String [] lines = Font.letterToImage.get( "”" );
-			////System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
-
-			/* String [] newlines = new String [ lines.length ] ;
-			int l = 0 ;
-			newlines[ l++ ] = "              " ; // 0
-			newlines[ l++ ] = "              " ; // 1
-			newlines[ l++ ] = "   0000  0000 " ; // 2
-			newlines[ l++ ] = "   0000  0000 " ; // 3
-			newlines[ l++ ] = "   0000  0000 " ; // 4
-			newlines[ l++ ] = "    000   000 " ; // 5
-			newlines[ l++ ] = "    000   000 " ; // 6
-			newlines[ l++ ] = "   000   000  " ; // 7
-			newlines[ l++ ] = "   00    00   " ; // 8
-			newlines[ l++ ] = "              " ; // 9
-			newlines[ l++ ] = "              " ; // 10
-			newlines[ l++ ] = "              " ; // 11
-			newlines[ l++ ] = "              " ; // 12
-			newlines[ l++ ] = "              " ; // 13
-			newlines[ l++ ] = "              " ; // 14
-			newlines[ l++ ] = "              " ; // 15
-			newlines[ l++ ] = "              " ; // 16
-			newlines[ l++ ] = "              " ; // 17
-			newlines[ l++ ] = "              " ; // 18
-			newlines[ l++ ] = "              " ; // 19
-			newlines[ l++ ] = "              " ; // 20
-			newlines[ l++ ] = "              " ; // 21
-			newlines[ l++ ] = "              " ; // 22
-			newlines[ l++ ] = "              " ; // 23
-			newlines[ l++ ] = "              " ; // 24
-
-			Font.letterToImage.put( "”", newlines ); */
 		}
 
 		Font.composeAndWriteImageOFont( new java.io.File( FilesystemPaths.getGameStorageInHome (), "font.new.png" ) );

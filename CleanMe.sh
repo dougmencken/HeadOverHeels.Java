@@ -10,3 +10,7 @@ rm -v -f head/over/heels/gui/*.class
 [ -d head/over/heels ] && rmdir head/over/heels
 [ -d head/over ] && rmdir head/over
 [ -d head ] && rmdir head
+
+[ -d com ] && rm -r com
+
+[ -d META-INF ] && rm -r META-INF
