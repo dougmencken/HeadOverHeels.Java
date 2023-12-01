@@ -2,15 +2,18 @@
 
 # ogg-vorbis support for java
 
-javac -g -d . submodules/java-ogg-vorbis/vorbis-support/src/main/java/com/github/trilarion/sound/util/*.java
+ogg_vorbis_for_java="submodules/java-ogg-vorbis/vorbis-support/src/main"
+ogg_vorbis_sources="$ogg_vorbis_for_java/java/com/github/trilarion/sound"
 
-javac -g -d . submodules/java-ogg-vorbis/vorbis-support/src/main/java/com/github/trilarion/sound/vorbis/jcraft/jogg/*.java
-javac -g -d . submodules/java-ogg-vorbis/vorbis-support/src/main/java/com/github/trilarion/sound/vorbis/jcraft/jorbis/*.java
+javac -g -d . $ogg_vorbis_sources/util/*.java
 
-javac -g -d . submodules/java-ogg-vorbis/vorbis-support/src/main/java/com/github/trilarion/sound/sampled/*.java \
-			submodules/java-ogg-vorbis/vorbis-support/src/main/java/com/github/trilarion/sound/sampled/spi/*.java
+javac -g -d . $ogg_vorbis_sources/vorbis/jcraft/jogg/*.java
+javac -g -d . $ogg_vorbis_sources/vorbis/jcraft/jorbis/*.java
 
-javac -g -d . submodules/java-ogg-vorbis/vorbis-support/src/main/java/com/github/trilarion/sound/vorbis/sampled/*.java \
-                        submodules/java-ogg-vorbis/vorbis-support/src/main/java/com/github/trilarion/sound/vorbis/sampled/spi/*.java
+javac -g -d . $ogg_vorbis_sources/sampled/*.java \
+			$ogg_vorbis_sources/sampled/spi/*.java
 
-mkdir -p META-INF/services && cp submodules/java-ogg-vorbis/vorbis-support/src/main/resources/META-INF/services/* ./META-INF/services/
+javac -g -d . $ogg_vorbis_sources/vorbis/sampled/*.java \
+                        $ogg_vorbis_sources/vorbis/sampled/spi/*.java
+
+mkdir -p META-INF/services && cp $ogg_vorbis_for_java/resources/META-INF/services/* ./META-INF/services/

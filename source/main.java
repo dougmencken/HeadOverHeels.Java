@@ -156,55 +156,17 @@ public final class main
 		window.setVisible( true );
 		window.randomPixelFadeIn( java.awt.Color.black );
 
-	try {
-		javax.sound.sampled.AudioInputStream oggAudioIn = javax.sound.sampled.AudioSystem.getAudioInputStream(
-				new java.io.File( FilesystemPaths.getPathToGameData(), "music" + java.io.File.separator + "freedom.ogg" )
-		) ;
-		if ( oggAudioIn != null ) {
-			javax.sound.sampled.AudioFormat pcmEncoding = new javax.sound.sampled.AudioFormat(
-				oggAudioIn.getFormat().getSampleRate(), 16, oggAudioIn.getFormat().getChannels(), true, false
-			);
+	String musicFile = "music" + java.io.File.separator + "freedom.ogg" ;
+	SoundManager.getInstance().play( new java.io.File( FilesystemPaths.getPathToGameData(), musicFile ), /* loop */ true );
 
-			byte [] buffer = new byte[ 4096 ];
-
-			// get a line from a mixer in the system with the wanted format
-			javax.sound.sampled.DataLine.Info info = new javax.sound.sampled.DataLine.Info(
-				javax.sound.sampled.SourceDataLine.class, pcmEncoding
-			);
-			javax.sound.sampled.SourceDataLine line =
-				(javax.sound.sampled.SourceDataLine) javax.sound.sampled.AudioSystem.getLine( info );
-
-			// convert the provided audio input stream to the desired encoding
-			javax.sound.sampled.AudioInputStream pcmAudioIn = javax.sound.sampled.AudioSystem.getAudioInputStream( pcmEncoding, oggAudioIn );
-
-			if ( line != null && pcmAudioIn != null ) {
-				line.open ();
-				line.start();
-
-				int bytesRead = 0 ;
-				while ( bytesRead >= 0 ) {
-					bytesRead = pcmAudioIn.read( buffer, 0, buffer.length );
-					if ( bytesRead > 0 ) /* int bytesWritten = */ line.write( buffer, 0, bytesRead );
-				}
-
-				line.drain ();
-				line.stop ();
-				line.close ();
-
-				pcmAudioIn.close ();
-			}
-
-			oggAudioIn.close ();
-		}
 	}
-	catch ( javax.sound.sampled.UnsupportedAudioFileException e ) {  e.printStackTrace ();  }
-	catch ( javax.sound.sampled.LineUnavailableException e ) {  e.printStackTrace ();  }
-	catch ( java.io.IOException e ) {  e.printStackTrace ();  }
 
-	/* ............ */
+	public static void quit ()
+	{
+		SoundManager.getInstance().stopAll ();
 
-		///System.out.println( );
-		///System.out.println( "bye :*" );
+		System.out.println( );
+		System.out.println( "bye :*" );
 	}
 
 }

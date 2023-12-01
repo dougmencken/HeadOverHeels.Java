@@ -296,10 +296,9 @@ public class GameWindow extends JFrame
 
 	public void dispose ()
 	{
-		System.out.println( );
-		System.out.println( "bye :*" );
-
 		super.dispose() ;
+
+		main.quit ();
 	}
 
 	public void randomPixelFadeIn( Color fromColor )
