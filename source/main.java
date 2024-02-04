@@ -1,6 +1,6 @@
 // The Java port of the free and open source remake of the game “Head over Heels”
 //
-// Copyright © 2023 Douglas Mencken dougmencken@gmail.com
+// Copyright © 2024 Douglas Mencken dougmencken@gmail.com
 // Original game by Jon Ritman, Bernie Drummond and Guy Stevens, released by Ocean Software Ltd. in 1987
 //
 // This program is free software
