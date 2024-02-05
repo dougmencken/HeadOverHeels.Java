@@ -96,13 +96,13 @@ public class Font
 	{
 		if ( imageFile == null ) return null ;
 
-		BufferedImage fontFromPNG = Pictures.readFromPNG( imageFile );
-		if ( fontFromPNG == null ) {
+		BufferedImage fontFromFile = Pictures.readFromFile( imageFile );
+		if ( fontFromFile == null ) {
 			System.err.println( "oops, can’t get the image of letters from file \"" + imageFile.getPath() + "\"" );
 			return null ;
 		}
 
-		return Pictures.cloneAsIndexedColor( fontFromPNG );
+		return Pictures.cloneAsIndexedColor( fontFromFile );
 	}
 
 	private static java.util.Vector < String [] > decomposeImageOFont( BufferedImage imageOFont )

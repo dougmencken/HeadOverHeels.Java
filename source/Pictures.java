@@ -39,12 +39,12 @@ public class Pictures
 		} catch ( java.io.IOException e ) {  return false ;  }
 	}
 
-	public static BufferedImage readFromPNG ( String what )
+	public static BufferedImage readFromFile ( String what )
 	{
-		return readFromPNG( new java.io.File( what ) );
+		return readFromFile( new java.io.File( what ) );
 	}
 
-	public static BufferedImage readFromPNG ( java.io.File file )
+	public static BufferedImage readFromFile ( java.io.File file )
 	{
 		try {
 			return javax.imageio.ImageIO.read( file ) ;
@@ -283,5 +283,48 @@ public class Pictures
 	}
 
 	private Pictures() {} // no instances
+
+	public static void main( String [] arguments )
+	{
+		if ( arguments.length == 0 ) {
+			System.out.println( "image files are expected as arguments" );
+			return ;
+		}
+
+		for ( int a = 0 ; a < arguments.length ; ++ a ) {
+			String nameOFile = arguments[ a ];
+
+			BufferedImage image = Pictures.readFromFile( new java.io.File( FilesystemPaths.getPathToGameData(), nameOFile ) );
+			if ( image == null ) {
+				image = Pictures.readFromFile( new java.io.File( nameOFile ) );
+				if ( image == null ) {
+					System.out.println( "oops, can’t read the image from file \"" + nameOFile + "\"" );
+					continue ;
+				}
+			}
+
+			// replace magenta background with transparent white
+			BufferedImage withRealTransparency = Pictures.cloneAsARGBWithReplacingColor( image,
+									Color.magenta, new Color( 255, 255, 255, /* alpha */ 0 ) );
+			// and white foreground with black
+			BufferedImage withBlackForeground = Pictures.cloneAsARGBWithReplacingColor( withRealTransparency, Color.white, Color.black );
+
+			// then convert it to the indexed colors
+			BufferedImage newImage = withBlackForeground ;
+			try {
+				newImage = Pictures.cloneAsIndexedColor( withBlackForeground );
+			}
+			// if can't convert to indexed colors, it fails like "the picture has 29671 various colors, it's more than 256"
+			catch ( IllegalArgumentException e ) { /* ignore it */ }
+
+			int lastSeparatorAt = nameOFile.lastIndexOf( java.io.File.separatorChar );
+			if ( lastSeparatorAt > 0 ) nameOFile = nameOFile.substring( lastSeparatorAt );
+			int lastDotAt = nameOFile.lastIndexOf( '.' );
+			String withoutSuffix = ( lastDotAt > 0 ) ? nameOFile.substring( 0, lastDotAt ) : nameOFile ;
+			java.io.File newImageFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), withoutSuffix + ".new.png" );
+			if ( Pictures.saveAsPNG( newImage, newImageFile ) )
+				System.out.println( "saved as PNG file \"" + newImageFile.getPath() + "\"" );
+		}
+	}
 
 }
