@@ -234,29 +234,6 @@ public class Pictures
 		return newPicture ;
 	}
 
-	public static boolean listColorModelIfIndexed ( BufferedImage picture )
-	{
-		java.awt.image.ColorModel colors = picture.getColorModel ();
-		if ( colors instanceof java.awt.image.IndexColorModel ) {
-			listIndexColorModel( (java.awt.image.IndexColorModel) colors );
-			return true ;
-		}
-
-		return false ;
-	}
-
-	public static void listIndexColorModel ( java.awt.image.IndexColorModel indexedColors )
-	{
-		int [] colorMapRGBs = new int[ indexedColors.getMapSize() ];
-		indexedColors.getRGBs( colorMapRGBs );
-
-		for ( int i = 0 ; i < colorMapRGBs.length ; ++ i ) {
-			System.out.print( "indexed colors [ " + i + " ] = " + String.format( "0x%08x", colorMapRGBs[ i ] ) );
-			if ( i == indexedColors.getTransparentPixel () ) System.out.print( " *transparent*" );
-			System.out.println() ;
-		}
-	}
-
 	public static BufferedImage cloneWithTwiceTheHeight ( BufferedImage before )
 	{
 		if ( before == null ) return null ;
@@ -272,10 +249,11 @@ public class Pictures
 			else
 				after = new BufferedImage( width, height << 1, type );
 
-			for ( int y = 0 ; y < height ; y ++ )
+			for ( int y = 0, y2 = 0 ; y < height ; y ++, y2 += 2 )
 				for ( int x = 0 ; x < width ; x ++ ) {
-					after.setRGB( x, 2*y, before.getRGB( x, y ) );
-					after.setRGB( x, 2*y + 1, before.getRGB( x, y ) );
+					int pixel = before.getRGB( x, y );
+					after.setRGB( x, y2, pixel );
+					after.setRGB( x, y2 + 1, pixel );
 				}
 		}
 
@@ -284,24 +262,52 @@ public class Pictures
 
 	private Pictures() {} // no instances
 
+	private static boolean listColorModelIfIndexed ( BufferedImage picture )
+	{
+		java.awt.image.ColorModel colors = picture.getColorModel ();
+		if ( colors instanceof java.awt.image.IndexColorModel ) {
+			dumpIndexColorModelTo( (java.awt.image.IndexColorModel) colors, System.out );
+			return true ;
+		}
+
+		return false ;
+	}
+
+	private static void dumpIndexColorModelTo ( java.awt.image.IndexColorModel indexedColors, java.io.PrintStream out )
+	{
+		int [] colorMapRGBs = new int[ indexedColors.getMapSize() ];
+		indexedColors.getRGBs( colorMapRGBs );
+
+		for ( int i = 0 ; i < colorMapRGBs.length ; ++ i ) {
+			out.print( "indexed colors [ " + i + " ] = " + String.format( "0x%08x", colorMapRGBs[ i ] ) );
+			if ( i == indexedColors.getTransparentPixel () ) out.print( " *transparent*" );
+			out.println() ;
+		}
+	}
+
 	public static void main( String [] arguments )
 	{
+		final java.io.PrintStream out = System.out ;
+
 		if ( arguments.length == 0 ) {
-			System.out.println( "image files are expected as arguments" );
+			out.println( "image files are expected as arguments" );
 			return ;
 		}
 
-		for ( int a = 0 ; a < arguments.length ; ++ a ) {
+		for ( int a = 0 ; a < arguments.length ; ++ a )
+		{
 			String nameOFile = arguments[ a ];
 
 			BufferedImage image = Pictures.readFromFile( new java.io.File( FilesystemPaths.getPathToGameData(), nameOFile ) );
 			if ( image == null ) {
 				image = Pictures.readFromFile( new java.io.File( nameOFile ) );
 				if ( image == null ) {
-					System.out.println( "oops, can’t read the image from file \"" + nameOFile + "\"" );
+					out.println( "☹️ oops, can’t read the image from file \"" + nameOFile + "\"" );
 					continue ;
 				}
 			}
+
+			out.println( "🖼 got image file \"" + nameOFile + "\"" );
 
 			// replace magenta background with transparent white
 			BufferedImage withRealTransparency = Pictures.cloneAsARGBWithReplacingColor( image,
@@ -317,13 +323,16 @@ public class Pictures
 			// if can't convert to indexed colors, it fails like "the picture has 29671 various colors, it's more than 256"
 			catch ( IllegalArgumentException e ) { /* ignore it */ }
 
+			// list the colors
+			Pictures.listColorModelIfIndexed( newImage );
+
 			int lastSeparatorAt = nameOFile.lastIndexOf( java.io.File.separatorChar );
 			if ( lastSeparatorAt > 0 ) nameOFile = nameOFile.substring( lastSeparatorAt );
 			int lastDotAt = nameOFile.lastIndexOf( '.' );
 			String withoutSuffix = ( lastDotAt > 0 ) ? nameOFile.substring( 0, lastDotAt ) : nameOFile ;
 			java.io.File newImageFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), withoutSuffix + ".new.png" );
 			if ( Pictures.saveAsPNG( newImage, newImageFile ) )
-				System.out.println( "saved as PNG file \"" + newImageFile.getPath() + "\"" );
+				out.println( "saved as PNG file \"" + newImageFile.getPath() + "\"" );
 		}
 	}
 

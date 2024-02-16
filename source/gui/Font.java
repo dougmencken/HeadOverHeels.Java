@@ -27,8 +27,9 @@ public class Font
 	 */
 	private static java.util.Map < String /* letter */, String [] /* bitmap */ > letterToImage ;
 
-	private String fontName ;
 	private Color fontColor ;
+
+	private boolean doubleHeight = false ;
 
 	private int spacingX ;
 	private int spacingY ;
@@ -42,27 +43,30 @@ public class Font
 	public static final int Default_Spacing_H = 3 ;
 	public static final int Default_Spacing_V = 5 ;
 
-	private boolean doubleHeight = false ;
-
 	public static final int Shadow_Shift = 2 ;
 
 	private String wildLetter = "?" ;
 
 	public void setWildLetter( String newWild ) {  this.wildLetter = newWild ;  }
 
-	public Font( String name, String color )
+	public Font()
 	{
-		this( name, color, false, Default_Spacing_H, Default_Spacing_V );
+		this( "", false, Default_Spacing_H, Default_Spacing_V );
 	}
 
-	public Font( String name, String color, boolean doubleHeight )
+	public Font( String color )
 	{
-		this( name, color, doubleHeight, Default_Spacing_H, Default_Spacing_V );
+		this( color, false, Default_Spacing_H, Default_Spacing_V );
 	}
 
-	public Font( String name, String color, int spaceTwitter /* spaceX */, int spaceY )
+	public Font( String color, boolean doubleHeight )
 	{
-		this( name, color, false, spaceTwitter, spaceY );
+		this( color, doubleHeight, Default_Spacing_H, Default_Spacing_V );
+	}
+
+	public Font( String color, int spaceTwitter /* spaceX */, int spaceY )
+	{
+		this( color, false, spaceTwitter, spaceY );
 	}
 
 	/**
@@ -72,10 +76,9 @@ public class Font
 	 * @param spaceTwitter or spaceX, the horizontal spacing between letters
 	 * @param spaceY the vertical spacing
 	 */
-	public Font( String name, String color, boolean doubleHeight, int spaceTwitter /* spaceX */, int spaceY )
+	public Font( String color, boolean doubleHeight, int spaceTwitter /* spaceX */, int spaceY )
 	{
-		this.fontName = name ;
-		this.fontColor = Colours.byName( color );
+		this.fontColor = Colours.byName( color.isEmpty() ? "white" : color );
 
 		this.doubleHeight = doubleHeight ;
 
@@ -448,7 +451,7 @@ public class Font
 	{
 		LettersFile.main( null );
 
-		Font testFont = new Font( "test", "vivid yellow" );
+		Font testFont = new Font( "vivid yellow" );
 
 		// print all the letters drawn in the font
 		StringBuilder letters = new StringBuilder( );

@@ -100,8 +100,8 @@ class ContentOfGameWindow extends JComponent
 	String dazzling = "*DAZZLING*" ;
 	String enthralling = "*ENTHRALLING*" ;
 
-	head.over.heels.gui.Font hohFont = new head.over.heels.gui.Font( "HoH", "fulvous", /* 2x height */ true ); // 😙
-	head.over.heels.gui.Font redFont = new head.over.heels.gui.Font( "test", "red" );
+	head.over.heels.gui.Font hohFont = new head.over.heels.gui.Font( "fulvous", /* 2x height */ true ); // 😙
+	head.over.heels.gui.Font redFont = new head.over.heels.gui.Font( "red" );
 
 	java.awt.image.BufferedImage hohImage = hohFont.composeImageOfString( "“" + HEAD + " " + over + " " + HEELS + "”" );
 
