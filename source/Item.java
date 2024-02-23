@@ -8,11 +8,14 @@
 
 package head.over.heels ;
 
+import head.over.heels.behaviors.Behaviour ;
+
+
 public abstract class Item extends ShadyAndMediated
 {
 
 	// creates an item by a description
-	public Item( DescriptionOfItem description, int z, String way )
+	public Item( DescriptionOfItem description )
 	{
 		this.descriptionOfItem = description ;
 	}
@@ -21,10 +24,39 @@ public abstract class Item extends ShadyAndMediated
 	public Item( Item item )
 	{
 		this.descriptionOfItem = item.descriptionOfItem ;
+
+		if ( item.behavior == null )
+			this.behavior = null ;
+		else
+			this.setBehaviourOf( item.behavior.getName () );
 	}
 
 	private DescriptionOfItem descriptionOfItem ;
 
-	public DescriptionOfItem getDescriptionOfItem () {  return descriptionOfItem ;  }
+	public DescriptionOfItem getDescriptionOfItem () {  return this.descriptionOfItem ;  }
+
+	// the behaviour of item
+	private Behaviour behavior = null ;
+
+	public Behaviour getBehaviour () {  return this.behavior ;  }
+
+	public void setBehaviourOf ( String name )
+	{
+		this.behavior = Behaviour.byName( name, this );
+	}
+
+	/**
+	 * For an item with behavior, update that behavior programmatically
+	 * @return true if the item can be updated thereafter (it didn’t disappear from the room)
+	 */
+	public boolean updateItem ()
+	{
+		return ( this.behavior != null ) ? this.behavior.update() : true ;
+	}
+
+	public String toString ()
+	{
+		return "item " + super.toString() ;
+	}
 
 }
