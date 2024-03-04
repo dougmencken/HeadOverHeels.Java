@@ -41,4 +41,11 @@ public class Activity
 	public static final Activity  GoingDown		= new Activity( "going down" );
 	public static final Activity  GoingUp		= new Activity( "going up" );
 
+	public static final Activity  Jumping		= new Activity( "jumping" );
+	public static final Activity  Falling		= new Activity( "falling" );
+	public static final Activity  Gliding		= new Activity( "gliding" );
+
+	public static final Activity  MetLethalItem	= new Activity( "met a lethal item" );
+	public static final Activity  Vanishing		= new Activity( "vanishing" );
+
 }

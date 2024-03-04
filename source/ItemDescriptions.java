@@ -71,6 +71,11 @@ public class ItemDescriptions
 	{
 		if ( this.alreadyRead ) return true ;
 
+		if ( ! xmlFile.exists() || ! xmlFile.canRead() ) {
+			System.out.println( "can't read file \"" + xmlFile.getPath() + "\"" );
+			return false ;
+		}
+
 		DocumentBuilder builder = null ;
 		try {
 			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder() ;
@@ -81,10 +86,7 @@ public class ItemDescriptions
 
 		Document xml = null ;
 		try {
-			if ( xmlFile.exists() && xmlFile.canRead() )
-				xml = builder.parse( xmlFile );
-			else
-				System.out.println( "can't read file \"" + xmlFile.getPath () + "\"" );
+			xml = builder.parse( xmlFile );
 		}
 		catch ( org.xml.sax.SAXException x ) {  return false ;  }
 		catch ( java.io.IOException io ) {  return false ;  }

@@ -31,6 +31,8 @@ public abstract class Behaviour
 	 */
 	protected Behaviour( Item item, String nameOfBehavior )
 	{
+		if ( item == null ) throw new NullPointerException( "an item than behaves can't be null" ) ;
+
 		this.itemThatBehaves = item ;
 		this.name = nameOfBehavior ;
 	}
