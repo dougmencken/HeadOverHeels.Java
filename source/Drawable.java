@@ -11,6 +11,6 @@ package head.over.heels ;
 public interface Drawable
 {
 
-	public void draw () ;
+	public void draw ( java.awt.Graphics2D g ) ;
 
 }

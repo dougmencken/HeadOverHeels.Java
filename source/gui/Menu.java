@@ -31,7 +31,7 @@ public class Menu extends Widget
 	 */
 	private Label activeOption ;
 
-	public void draw ()
+	public void draw ( java.awt.Graphics2D g )
 	{
 		// ...
 	}

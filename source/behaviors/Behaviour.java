@@ -11,6 +11,7 @@ package head.over.heels.behaviors ;
 import head.over.heels.Item ;
 import head.over.heels.AvatarItem ;
 import head.over.heels.FreeItem ;
+import head.over.heels.GridItem ;
 
 
 /**
@@ -82,18 +83,18 @@ public abstract class Behaviour
 		else if ( item instanceof FreeItem ) {
 			// ....
 		}
-		// none of the above
-		else {
-			if ( name.contains( "disappearing" ) )
-				return new Volatile( item, name );
-			else
-			if ( name.isEmpty () || name.equals( "still" ) || name.equals( "bubbles" ) )
-				return null ;
-			else
-				throw new IllegalArgumentException( "unknown behavior \"" + name + "\" for " + item.toString () );
+		else if ( item instanceof GridItem ) {
+			// ....
 		}
 
-		return null ;
+		// none of the above
+		if ( name.contains( "disappearing" ) )
+			return new Volatile( item, name );
+		else
+		if ( name.isEmpty () || name.equals( "still" ) || name.equals( "bubbles" ) )
+			return null ;
+		else
+		throw new IllegalArgumentException( "unknown behavior \"" + name + "\" for " + item.toString () );
 	}
 
 }

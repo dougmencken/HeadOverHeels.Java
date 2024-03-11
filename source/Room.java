@@ -19,9 +19,9 @@ public class Room extends DrawableAndMediated
 	{
 	}
 
-	public void draw ()
+	public void draw ( java.awt.Graphics2D g )
 	{
-		/* ......... */
+		/* ....... */
 	}
 
 }

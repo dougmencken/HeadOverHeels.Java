@@ -10,6 +10,8 @@ package head.over.heels ;
 
 import head.over.heels.behaviors.Behaviour ;
 
+import java.util.Vector ;
+
 
 public abstract class Item extends ShadyAndMediated
 {
@@ -54,9 +56,58 @@ public abstract class Item extends ShadyAndMediated
 		return ( this.behavior != null ) ? this.behavior.update() : true ;
 	}
 
+	 // the pictures of item
+        Vector< OffscreenImage > frames = new Vector< OffscreenImage > ();
+
+        // the pictures of item’s shadow
+        Vector< OffscreenImage > shadows = new Vector< OffscreenImage > ();
+
+	// number of the current frame for drawing this item
+	private int currentFrame = 0 ;
+
+	/**
+	 * Changes the current frame. Frames usually change when the angular orientation changes
+	 * or when looping in a sequence of animation. However there’re some cases when frames
+	 * are changed manually. As example, in the behavior of a spring stool the one frame
+	 * is for rest and the other is for fold
+	 */
+	void changeFrame ( int newFrame )
+	{
+		if ( this.currentFrame != newFrame ) {
+			this.currentFrame = newFrame ;
+			// ...
+		}
+	}
+
+	protected int firstFrameWhenHeading ( String where )
+	{
+		if ( this.descriptionOfItem.howManyOrientations() > 1 ) {
+			int orientOccident = 0 ;
+			     if ( where.equals( "south" ) ) orientOccident = Frames.South ;
+			else if ( where.equals( "west" ) )  orientOccident = Frames.West ;
+			else
+			 if ( this.descriptionOfItem.howManyOrientations() > 2 ) {
+				     if ( where.equals( "east" ) )  orientOccident = Frames.East ;
+				else if ( where.equals( "north" ) ) orientOccident = Frames.North ;
+			}
+
+			return this.descriptionOfItem.howManyFramesPerOrientation() * orientOccident ;
+		}
+
+		return 0 ;
+	}
+
 	public String toString ()
 	{
 		return "item " + super.toString() ;
+	}
+
+	static class Frames
+	{
+		static final int South = 0 ;
+		static final int  West = 1 ;
+		static final int North = 2 ;
+		static final int  East = 3 ;
 	}
 
 }

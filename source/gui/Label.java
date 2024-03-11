@@ -36,7 +36,7 @@ public class Label extends Widget
 		// ....
 	}
 
-	public void draw ()
+	public void draw ( java.awt.Graphics2D g )
 	{
 		// ...
 	}

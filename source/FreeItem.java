@@ -13,16 +13,16 @@ package head.over.heels ;
  * Free items may be anywhere and move within the room, such as player characters
  */
 
-public class FreeItem extends Item
+public class FreeItem extends Item implements Drawable
 {
 	/**
 	 * @param description the description of this item
 	 * @param x the position on X
 	 * @param y the position on Y
 	 * @param z the position on Z, or how far is floor
-	 * @param heading the angular orientation
+	 * @param where the angular orientation
 	 */
-	public FreeItem( DescriptionOfItem description, int x, int y, int z, String heading )
+	public FreeItem( DescriptionOfItem description, int x, int y, int z, String where )
 	{
 		super( description );
 
@@ -30,7 +30,7 @@ public class FreeItem extends Item
 		this.theY = y ;
 		this.theZ = z ;
 
-		this.heading = heading ;
+		this.heading = where ;
 	}
 
 	// the copy constructor
@@ -43,7 +43,7 @@ public class FreeItem extends Item
 		this.heading = that.heading ;
 	}
 
-	// the position in 3-dimensional space
+	// the position in 3-dimensional space, in free isometric units
 	private int theX ;
 	private int theY ;
 	private int theZ ;
@@ -52,5 +52,23 @@ public class FreeItem extends Item
 	private String heading ;
 
 	public String getHeading () {  return this.heading ;  }
+
+	public void changeHeading ( String where )
+	{
+		if ( ! this.heading.equals( where ) ) {
+			this.heading = where ;
+			changeFrame( firstFrame() );
+		}
+	}
+
+	private int firstFrame () {  return firstFrameWhenHeading( this.heading ) ;  }
+
+	/**
+	 * Draw this free item
+	 */
+	public void draw ( java.awt.Graphics2D g )
+	{
+		// ...
+	}
 
 }

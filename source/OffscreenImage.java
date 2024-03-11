@@ -32,10 +32,8 @@ public class OffscreenImage extends BufferedImage
 
 		Graphics2D g = super.createGraphics ();
 
-		if ( toCopy.getWidth () < newWidth || toCopy.getHeight () < newHeight ) {
-			g.setColor( backColor );
-			g.fillRect( 0, 0, getWidth(), getHeight() );
-		}
+		if ( toCopy.getWidth () < newWidth || toCopy.getHeight () < newHeight )
+			fillWithColor( backColor, g );
 
 		// the copying itself happens here
 		g.drawImage( toCopy, 0, 0, null );
@@ -43,14 +41,17 @@ public class OffscreenImage extends BufferedImage
 		g.dispose ();
 	}
 
-	public void fillWithColor ( java.awt.Color fillColor )
+	public void fillWithColor ( java.awt.Color color )
 	{
 		Graphics2D g = super.createGraphics ();
-
-		g.setColor( fillColor );
-		g.fillRect( 0, 0, getWidth(), getHeight() );
-
+		fillWithColor( color, g );
 		g.dispose ();
+	}
+
+	private void fillWithColor ( java.awt.Color fillColor, Graphics2D g2d )
+	{
+		g2d.setColor( fillColor );
+		g2d.fillRect( 0, 0, getWidth(), getHeight() );
 	}
 
 }
