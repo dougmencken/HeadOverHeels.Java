@@ -13,7 +13,7 @@ package head.over.heels ;
  * A set of such tiles forms the floor of the room
  */
 
-public class FloorTile extends ShadyAndMediated implements Drawable
+public class FloorTile extends ShadyMediated implements Drawable
 {
 	// the room’s grid cell where this tile is located
 	private int cellX ;
@@ -37,7 +37,7 @@ public class FloorTile extends ShadyAndMediated implements Drawable
 		this.rawImage = graphicsOfTile ;
 		this.shadyImage = new OffscreenImage( graphicsOfTile ); // copy the graphics
 
-		setWantShadow( true );
+		super.setWantShadow( true );
 	}
 
 	/**

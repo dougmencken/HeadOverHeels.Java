@@ -8,11 +8,18 @@
 
 package head.over.heels ;
 
-public interface Mediated
+
+public class Mediated
 {
 
-	public Mediator getMediator () ;
+	private Mediator mediator ;
 
-	public void setMediator ( Mediator mediator ) ;
+	public Mediator getMediator () {  return this.mediator ;  }
+	public void setMediator ( Mediator mediator ) {  this.mediator = mediator ;  }
+
+	public Mediated ()
+	{
+		this.mediator = null ;
+	}
 
 }

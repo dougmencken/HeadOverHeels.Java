@@ -8,31 +8,18 @@
 
 package head.over.heels ;
 
-public abstract class ShadyAndMediated implements Shady, Mediated
+public abstract class ShadyMediated extends Mediated implements Shady
 {
-
-	/* shady */
 
 	private boolean wantShadow ;
 
 	public boolean getWantShadow () {  return wantShadow ;  }
-
 	public void setWantShadow ( boolean wanna ) {  this.wantShadow = wanna ;  }
 
-	/* mediated */
-
-	private Mediator mediator ;
-
-	public void setMediator ( Mediator mediator ) {  this.mediator = mediator ;  }
-
-	public Mediator getMediator () {  return this.mediator ;  }
-
-	/* constructor */
-
-	public ShadyAndMediated ()
+	public ShadyMediated ()
 	{
+		super() ;
 		this.wantShadow = false ;
-		this.mediator = null ;
 	}
 
 }

@@ -13,12 +13,14 @@ import head.over.heels.behaviors.Behaviour ;
 import java.util.Vector ;
 
 
-public abstract class Item extends ShadyAndMediated
+public abstract class Item extends ShadyMediated
 {
 
 	// creates an item by a description
 	public Item( DescriptionOfItem description )
 	{
+		if ( description == null ) throw new NullPointerException( "null description at the time of item construction" ) ;
+
 		this.descriptionOfItem = description ;
 	}
 

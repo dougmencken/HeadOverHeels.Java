@@ -12,7 +12,7 @@ package head.over.heels ;
  * A room drawn in isometric perspective
  */
 
-public class Room extends DrawableAndMediated
+public class Room extends Mediated implements Drawable
 {
 
 	public Room ()
