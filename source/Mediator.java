@@ -8,6 +8,9 @@
 
 package head.over.heels ;
 
+import java.util.Set ;
+
+
 /**
  * Intermediary between the items in the room
  */
@@ -15,7 +18,22 @@ package head.over.heels ;
 public class Mediator
 {
 
-	private Room room ;
+	// the room where this mediator deals
+	private final Room room ;
+
+	public Room getRoom () {  return this.room ;  }
+
+	// the collected collisions
+	private Set < String > collisions = new java.util.HashSet< String > ();
+
+	public boolean isThereAnyCollision () {  return ! this.collisions.isEmpty() ;  }
+	public int howManyCollisions () {  return this.collisions.size() ;  }
+	public void clearCollisions () {  this.collisions.clear() ;  }
+
+	// the character yet controlled by the player
+	private AvatarItem activeCharacter ;
+
+	public AvatarItem getActiveCharacter () {  return this.activeCharacter ;  }
 
 	public Mediator ( Room room )
 	{

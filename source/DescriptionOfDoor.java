@@ -25,11 +25,11 @@ public class DescriptionOfDoor extends DescriptionOfItem
 	public DescriptionOfItem getLeftJamb () {  return this.leftJamb ;  }
 	public DescriptionOfItem getRightJamb () {  return this.rightJamb ;  }
 
-	private String scenery = "none" ;
+	private final String scenery ;
 
 	public String getScenery () {  return this.scenery ;  }
 
-	private String doorAt = "void" ;
+	private final String doorAt ;
 
 	public String getWhereIsDoor () {  return this.doorAt ;  }
 
