@@ -8,6 +8,9 @@
 
 package head.over.heels ;
 
+import head.over.heels.gui.transitions.ImageTransition ;
+import head.over.heels.gui.transitions.RandomPixelFade ;
+
 import javax.swing.JFrame ;
 import javax.swing.JComponent ;
 
