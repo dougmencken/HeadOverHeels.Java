@@ -13,6 +13,10 @@ import javax.sound.sampled.AudioInputStream ;
 import javax.sound.sampled.AudioSystem ;
 import javax.sound.sampled.Clip ;
 
+import javax.sound.midi.Instrument ;
+import javax.sound.midi.MidiChannel ;
+import javax.sound.midi.Synthesizer ;
+
 
 class MusicPlaying implements Runnable
 {
@@ -114,8 +118,8 @@ public class SoundManager
 
 	public static SoundManager getInstance()
 	{
-		if ( instance == null ) instance = new SoundManager() ;
-		return instance ;
+		if ( SoundManager.instance == null ) SoundManager.instance = new SoundManager() ;
+		return SoundManager.instance ;
 	}
 
 	/**
@@ -155,8 +159,107 @@ public class SoundManager
 
 	public void stopAll ()
 	{
-		for ( String entry : this.playlist.keySet() ) {
+		for ( String entry : this.playlist.keySet() )
 			this.stop( entry );
+	}
+
+	/**
+	 * list all the MIDI instruments
+	 */
+	public static void listMidiInstruments ()
+	{
+		Synthesizer midiSynthesizer = null ;
+		try {
+			midiSynthesizer = javax.sound.midi.MidiSystem.getSynthesizer() ;
+			midiSynthesizer.open ();
+		} catch ( javax.sound.midi.MidiUnavailableException ex ) { midiSynthesizer = null ; }
+
+		if ( midiSynthesizer != null ) {
+			Instrument [] instruments = midiSynthesizer.getAvailableInstruments() ;
+
+			for ( int i = 0 ; i < instruments.length ; ++ i )
+				System.out.println( StringUtilities.toStringWithOrdinalSuffix( i )
+							+ " MIDI instrument is \"" + instruments[ i ].getName() + "\"" );
+
+			midiSynthesizer.close ();
+		}
+		else
+			System.out.println( "can’t get MIDI synthesizer" );
+	}
+
+	public static Instrument loadMidiInstrumentByName ( Synthesizer midiSynth, String partOfName )
+	{
+		return loadMidiInstrumentByName( midiSynth, partOfName, "" );
+	}
+
+	public static Instrument loadMidiInstrumentByName ( Synthesizer midiSynth, String partOfName, String otherPartOfName )
+	{
+		if ( midiSynth == null ) return null ;
+
+		Instrument [] instruments = midiSynth.getAvailableInstruments () ;
+
+		for ( int i = 0 ; i < instruments.length ; ++ i )
+			if ( instruments[ i ].getName().toLowerCase().contains( partOfName.toLowerCase() )
+					&& instruments[ i ].getName().toLowerCase().contains( otherPartOfName.toLowerCase() ) )
+				// load and return if found
+				if ( midiSynth.loadInstrument( instruments[ i ] ) ) return instruments[ i ] ;
+
+		return null ;
+	}
+
+	public static void main( String [] ignored )
+	{
+		listMidiInstruments ();
+
+		Synthesizer midiSynthesizer = null ;
+		try {
+			midiSynthesizer = javax.sound.midi.MidiSystem.getSynthesizer() ;
+			midiSynthesizer.open ();
+		} catch ( javax.sound.midi.MidiUnavailableException ex ) { midiSynthesizer = null ; }
+
+		MidiChannel [] voices = midiSynthesizer.getChannels () ;
+		int first = 0 ;
+		while ( first < voices.length && voices[ first ] == null ) ++ first ;
+		int second = first + 1 ;
+		while ( second < voices.length && voices[ second ] == null ) ++ second ;
+
+		System.out.println( "got MIDI channels #" + first + " and #" + second );
+
+		MidiChannel voiceOne = voices[ first ] ;
+		MidiChannel voiceToo = voices[ second ] ;
+
+		Instrument squareLead = loadMidiInstrumentByName( midiSynthesizer, "square", "lead" );
+		Instrument vibraphone = loadMidiInstrumentByName( midiSynthesizer, "vibraphone" );
+
+		System.out.println( "the square lead instrument is known as \""
+					+ ( squareLead != null ? squareLead.getName() : "null" ) + "\"" );
+		System.out.println( "the vibraphone instrument  is known as \""
+					+ ( vibraphone != null ? vibraphone.getName() : "null" ) + "\"" );
+
+		voiceOne.programChange( squareLead.getPatch().getProgram() );
+		voiceToo.programChange( vibraphone.getPatch().getProgram() );
+
+		java.util.Random random = new java.util.Random () ;
+
+		for ( int n = 0 ; n < 40 ; ++ n ) {
+			int note = 60 + random.nextInt( 25 );
+
+			voiceOne.noteOn( /* note pitch from 0 to 127, 60 = middle C */ note, /* velocity */ 100 );
+			try { Thread.sleep( 100 /* milliseconds */ ); } catch( InterruptedException ie ) {}
+			voiceToo.noteOn( note, 80 );
+			try { Thread.sleep( 50 /* milliseconds */ ); } catch( InterruptedException ie ) {}
+			voiceToo.noteOff( note );
+			try { Thread.sleep( 50 /* milliseconds */ ); } catch( InterruptedException ie ) {}
+			voiceToo.noteOn( note, 80 );
+			try { Thread.sleep( 50 /* milliseconds */ ); } catch( InterruptedException ie ) {}
+			voiceToo.noteOff( note );
+			voiceOne.noteOff( note );
+		}
+
+		if ( midiSynthesizer != null ) {
+			midiSynthesizer.unloadInstrument( squareLead );
+			midiSynthesizer.unloadInstrument( vibraphone );
+			midiSynthesizer.close ();
 		}
 	}
 
