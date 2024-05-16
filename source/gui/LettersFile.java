@@ -285,9 +285,9 @@ public class LettersFile
 		letters.add( "\u0058" ); /* "X" */ // utf8 { 0x58 }
 		letters.add( "\u0059" ); /* "Y" */ // utf8 { 0x59 }
 		letters.add( "\u005a" ); /* "Z" */ // utf8 { 0x5a }
+		letters.add( "\u005b" ); /* "[" */ // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "\u005d" ); /* "]" */ // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "\u005f" ); /* "_" */ // utf8 { 0x5f }
 
@@ -331,7 +331,7 @@ public class LettersFile
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "\u00b7" ); /* "·" */ // utf8 { 0xc2, 0xb7 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "\u0160" ); /* "Š" */ // utf8 { 0xc5, 0xa0 }
@@ -345,10 +345,10 @@ public class LettersFile
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "\u00b7" ); /* "·" */ // utf8 { 0xc2, 0xb7 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "\u00d7" ); /* "×" */ // utf8 { 0xc3, 0x97 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "\u0161" ); /* "š" */ // utf8 { 0xc5, 0xa1 }
@@ -381,10 +381,10 @@ public class LettersFile
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "\u21e6" ); /* "⇦" */ // utf8 { 0xe2, 0x87, 0xa6 }
+		letters.add( "\u21e7" ); /* "⇧" */ // utf8 { 0xe2, 0x87, 0xa7 }
+		letters.add( "\u21e8" ); /* "⇨" */ // utf8 { 0xe2, 0x87, 0xa8 }
+		letters.add( "\u21e9" ); /* "⇩" */ // utf8 { 0xe2, 0x87, 0xa9 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }

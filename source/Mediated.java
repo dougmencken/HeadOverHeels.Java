@@ -9,7 +9,7 @@
 package head.over.heels ;
 
 
-public class Mediated
+public abstract class Mediated
 {
 
 	private Mediator mediator ;
@@ -17,7 +17,7 @@ public class Mediated
 	public Mediator getMediator () {  return this.mediator ;  }
 	public void setMediator ( Mediator mediator ) {  this.mediator = mediator ;  }
 
-	public Mediated ()
+	protected Mediated ()
 	{
 		this.mediator = null ;
 	}

@@ -36,4 +36,16 @@ public class StringUtilities
 		return result.toString() ;
         }
 
+	public static String reverseString( String in )
+	{
+		/* StringBuilder out = new StringBuilder() ;
+
+		for ( int c = in.length() - 1 ; c >= 0 ; -- c )
+			out.append( in.charAt( c ) );
+
+		return out.toString () ; */
+
+		return ( new StringBuilder( in ) ).reverse().toString () ;
+	}
+
 }

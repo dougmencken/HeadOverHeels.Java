@@ -9,12 +9,12 @@
 package head.over.heels.behaviors ;
 
 
-public class Activity
+class Activity
 {
 
 	private String letters ;
 
-	private Activity( String text ) {  this.letters = text ;  }
+	protected Activity( String text ) {  this.letters = text ;  }
 
 	public boolean equals ( Activity that ) {  return that.letters.equals( this.letters );  }
 
@@ -38,14 +38,23 @@ public class Activity
 	public static final Activity  AutomovingEast	= new Activity( "automoving east" );
 	public static final Activity  AutomovingWest	= new Activity( "automoving west" );
 
-	public static final Activity  GoingDown		= new Activity( "going down" );
-	public static final Activity  GoingUp		= new Activity( "going up" );
-
 	public static final Activity  Jumping		= new Activity( "jumping" );
 	public static final Activity  Falling		= new Activity( "falling" );
 	public static final Activity  Gliding		= new Activity( "gliding" );
 
 	public static final Activity  MetLethalItem	= new Activity( "met a lethal item" );
 	public static final Activity  Vanishing		= new Activity( "vanishing" );
+
+}
+
+class ActivityOfElevator extends Activity
+{
+
+	protected ActivityOfElevator( String text ) {  super( text );  }
+
+	public static final ActivityOfElevator  GoingDown	= new ActivityOfElevator( "elevator is going down" );
+	public static final ActivityOfElevator  GoingUp		= new ActivityOfElevator( "elevator is going up" );
+	public static final ActivityOfElevator  ReachedBottom	= new ActivityOfElevator( "elevator reached bottom" );
+	public static final ActivityOfElevator  ReachedTop	= new ActivityOfElevator( "elevator reached top" );
 
 }

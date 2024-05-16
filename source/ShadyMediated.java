@@ -13,10 +13,10 @@ public abstract class ShadyMediated extends Mediated implements Shady
 
 	private boolean wantShadow ;
 
-	public boolean getWantShadow () {  return wantShadow ;  }
+	public boolean getWantShadow () {  return this.wantShadow ;  }
 	public void setWantShadow ( boolean wanna ) {  this.wantShadow = wanna ;  }
 
-	public ShadyMediated ()
+	protected ShadyMediated ()
 	{
 		super() ;
 		this.wantShadow = false ;

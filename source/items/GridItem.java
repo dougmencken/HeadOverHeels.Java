@@ -6,7 +6,10 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-package head.over.heels ;
+package head.over.heels.items ;
+
+import head.over.heels.DescriptionOfItem ;
+import head.over.heels.Drawable ;
 
 
 /**
@@ -15,7 +18,7 @@ package head.over.heels ;
  * of a grid item can be changed, but not the position on X and Y
  */
 
-public class GridItem extends Item implements Drawable
+public class GridItem extends DescribedItem implements Drawable
 {
 	/**
 	 * @param description the description of this item
@@ -49,7 +52,7 @@ public class GridItem extends Item implements Drawable
 	private int cellX ;
 	private int cellY ;
 
-        // the position on Z, or how far is floor, in free isometric units
+        // the position on Z, or how far is floor, in free units
 	private int theZ ;
 
 	// the angular orientation

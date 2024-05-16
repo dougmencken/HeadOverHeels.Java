@@ -8,6 +8,8 @@
 
 package head.over.heels ;
 
+import head.over.heels.items.AvatarItem ;
+
 import java.util.Set ;
 
 

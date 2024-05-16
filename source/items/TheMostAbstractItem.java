@@ -6,38 +6,33 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-package head.over.heels ;
+package head.over.heels.items ;
+
+import head.over.heels.OffscreenImage ;
+import head.over.heels.ShadyMediated ;
 
 import head.over.heels.behaviors.Behaviour ;
 
 import java.util.Vector ;
 
 
-public abstract class Item extends ShadyMediated
+/**
+ * The most abstract item
+ */
+
+public abstract class TheMostAbstractItem extends ShadyMediated
 {
 
-	// creates an item by a description
-	public Item( DescriptionOfItem description )
-	{
-		if ( description == null ) throw new NullPointerException( "null description at the time of item construction" ) ;
-
-		this.descriptionOfItem = description ;
-	}
+	protected TheMostAbstractItem() {  super() ;  }
 
 	// the copy constructor
-	public Item( Item item )
+	protected TheMostAbstractItem( TheMostAbstractItem item )
 	{
-		this.descriptionOfItem = item.descriptionOfItem ;
-
 		if ( item.behavior == null )
 			this.behavior = null ;
 		else
 			this.setBehaviourOf( item.behavior.getName () );
 	}
-
-	private DescriptionOfItem descriptionOfItem ;
-
-	public DescriptionOfItem getDescriptionOfItem () {  return this.descriptionOfItem ;  }
 
 	// the behaviour of item
 	private Behaviour behavior = null ;
@@ -81,35 +76,9 @@ public abstract class Item extends ShadyMediated
 		}
 	}
 
-	protected int firstFrameWhenHeading ( String where )
-	{
-		if ( this.descriptionOfItem.howManyOrientations() > 1 ) {
-			int orientOccident = 0 ;
-			     if ( where.equals( "south" ) ) orientOccident = Frames.South ;
-			else if ( where.equals( "west" ) )  orientOccident = Frames.West ;
-			else
-			 if ( this.descriptionOfItem.howManyOrientations() > 2 ) {
-				     if ( where.equals( "east" ) )  orientOccident = Frames.East ;
-				else if ( where.equals( "north" ) ) orientOccident = Frames.North ;
-			}
-
-			return this.descriptionOfItem.howManyFramesPerOrientation() * orientOccident ;
-		}
-
-		return 0 ;
-	}
-
 	public String toString ()
 	{
 		return "item " + super.toString() ;
-	}
-
-	static class Frames
-	{
-		static final int South = 0 ;
-		static final int  West = 1 ;
-		static final int North = 2 ;
-		static final int  East = 3 ;
 	}
 
 }

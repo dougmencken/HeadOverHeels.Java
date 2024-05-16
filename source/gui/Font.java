@@ -459,8 +459,8 @@ public class Font
 			letters.append( letter );
 		System.out.println( letters );
 
-		BufferedImage allTheLetters = testFont.composeImageOfString( letters.toString () );
-		Pictures.saveAsPNG( allTheLetters, new java.io.File( FilesystemPaths.getGameStorageInHome (), "Font.test.png" ) );
+		/* BufferedImage allTheLetters = testFont.composeImageOfString( letters.toString () );
+		Pictures.saveAsPNG( allTheLetters, new java.io.File( FilesystemPaths.getGameStorageInHome (), "Font.test.png" ) ); */
 
 		// dump the images of letters as lines of text
 		for ( String letter : Font.letterToImage.keySet() ) {
@@ -471,10 +471,12 @@ public class Font
 		}
 
 		{
-			///String [] lines = Font.letterToImage.get( "’" );
-			///System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
+			///String letter = "’" ;
+			///String [] lines = Font.letterToImage.get( letter );
+			///if ( lines != null )
+			///	System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
 
-			/* String [] newlines = new String [ lines.length ] ;
+			/* String [] newlines = new String [ ( lines != null ) ? lines.length : 25 ] ;
 			int l = 0 ;
 			newlines[ l++ ] = "              " ; // 0
 			newlines[ l++ ] = "              " ; // 1
@@ -502,10 +504,151 @@ public class Font
 			newlines[ l++ ] = "              " ; // 23
 			newlines[ l++ ] = "              " ; // 24
 
-			Font.letterToImage.put( "’", newlines ); */
+			Font.letterToImage.put( letter, newlines ); */
+		}
+
+		{
+			String letter = "⇧" ;
+			String [] lines = Font.letterToImage.get( letter );
+			if ( lines != null )
+				System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
+
+			String [] newlines = new String [ ( lines != null ) ? lines.length : 25 ] ;
+			int l = 0 ;
+			newlines[ l++ ] = fillGaps( "              " ); // 0
+			newlines[ l++ ] = fillGaps( "              " ); // 1
+			newlines[ l++ ] = fillGaps( "              " ); // 2
+			newlines[ l++ ] = fillGaps( "              " ); // 3
+			newlines[ l++ ] = fillGaps( "              " ); // 4
+			newlines[ l++ ] = fillGaps( "              " ); // 5
+			newlines[ l++ ] = fillGaps( "      00      " ); // 6
+			newlines[ l++ ] = fillGaps( "     0000     " ); // 7
+			newlines[ l++ ] = fillGaps( "    00  00    " ); // 8
+			newlines[ l++ ] = fillGaps( "   00    00   " ); // 9
+			newlines[ l++ ] = fillGaps( "  00      00  " ); // 10
+			newlines[ l++ ] = fillGaps( " 0000    0000 " ); // 11
+			newlines[ l++ ] = fillGaps( " 0000    0000 " ); // 12
+			newlines[ l++ ] = fillGaps( "    0    0    " ); // 13
+			newlines[ l++ ] = fillGaps( "    0    0    " ); // 14
+			newlines[ l++ ] = fillGaps( "    0    0    " ); // 15
+			newlines[ l++ ] = fillGaps( "    0    0    " ); // 16
+			newlines[ l++ ] = fillGaps( "    000000    " ); // 17
+			newlines[ l++ ] = fillGaps( "    000000    " ); // 18
+			newlines[ l++ ] = fillGaps( "              " ); // 19
+			newlines[ l++ ] = fillGaps( "              " ); // 20
+			newlines[ l++ ] = fillGaps( "              " ); // 21
+			newlines[ l++ ] = fillGaps( "              " ); // 22
+			newlines[ l++ ] = fillGaps( "              " ); // 23
+			newlines[ l++ ] = fillGaps( "              " ); // 24
+			System.out.println() ;
+
+			Font.letterToImage.put( letter, newlines );
+
+			letter = "⇩" ;
+
+			String [] upsidedownlines = new String [ 25 ] ;
+			for ( int k = 24, j = 0 ; k >= 0 ; -- k, ++ j )
+				upsidedownlines[ k ] = newlines[ j ] ;
+
+			Font.letterToImage.put( letter, upsidedownlines );
+		}
+
+		{
+			String letter = "⇨" ;
+			String [] lines = Font.letterToImage.get( letter );
+			if ( lines != null )
+				System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
+
+			String [] newlines = new String [ ( lines != null ) ? lines.length : 25 ] ;
+			int l = 0 ;
+			newlines[ l++ ] = fillGaps( "              " ); // 0
+			newlines[ l++ ] = fillGaps( "              " ); // 1
+			newlines[ l++ ] = fillGaps( "              " ); // 2
+			newlines[ l++ ] = fillGaps( "              " ); // 3
+			newlines[ l++ ] = fillGaps( "              " ); // 4
+			newlines[ l++ ] = fillGaps( "              " ); // 5
+			newlines[ l++ ] = fillGaps( "     00       " ); // 6
+			newlines[ l++ ] = fillGaps( "     000      " ); // 7
+			newlines[ l++ ] = fillGaps( "     0000     " ); // 8
+			newlines[ l++ ] = fillGaps( "     00 00    " ); // 9
+			newlines[ l++ ] = fillGaps( " 000000  00   " ); // 10
+			newlines[ l++ ] = fillGaps( " 00       00  " ); // 11
+			newlines[ l++ ] = fillGaps( " 00        00 " ); // 12
+			newlines[ l++ ] = fillGaps( " 00       00  " ); // 13
+			newlines[ l++ ] = fillGaps( " 000000  00   " ); // 14
+			newlines[ l++ ] = fillGaps( "     00 00    " ); // 15
+			newlines[ l++ ] = fillGaps( "     0000     " ); // 16
+			newlines[ l++ ] = fillGaps( "     000      " ); // 17
+			newlines[ l++ ] = fillGaps( "     00       " ); // 18
+			newlines[ l++ ] = fillGaps( "              " ); // 19
+			newlines[ l++ ] = fillGaps( "              " ); // 20
+			newlines[ l++ ] = fillGaps( "              " ); // 21
+			newlines[ l++ ] = fillGaps( "              " ); // 22
+			newlines[ l++ ] = fillGaps( "              " ); // 23
+			newlines[ l++ ] = fillGaps( "              " ); // 24
+			System.out.println() ;
+
+			Font.letterToImage.put( letter, newlines );
+
+			letter = "⇦" ;
+
+			String [] reversedlines = new String [ 25 ] ;
+			for ( int k = 0 ; k < 25 ; k ++ )
+				reversedlines[ k ] = head.over.heels.StringUtilities.reverseString( newlines[ k ] );
+
+			Font.letterToImage.put( letter, reversedlines );
+		}
+
+		{
+			String letter = "[" ;
+			String [] lines = Font.letterToImage.get( "(" );
+			if ( lines != null )
+				System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
+
+			Font.letterToImage.put( letter, lines );
+
+			letter = "]" ;
+			String [] closingroundlines = Font.letterToImage.get( ")" );
+
+			String [] reversedlines = new String [ 25 ] ;
+			for ( int k = 0 ; k < 25 ; k ++ ) {
+				reversedlines[ k ] = head.over.heels.StringUtilities.reverseString( lines[ k ] );
+
+				if ( ! closingroundlines[ k ].equals( reversedlines[ k ] ) )
+					System.out.println( "\"" + closingroundlines[ k ] + "\" != \"" + reversedlines[ k ] + "\"" );
+			}
+
+			Font.letterToImage.put( letter, reversedlines );
 		}
 
 		Font.composeAndWriteImageOFont( new java.io.File( FilesystemPaths.getGameStorageInHome (), "font.new.png" ) );
+	}
+
+	private static String fillGaps( String in )
+	{
+		int firstNonSpace = in.length() ;
+		for ( int c = 0 ; c < in.length() ; ++ c )
+			if ( in.charAt( c ) != ' ' ) {
+				firstNonSpace = c ;
+				break ;
+			}
+
+		int lastNonSpace = -1 ;
+		for ( int c = in.length() - 1 ; c >= 0 ; -- c )
+			if ( in.charAt( c ) != ' ' ) {
+				lastNonSpace = c ;
+				break ;
+			}
+
+		StringBuilder out = new StringBuilder( in );
+
+		for ( int c = firstNonSpace ; c < lastNonSpace ; c ++ ) {
+			if ( out.charAt( c ) == ' ' ) out.setCharAt( c, 'X' );
+		}
+
+		System.out.println( "fillGaps : \"" + in + "\" becomes \"" + out + "\"" );
+
+		return out.toString () ;
 	}
 
 }

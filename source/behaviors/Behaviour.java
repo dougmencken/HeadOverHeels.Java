@@ -8,10 +8,11 @@
 
 package head.over.heels.behaviors ;
 
-import head.over.heels.Item ;
-import head.over.heels.AvatarItem ;
-import head.over.heels.FreeItem ;
-import head.over.heels.GridItem ;
+import head.over.heels.items.AvatarItem ;
+import head.over.heels.items.DescribedItem ;
+import head.over.heels.items.FreeItem ;
+import head.over.heels.items.GridItem ;
+import head.over.heels.items.TheMostAbstractItem ;
 
 
 /**
@@ -30,7 +31,7 @@ public abstract class Behaviour
 	/**
 	 * protected, new behaviour can be created via Behaviour.byName( String, Item )
 	 */
-	protected Behaviour( Item item, String nameOfBehavior )
+	protected Behaviour( TheMostAbstractItem item, String nameOfBehavior )
 	{
 		if ( item == null ) throw new NullPointerException( "an item than behaves can't be null" ) ;
 
@@ -41,9 +42,9 @@ public abstract class Behaviour
 	/**
 	 * The item that behaves
 	 */
-	private Item itemThatBehaves ;
+	private TheMostAbstractItem itemThatBehaves ;
 
-	public Item getItem () {  return this.itemThatBehaves ;  }
+	public TheMostAbstractItem getItem () {  return this.itemThatBehaves ;  }
 
 	/**
 	 * The name of behavior
@@ -60,15 +61,15 @@ public abstract class Behaviour
 	/**
 	 * Another item that changed activity of this one
 	 */
-	private Item affectedBy = null ;
+	private DescribedItem affectedBy = null ;
 
-	public void changeActivityDueTo ( Activity newActivity, Item dueTo )
+	public void changeActivityDueTo ( Activity newActivity, DescribedItem dueTo )
 	{
 		this.currentActivity = newActivity ;
 		this.affectedBy = dueTo ;
 	}
 
-	public static Behaviour byName( String name, Item item )
+	public static Behaviour byName( String name, TheMostAbstractItem item )
 	{
 		if ( item instanceof AvatarItem ) {
 			if ( name.equals( "Head" ) )
@@ -88,8 +89,8 @@ public abstract class Behaviour
 		}
 
 		// none of the above
-		if ( name.contains( "disappearing" ) )
-			return new Volatile( item, name );
+		if ( name.contains( "disappearing" ) && item instanceof DescribedItem )
+			return new Volatile( (DescribedItem) item, name );
 		else
 		if ( name.isEmpty () || name.equals( "still" ) || name.equals( "bubbles" ) )
 			return null ;

@@ -183,7 +183,7 @@ public class ItemDescriptions
 
 		description.setWeight( itemWeight );
 
-		// how many milliseconds this item moves one single isometric unit
+		// how many milliseconds this item moves one free unit
 		int itemSpeed = 0 ;
 
 		NodeList speedNodes = element.getElementsByTagName( "speed" );

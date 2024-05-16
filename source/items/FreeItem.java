@@ -6,14 +6,17 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-package head.over.heels ;
+package head.over.heels.items ;
+
+import head.over.heels.DescriptionOfItem ;
+import head.over.heels.Drawable ;
 
 
 /**
  * Free items may be anywhere and move within the room, such as player characters
  */
 
-public class FreeItem extends Item implements Drawable
+public class FreeItem extends DescribedItem implements Drawable
 {
 	/**
 	 * @param description the description of this item
@@ -43,7 +46,7 @@ public class FreeItem extends Item implements Drawable
 		this.heading = that.heading ;
 	}
 
-	// the position in 3-dimensional space, in free isometric units
+	// the position in 3-dimensional space of this item’s lower north-west point, in free units
 	private int theX ;
 	private int theY ;
 	private int theZ ;

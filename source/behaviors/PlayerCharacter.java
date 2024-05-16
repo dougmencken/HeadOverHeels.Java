@@ -8,7 +8,7 @@
 
 package head.over.heels.behaviors ;
 
-import head.over.heels.AvatarItem ;
+import head.over.heels.items.AvatarItem ;
 
 
 /**

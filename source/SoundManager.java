@@ -217,6 +217,8 @@ public class SoundManager
 			midiSynthesizer.open ();
 		} catch ( javax.sound.midi.MidiUnavailableException ex ) { midiSynthesizer = null ; }
 
+		if ( midiSynthesizer == null ) return ;
+
 		MidiChannel [] voices = midiSynthesizer.getChannels () ;
 		int first = 0 ;
 		while ( first < voices.length && voices[ first ] == null ) ++ first ;
@@ -256,11 +258,9 @@ public class SoundManager
 			voiceOne.noteOff( note );
 		}
 
-		if ( midiSynthesizer != null ) {
-			midiSynthesizer.unloadInstrument( squareLead );
-			midiSynthesizer.unloadInstrument( vibraphone );
-			midiSynthesizer.close ();
-		}
+		midiSynthesizer.unloadInstrument( squareLead );
+		midiSynthesizer.unloadInstrument( vibraphone );
+		midiSynthesizer.close ();
 	}
 
 }

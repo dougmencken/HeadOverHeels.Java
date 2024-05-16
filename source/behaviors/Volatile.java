@@ -8,7 +8,7 @@
 
 package head.over.heels.behaviors ;
 
-import head.over.heels.Item ;
+import head.over.heels.items.DescribedItem ;
 
 
 /**
@@ -28,7 +28,7 @@ public class Volatile extends Behaviour
 		return present ;
 	}
 
-	public Volatile( Item item, String name )
+	public Volatile( DescribedItem item, String name )
 	{
 		super( item, name );
 		this.solid = false ;

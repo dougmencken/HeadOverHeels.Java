@@ -24,7 +24,7 @@ public class DescriptionOfItem implements Cloneable
 	protected void setKind ( String newKind ) {  this.kind = newKind ;  }
 
 	/**
-	 * The three spatial dimensions of the item, along the x, along the y, and height along the z
+	 * The three spatial dimensions (widths) of the item, along the x, along the y, and height along the z
 	 */
 	private int widthX = 0 ;
 	private int widthY = 0 ;
@@ -48,7 +48,7 @@ public class DescriptionOfItem implements Cloneable
 	public void setWeight( int newWeight ) {  this.weight = newWeight ;  }
 
 	/**
-	 * The time in milliseconds the item takes to move one single isometric unit
+	 * The time in milliseconds the item takes to move one free unit
 	 */
 	private int speed = 0 ;
 

@@ -8,6 +8,9 @@
 
 package head.over.heels ;
 
+import head.over.heels.items.GridItem ;
+import head.over.heels.items.FreeItem ;
+
 import java.util.Vector ;
 import java.util.Map ;
 
