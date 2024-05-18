@@ -6,14 +6,16 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-package head.over.heels ;
+package head.over.heels.items ;
+
+import head.over.heels.Mediated ;
 
 
 /**
  * A door to the room. It is really the three free items, the two jambs and the lintel
  */
 
-public class Door ///implements Mediated
+public class Door extends Mediated
 {
 
 	private String kindOfDoor ;

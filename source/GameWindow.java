@@ -198,7 +198,7 @@ public class GameWindow extends JFrame
 
 	public GameWindow ( int width, int height )
 	{
-		super( "Foot and Mouth (Java)" );
+		super( "Foot and Mouth (Java)" + " version " + main.gameVersion() );
 
 		addMouseListener( new java.awt.event.MouseAdapter ()
 		{

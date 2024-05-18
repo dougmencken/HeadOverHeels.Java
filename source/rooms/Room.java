@@ -6,10 +6,16 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-package head.over.heels ;
+package head.over.heels.rooms ;
+
+import head.over.heels.Drawable ;
+import head.over.heels.Mediated ;
 
 import head.over.heels.items.GridItem ;
 import head.over.heels.items.FreeItem ;
+import head.over.heels.items.Door ;
+import head.over.heels.items.WallPiece ;
+import head.over.heels.items.FloorTile ;
 
 import java.util.Vector ;
 import java.util.Map ;

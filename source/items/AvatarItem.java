@@ -8,8 +8,6 @@
 
 package head.over.heels.items ;
 
-import head.over.heels.DescriptionOfItem ;
-
 import head.over.heels.behaviors.Behaviour ;
 import head.over.heels.behaviors.PlayerCharacter ;
 

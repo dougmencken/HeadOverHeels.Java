@@ -89,8 +89,7 @@ public class Font
 		{
 			BufferedImage font = Font.readImageOFont( new java.io.File( FilesystemPaths.getPathToGameData(), "font.png" ) );
 			java.util.Vector < String [] > imagesOfLetters = Font.decomposeImageOFont( font );
-			LettersFile listOfLetters = new LettersFile( );
-					// = new LettersFile( new java.io.File( FilesystemPaths.getPathToGameData(), "letters.utf8" ) );
+			LettersFile listOfLetters = new LettersFile( new java.io.File( FilesystemPaths.getPathToGameData(), "letters.utf8" ) );
 			Font.fillTheMapping( listOfLetters, imagesOfLetters );
 		}
 	}
@@ -390,7 +389,7 @@ public class Font
 		final int yShift = 1 ;
 
 		LettersFile listOfLetters = new LettersFile( );
-		int lettersThere = listOfLetters.howManyLetters ();
+		int lettersThere = listOfLetters.howManyLetters() ;
 		int linesInFont = ( ( lettersThere - 1 ) / lettersPerLine ) + 1 ;
 
 		String [] someLetter = Font.letterToImage.get( "O" );
@@ -429,11 +428,14 @@ public class Font
 			String letter = listOfLetters.letterAt( l );
 			if ( ! letter.isEmpty() ) {
 				String [] lines = Font.letterToImage.get( letter );
-
-				for ( int y = 0 ; y < heightOfLetter ; y ++ )
-					for ( int x = 0 ; x < widthOfLetter ; x ++ )
-						if ( lines[ y ].charAt( x ) != ' ' )
-							imageOFont.setRGB( letterX + x, letterY + yShift + y, /* opaque */ palette[ 0 ] ) ;
+				if ( lines == null /* no image of this letter in the font */ )
+					throw new NullPointerException( "there’s no image for letter \"" + letter + "\" in the font" );
+				else {
+					for ( int y = 0 ; y < heightOfLetter ; y ++ )
+						for ( int x = 0 ; x < widthOfLetter ; x ++ )
+							if ( lines[ y ].charAt( x ) != ' ' )
+								imageOFont.setRGB( letterX + x, letterY + yShift + y, /* opaque */ palette[ 0 ] ) ;
+				}
 			}
 
 			if ( ( ++ l ) % lettersPerLine == 0 ) {
@@ -468,6 +470,14 @@ public class Font
 			System.out.println( "|" + letter + "|" );
 			System.out.println();
 			System.out.println( Font.dumpTextualBitmap( ".add( \"", Font.letterToImage.get( letter ), "\" ); // " ) );
+
+			////System.out.println( "{" );
+			////System.out.println( "String letter = \"" + letter + "\" ;" );
+			////System.out.println( "Vector< String > lines = new Vector< String >() ;" );
+			////System.out.println();
+			////System.out.println( Font.dumpTextualBitmap( "lines.add( \"", Font.letterToImage.get( letter ), "\" ); // " ) );
+			////System.out.println( "Font.letterToImage.put( letter, lines.toArray( new String[ lines.size() ] ) );" );
+			////System.out.println( "}" );
 		}
 
 		{
@@ -507,7 +517,7 @@ public class Font
 			Font.letterToImage.put( letter, newlines ); */
 		}
 
-		{
+		/***{
 			String letter = "⇧" ;
 			String [] lines = Font.letterToImage.get( letter );
 			if ( lines != null )
@@ -551,9 +561,9 @@ public class Font
 				upsidedownlines[ k ] = newlines[ j ] ;
 
 			Font.letterToImage.put( letter, upsidedownlines );
-		}
+		}***/
 
-		{
+		/***{
 			String letter = "⇨" ;
 			String [] lines = Font.letterToImage.get( letter );
 			if ( lines != null )
@@ -597,34 +607,12 @@ public class Font
 				reversedlines[ k ] = head.over.heels.StringUtilities.reverseString( newlines[ k ] );
 
 			Font.letterToImage.put( letter, reversedlines );
-		}
-
-		{
-			String letter = "[" ;
-			String [] lines = Font.letterToImage.get( "(" );
-			if ( lines != null )
-				System.out.println( Font.dumpTextualBitmap( "\t\t\tnewlines[ l++ ] = \"", lines, "\" ; // " ) );
-
-			Font.letterToImage.put( letter, lines );
-
-			letter = "]" ;
-			String [] closingroundlines = Font.letterToImage.get( ")" );
-
-			String [] reversedlines = new String [ 25 ] ;
-			for ( int k = 0 ; k < 25 ; k ++ ) {
-				reversedlines[ k ] = head.over.heels.StringUtilities.reverseString( lines[ k ] );
-
-				if ( ! closingroundlines[ k ].equals( reversedlines[ k ] ) )
-					System.out.println( "\"" + closingroundlines[ k ] + "\" != \"" + reversedlines[ k ] + "\"" );
-			}
-
-			Font.letterToImage.put( letter, reversedlines );
-		}
+		}***/
 
 		Font.composeAndWriteImageOFont( new java.io.File( FilesystemPaths.getGameStorageInHome (), "font.new.png" ) );
 	}
 
-	private static String fillGaps( String in )
+	/***** private static String fillGaps( String in )
 	{
 		int firstNonSpace = in.length() ;
 		for ( int c = 0 ; c < in.length() ; ++ c )
@@ -649,6 +637,6 @@ public class Font
 		System.out.println( "fillGaps : \"" + in + "\" becomes \"" + out + "\"" );
 
 		return out.toString () ;
-	}
+	} *****/
 
 }

@@ -8,8 +8,6 @@
 
 package head.over.heels.items ;
 
-import head.over.heels.DescriptionOfItem ;
-
 
 public abstract class DescribedItem extends TheMostAbstractItem
 {

@@ -8,7 +8,6 @@
 
 package head.over.heels.items ;
 
-import head.over.heels.DescriptionOfItem ;
 import head.over.heels.Drawable ;
 
 

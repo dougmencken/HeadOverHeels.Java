@@ -12,6 +12,9 @@ package head.over.heels ;
 import java.util.Vector ;
 import java.util.HashMap ;
 
+import head.over.heels.items.ItemDescriptions ; /**/// temporary line
+
+
 class KnownOption
 {
 
@@ -41,15 +44,25 @@ public final class main
 
 	private static Vector < KnownOption > knownOptions ;
 
-	public static final int EXIT_SUCCESS = 0 ;
+	private static final int EXIT_SUCCESS = 0 ;
 
-	public static final String current_version = "0.4dev" ;
+	private static final String current_version = "0.4dev" ;
+
+	public static String gameVersion ()
+	{
+		StringBuilder version = new StringBuilder( current_version );
+		String gitHeadHash = System.getenv( "GIT_HEAD_HASH" );
+		if ( gitHeadHash != null && ! gitHeadHash.isEmpty() )
+			version.append( "-" ).append( gitHeadHash );
+
+		return version.toString ();
+	}
 
 	public static void main( String [] arguments )
 	{
 		System.out.println( "Head over Heels" );
 		System.out.println( "the free and open source remake (in Java)" );
-		System.out.println( "version " + current_version );
+		System.out.println( "version " + gameVersion() );
 		System.out.println( );
 
 		knownOptions = new Vector < KnownOption > () ;

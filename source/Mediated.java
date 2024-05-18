@@ -8,6 +8,8 @@
 
 package head.over.heels ;
 
+import head.over.heels.rooms.Mediator ;
+
 
 public abstract class Mediated
 {

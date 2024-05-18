@@ -6,7 +6,7 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-package head.over.heels ;
+package head.over.heels.items ;
 
 import java.util.TreeMap ;
 
@@ -65,9 +65,9 @@ public class ItemDescriptions
 	}
 
 	/**
-	 * Load the descriptions of items from the XML file
+	 * Read the descriptions of items from the XML file
 	 */
-	boolean readDescriptionsFromFile ( File xmlFile )
+	public boolean readDescriptionsFromFile ( File xmlFile )
 	{
 		if ( this.alreadyRead ) return true ;
 

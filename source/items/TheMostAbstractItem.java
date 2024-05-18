@@ -17,7 +17,7 @@ import java.util.Vector ;
 
 
 /**
- * The most abstract item
+ * The most abstract item of the game
  */
 
 public abstract class TheMostAbstractItem extends ShadyMediated
@@ -63,10 +63,10 @@ public abstract class TheMostAbstractItem extends ShadyMediated
 	private int currentFrame = 0 ;
 
 	/**
-	 * Changes the current frame. Frames usually change when the angular orientation changes
-	 * or when looping in a sequence of animation. However there’re some cases when frames
-	 * are changed manually. As example, in the behavior of a spring stool the one frame
-	 * is for rest and the other is for fold
+	 * Changes the current frame. Frames usually change when looping in the sequence of animation
+	 * or when the angular orientation changes. However there’re some cases when frames are changed
+	 * manually. As example, in the behavior of a spring stool the one frame is for rest
+	 * and the other is for fold
 	 */
 	void changeFrame ( int newFrame )
 	{

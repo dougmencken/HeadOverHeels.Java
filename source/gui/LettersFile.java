@@ -12,6 +12,7 @@ package head.over.heels.gui ;
 /**
  * The list of letters that the font draws, stored in a file
  */
+
 public class LettersFile
 {
 
@@ -20,11 +21,6 @@ public class LettersFile
 	public LettersFile ()
 	{
 		this.letters = generateListOfLetters () ;
-	}
-
-	public LettersFile( String nameOFile )
-	{
-		this( new java.io.File( nameOFile ) );
 	}
 
 	/**
@@ -95,20 +91,19 @@ public class LettersFile
 
 	public int howManyLetters ()
 	{
-		return letters.size ();
+		return this.letters.size ();
 	}
 
 	public String letterAt( int i )
 	{
-		return letters.elementAt( i );
+		return this.letters.elementAt( i );
 	}
 
 	public boolean writeTo( java.io.File file )
 	{
-		int howManyLetters = letters.size () ;
 		int howManyBytes = 0 ;
 
-		java.util.Vector < byte [] > lettersUtf8 = new java.util.Vector < byte [] > ( howManyLetters ) ;
+		java.util.Vector < byte [] > lettersUtf8 = new java.util.Vector < byte [] > ( howManyLetters() ) ;
 		for ( String letter : this.letters ) {
 			byte [] utf8 = LettersFile.letterToUtf8( letter );
 			lettersUtf8.add( utf8 );
@@ -137,7 +132,7 @@ public class LettersFile
 		StringBuilder out = new StringBuilder( );
 		String newline = System.getProperty( "line.separator" );
 
-		out.append( this.letters.size () ).append( " letters" ).append( newline );
+		out.append( howManyLetters() ).append( " letters" ).append( newline );
 
 		for ( String letter : this.letters )
 		{
@@ -285,9 +280,9 @@ public class LettersFile
 		letters.add( "\u0058" ); /* "X" */ // utf8 { 0x58 }
 		letters.add( "\u0059" ); /* "Y" */ // utf8 { 0x59 }
 		letters.add( "\u005a" ); /* "Z" */ // utf8 { 0x5a }
-		letters.add( "\u005b" ); /* "[" */ // utf8 { 0x00 }
+		letters.add( "\u005b" ); /* "[" */ // utf8 { 0x5b }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "\u005d" ); /* "]" */ // utf8 { 0x00 }
+		letters.add( "\u005d" ); /* "]" */ // utf8 { 0x5d }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "\u005f" ); /* "_" */ // utf8 { 0x5f }
 
@@ -334,29 +329,29 @@ public class LettersFile
 		letters.add( "\u00b7" ); /* "·" */ // utf8 { 0xc2, 0xb7 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "\u0160" ); /* "Š" */ // utf8 { 0xc5, 0xa0 }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "\u0152" ); /* "Œ" */ // utf8 { 0xc5, 0x92 }
+		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "\u0152" ); /* "Œ" */ // utf8 { 0xc5, 0x92 }
+		letters.add( "\u0153" ); /* "œ" */ // utf8 { 0xc5, 0x93 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "\u00d7" ); /* "×" */ // utf8 { 0xc3, 0x97 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "\u0161" ); /* "š" */ // utf8 { 0xc5, 0xa1 }
-		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "\u0153" ); /* "œ" */ // utf8 { 0xc5, 0x93 }
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "\u0178" ); /* "Ÿ" */ // utf8 { 0xc5, 0xb8 }
+		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "\u00df" ); /* "ß" */ // utf8 { 0xc3, 0x9f }
 
 		letters.add( "" ); // utf8 { 0x00 }
 		letters.add( "\u00a1" ); /* "¡" */ // utf8 { 0xc2, 0xa1 }
@@ -394,6 +389,7 @@ public class LettersFile
 
 		letters.add( "\u00c0" ); /* "À" */ // utf8 { 0xc3, 0x80 }
 		letters.add( "\u00c1" ); /* "Á" */ // utf8 { 0xc3, 0x81 }
+		letters.add( "\u00c2" ); /* "Â" */ // utf8 { 0xc3, 0x82 }
 		letters.add( "\u00c3" ); /* "Ã" */ // utf8 { 0xc3, 0x83 }
 		letters.add( "\u00c4" ); /* "Ä" */ // utf8 { 0xc3, 0x84 }
 		letters.add( "\u00c5" ); /* "Å" */ // utf8 { 0xc3, 0x85 }
@@ -407,6 +403,7 @@ public class LettersFile
 		letters.add( "\u00cd" ); /* "Í" */ // utf8 { 0xc3, 0x8d }
 		letters.add( "\u00ce" ); /* "Î" */ // utf8 { 0xc3, 0x8e }
 		letters.add( "\u00cf" ); /* "Ï" */ // utf8 { 0xc3, 0x8f }
+
 		letters.add( "\u00d0" ); /* "Ð" */ // utf8 { 0xc3, 0x90 }
 		letters.add( "\u00d1" ); /* "Ñ" */ // utf8 { 0xc3, 0x91 }
 		letters.add( "\u00d2" ); /* "Ò" */ // utf8 { 0xc3, 0x92 }
@@ -421,8 +418,9 @@ public class LettersFile
 		letters.add( "\u00db" ); /* "Û" */ // utf8 { 0xc3, 0x9b }
 		letters.add( "\u00dc" ); /* "Ü" */ // utf8 { 0xc3, 0x9c }
 		letters.add( "\u00dd" ); /* "Ý" */ // utf8 { 0xc3, 0x9d }
+		letters.add( "\u0178" ); /* "Ÿ" */ // utf8 { 0xc5, 0xb8 }
 		letters.add( "\u00de" ); /* "Þ" */ // utf8 { 0xc3, 0x9e }
-		letters.add( "\u00df" ); /* "ß" */ // utf8 { 0xc3, 0x9f }
+
 		letters.add( "\u00e0" ); /* "à" */ // utf8 { 0xc3, 0xa0 }
 		letters.add( "\u00e1" ); /* "á" */ // utf8 { 0xc3, 0xa1 }
 		letters.add( "\u00e2" ); /* "â" */ // utf8 { 0xc3, 0xa2 }
@@ -439,6 +437,7 @@ public class LettersFile
 		letters.add( "\u00ed" ); /* "í" */ // utf8 { 0xc3, 0xad }
 		letters.add( "\u00ee" ); /* "î" */ // utf8 { 0xc3, 0xae }
 		letters.add( "\u00ef" ); /* "ï" */ // utf8 { 0xc3, 0xaf }
+
 		letters.add( "\u00f0" ); /* "ð" */ // utf8 { 0xc3, 0xb0 }
 		letters.add( "\u00f1" ); /* "ñ" */ // utf8 { 0xc3, 0xb1 }
 		letters.add( "\u00f2" ); /* "ò" */ // utf8 { 0xc3, 0xb2 }
@@ -453,9 +452,9 @@ public class LettersFile
 		letters.add( "\u00fb" ); /* "û" */ // utf8 { 0xc3, 0xbb }
 		letters.add( "\u00fc" ); /* "ü" */ // utf8 { 0xc3, 0xbc }
 		letters.add( "\u00fd" ); /* "ý" */ // utf8 { 0xc3, 0xbd }
-		letters.add( "\u00fe" ); /* "þ" */ // utf8 { 0xc3, 0xbe }
 		letters.add( "\u00ff" ); /* "ÿ" */ // utf8 { 0xc3, 0xbf }
-		letters.add( "" ); // utf8 { 0x00 }
+		letters.add( "\u00fe" ); /* "þ" */ // utf8 { 0xc3, 0xbe }
+
 		letters.add( "\u0104" ); /* "Ą" */ // utf8 { 0xc4, 0x84 }
 		letters.add( "\u0105" ); /* "ą" */ // utf8 { 0xc4, 0x85 }
 		letters.add( "\u0106" ); /* "Ć" */ // utf8 { 0xc4, 0x86 }
@@ -468,8 +467,11 @@ public class LettersFile
 		letters.add( "\u0144" ); /* "ń" */ // utf8 { 0xc5, 0x84 }
 		letters.add( "\u015a" ); /* "Ś" */ // utf8 { 0xc5, 0x9a }
 		letters.add( "\u015b" ); /* "ś" */ // utf8 { 0xc5, 0x9b }
+		letters.add( "\u0160" ); /* "Š" */ // utf8 { 0xc5, 0xa0 }
+		letters.add( "\u0161" ); /* "š" */ // utf8 { 0xc5, 0xa1 }
 		letters.add( "\u017b" ); /* "Ż" */ // utf8 { 0xc5, 0xbb }
 		letters.add( "\u017c" ); /* "ż" */ // utf8 { 0xc5, 0xbc }
+
 		letters.add( "\u0179" ); /* "Ź" */ // utf8 { 0xc5, 0xb9 }
 		letters.add( "\u017a" ); /* "ź" */ // utf8 { 0xc5, 0xba }
 		letters.add( "\u017d" ); /* "Ž" */ // utf8 { 0xc5, 0xbd }
@@ -486,8 +488,6 @@ public class LettersFile
 		letters.add( "\u0111" ); /* "đ" */ // utf8 { 0xc4, 0x91 }
 		letters.add( "\u0147" ); /* "Ň" */ // utf8 { 0xc5, 0x87 }
 		letters.add( "\u0148" ); /* "ň" */ // utf8 { 0xc5, 0x88 }
-		letters.add( "" ); // utf8 { 0x00 }
-		letters.add( "" ); // utf8 { 0x00 }
 
 		letters.add( "\u0410" ); /* "А" */ // utf8 { 0xd0, 0x90 }
 		letters.add( "\u0411" ); /* "Б" */ // utf8 { 0xd0, 0x91 }
@@ -521,6 +521,7 @@ public class LettersFile
 		letters.add( "\u042d" ); /* "Э" */ // utf8 { 0xd0, 0xad }
 		letters.add( "\u042e" ); /* "Ю" */ // utf8 { 0xd0, 0xae }
 		letters.add( "\u042f" ); /* "Я" */ // utf8 { 0xd0, 0xaf }
+
 		letters.add( "\u0430" ); /* "а" */ // utf8 { 0xd0, 0xb0 }
 		letters.add( "\u0431" ); /* "б" */ // utf8 { 0xd0, 0xb1 }
 		letters.add( "\u0432" ); /* "в" */ // utf8 { 0xd0, 0xb2 }
@@ -575,17 +576,29 @@ public class LettersFile
 	}
 
 	/**
-	 * Writes the new, as is generated by this class, list of letters
+	 * Writes the new, as is generated by this class, list of letters. When some old
+	 * letters.utf8 file is there in game data, parses and dumps it before the new list
 	 */
 	public static void main( String [] arguments )
 	{
 		String nameOfNewLettersFile = "letters.new.utf8" ;
 		if ( arguments != null && arguments.length > 0 ) nameOfNewLettersFile = arguments[ 0 ] ;
 
-		LettersFile theList = new LettersFile( );
-		System.out.println( theList );
+		LettersFile oldLetters = null ;
+		java.io.File oldFile = new java.io.File( head.over.heels.FilesystemPaths.getPathToGameData(), "letters.utf8" );
+		if ( oldFile.exists() && oldFile.isFile() && oldFile.canRead() ) {
+			oldLetters = new LettersFile( oldFile );
+			System.out.println( "old letters" );
+			System.out.println( "———————————" );
+			System.out.println( oldLetters );
+		}
 
-		theList.writeTo( new java.io.File( head.over.heels.FilesystemPaths.getGameStorageInHome (), nameOfNewLettersFile ) );
+		LettersFile newLetters = new LettersFile( );
+		System.out.println( "new letters" );
+		System.out.println( "———————————" );
+		System.out.println( newLetters );
+
+		newLetters.writeTo( new java.io.File( head.over.heels.FilesystemPaths.getGameStorageInHome (), nameOfNewLettersFile ) );
 	}
 
 }

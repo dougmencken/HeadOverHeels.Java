@@ -6,7 +6,11 @@
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
 // either version 3 of the License or at your option any later version
 
-package head.over.heels ;
+package head.over.heels.items ;
+
+import head.over.heels.Drawable ;
+import head.over.heels.OffscreenImage ;
+import head.over.heels.Mediated ;
 
 
 public class WallPiece extends Mediated implements Drawable
