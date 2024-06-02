@@ -11,6 +11,7 @@ package head.over.heels.rooms ;
 import head.over.heels.FilesystemPaths ;
 
 import java.io.File ;
+
 import java.util.HashMap ;
 
 import javax.xml.parsers.DocumentBuilderFactory ;
@@ -39,7 +40,7 @@ public class GameMap
 	}
 
 	/**
-	 * Compose the game map by an XML file
+	 * Read the game map from an XML file
 	 */
 	private boolean readMap ( File mapFile )
 	{

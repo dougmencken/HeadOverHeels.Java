@@ -9,7 +9,6 @@
 package head.over.heels.items ;
 
 import head.over.heels.Drawable ;
-import head.over.heels.OffscreenImage ;
 import head.over.heels.Mediated ;
 
 
@@ -21,24 +20,26 @@ public class WallPiece extends Mediated implements Drawable
 	public boolean isAlongX () {  return   this.alongX ;  }
 	public boolean isAlongY () {  return ! this.alongX ;  }
 
-	// the position of this piece on the wall, the smaller the closer to the room’s origin
-	public int position ;
+	// the position of this piece, the smaller the closer to the room’s origin
+	private int position ;
 
 	public int getPosition () {  return this.position ;  }
 
-	// the graphics of this piece of the wall
-	private final OffscreenImage image ;
+	// name of the picture file for this part of the wall
+	private final String nameOfImage ;
+
+	public String getNameOfImage () {  return this.nameOfImage ;  }
 
 	/**
 	 * @param trueXfalseY is this a piece of the wall along X or not
 	 * @param index where’s this piece on the wall, the number from zero onwards
-	 * @param graphicsOfPiece the picture of the piece
+	 * @param pictureFile the name of picture file
 	 */
-	public WallPiece( boolean trueXfalseY, int index, OffscreenImage graphicsOfPiece )
+	public WallPiece( boolean trueXfalseY, int index, String pictureFile )
 	{
 		this.alongX = trueXfalseY ;
 		this.position = index ;
-		this.image = graphicsOfPiece ;
+		this.nameOfImage = pictureFile ;
 	}
 
 	/**
