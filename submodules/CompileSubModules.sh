@@ -2,7 +2,11 @@
 
 # ogg-vorbis support for java
 
-ogg_vorbis_for_java="submodules/java-ogg-vorbis/vorbis-support/src/main"
+ogg_vorbis_submodule="submodules/java-ogg-vorbis"
+ogg_vorbis_for_java="$ogg_vorbis_submodule/vorbis-support/src/main"
+
+[ -d "$ogg_vorbis_for_java" ] || git submodule update --init
+
 ogg_vorbis_sources="$ogg_vorbis_for_java/java/com/github/trilarion/sound"
 
 javac -g -d . $ogg_vorbis_sources/util/*.java
