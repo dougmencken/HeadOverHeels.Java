@@ -16,22 +16,45 @@ package head.over.heels.gui ;
 public class Label extends Widget
 {
 
+	// the text of this label
+	private String text ;
+
+	public String getText () {  return this.text ;  }
+	public void setText( String newText ) {  this.text = newText ; update() ;  }
+
+	// the font to draw this label
+	private head.over.heels.gui.Font font ;
+
+	public head.over.heels.gui.Font getFont () {  return this.font ;  }
+
+	// if true the letters are colored in a cycle
+	private boolean cyclicallyColoredLetters ;
+
+	public boolean areLettersCyclicallyColored () {  return this.cyclicallyColoredLetters ;  }
+
 	public Label( String text )
 	{
-		this( text, new Font(), false );
+		this( text, new head.over.heels.gui.Font(), false );
 	}
 
-	public Label( String text, Font font )
+	public Label( String text, head.over.heels.gui.Font font )
 	{
 		this( text, font, false );
 	}
 
 	/**
-	 * @param text the text of this label
-	 * @param font the font to draw this label
-	 * @param multicolor true for coloring letters in the cycle
+	 * @param theText the text of this label
+	 * @param theFont the font to draw this label
+	 * @param multicolor true for coloring the letters in a cycle
 	 */
-	public Label( String text, Font font, boolean multicolor )
+	public Label( String theText, head.over.heels.gui.Font theFont, boolean multicolor )
+	{
+		this.text = theText ;
+		this.font = theFont ;
+		this.cyclicallyColoredLetters = multicolor ;
+	}
+
+	public void update ()
 	{
 		// ....
 	}

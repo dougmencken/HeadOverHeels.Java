@@ -13,13 +13,27 @@ package head.over.heels.gui ;
  * The foundation for creating elements of the user interface
  */
 
-public abstract class Widget implements head.over.heels.Drawable
+public abstract class Widget implements head.over.heels.Drawable, KeyHandler
 {
 
+	// where is this widget on the containing slide
 	private int whereX ;
 	private int whereY ;
 
-	private boolean onScreen = false ;
+	public int getX () {  return this.whereX ;  }
+	public int getY () {  return this.whereY ;  }
+
+	protected void setX ( int x ) {  this.whereX = x ;  }
+	protected void setY ( int y ) {  this.whereY = y ;  }
+
+	public void moveTo ( int x, int y ) {  setX( x ); setY( y );  }
+
+	private Slide onWhichSlide = null ;
+
+	public Slide getContainingSlide () {  return this.onWhichSlide ;  }
+	public void setContainingSlide( Slide theSlide ) {  this.onWhichSlide = theSlide ;  }
+
+	public boolean isOnSomeSlide() {  return this.onWhichSlide != null ;  }
 
 	public Widget( )
 	{
@@ -31,11 +45,6 @@ public abstract class Widget implements head.over.heels.Drawable
 		this.whereX = x ;
 		this.whereY = y ;
 	}
-
-	/**
-	 * Subclasses may handle this event or pass it to some other widget
-	 */
-	public abstract void handleKey ( String key ) ;
 
 	// .....
 
