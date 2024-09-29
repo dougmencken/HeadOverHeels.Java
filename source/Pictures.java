@@ -260,6 +260,44 @@ public class Pictures
 		return after ;
 	}
 
+	public static BufferedImage summation ( BufferedImage first, BufferedImage second )
+	{
+		if ( first == null || second == null ) return null ;
+
+		BufferedImage result = null ;
+
+		synchronized ( first ) { synchronized ( second ) {
+			int minWidth = Math.min( first.getWidth(), second.getWidth() );
+			int minHeight = Math.min( first.getHeight(), second.getHeight() );
+			result = new BufferedImage( minWidth, minHeight, BufferedImage.TYPE_INT_ARGB );
+
+			for ( int y = 0 ; y < minHeight ; y ++ )
+				for ( int x = 0 ; x < minWidth ; x ++ )
+					result.setRGB( x, y, first.getRGB( x, y ) + second.getRGB( x, y ) );
+		} }
+
+		return result ;
+	}
+
+	public static BufferedImage difference ( BufferedImage first, BufferedImage second )
+	{
+		if ( first == null || second == null ) return null ;
+
+		BufferedImage result = null ;
+
+		synchronized ( first ) { synchronized ( second ) {
+			int minWidth = Math.min( first.getWidth(), second.getWidth() );
+			int minHeight = Math.min( first.getHeight(), second.getHeight() );
+			result = new BufferedImage( minWidth, minHeight, BufferedImage.TYPE_INT_ARGB );
+
+			for ( int y = 0 ; y < minHeight ; y ++ )
+				for ( int x = 0 ; x < minWidth ; x ++ )
+					result.setRGB( x, y, first.getRGB( x, y ) - second.getRGB( x, y ) );
+		} }
+
+		return result ;
+	}
+
 	private Pictures() {} // no instances
 
 	private static boolean listColorModelIfIndexed ( BufferedImage picture )
@@ -285,7 +323,51 @@ public class Pictures
 		}
 	}
 
-	public static void main( String [] arguments )
+	public static void main ( String [] arguments )
+	{
+		final java.io.PrintStream out = System.out ;
+
+		if ( arguments.length != 2 ) {
+			out.println( "to get the difference and the summation, two image files are needed as arguments" );
+			return ;
+		}
+
+		String firstImageFilename = arguments[ 0 ];
+		String secondImageFilename = arguments[ 1 ];
+		java.io.File gamedata = FilesystemPaths.getPathToGameData() ;
+
+		BufferedImage firstImage  = Pictures.readFromFile( new java.io.File( gamedata, firstImageFilename ) );
+		if ( firstImage == null )
+			firstImage = Pictures.readFromFile( new java.io.File( firstImageFilename ) );
+
+		BufferedImage secondImage = Pictures.readFromFile( new java.io.File( gamedata, secondImageFilename ) );
+		if ( secondImage == null )
+			secondImage = Pictures.readFromFile( new java.io.File( secondImageFilename ) );
+
+		if ( firstImage == null || secondImage == null ) {
+			out.println( "☹️ oops, can’t read image from one of files"
+					+ " \"" + firstImageFilename + "\" or \"" + secondImageFilename + "\"" );
+			return ;
+		}
+
+		out.println( "🖼 got the two images :"
+				+ " the first from file \"" + firstImageFilename + "\" and"
+				+ " the second from file \"" + secondImageFilename + "\"" );
+
+		// get the difference between the two images
+		BufferedImage difference = Pictures.difference( firstImage, secondImage );
+		java.io.File differenceFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "difference.png" );
+		if ( Pictures.saveAsPNG( difference, differenceFile ) )
+			out.println( "the difference is saved as PNG file \"" + differenceFile.getPath() + "\"" );
+
+		// get the summation of the two images
+		BufferedImage summation = Pictures.summation( firstImage, secondImage );
+		java.io.File summationFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "summation.png" );
+		if ( Pictures.saveAsPNG( summation, summationFile ) )
+			out.println( "the summation is saved as PNG file \"" + summationFile.getPath() + "\"" );
+	}
+
+	public static void previous_main ( String [] arguments )
 	{
 		final java.io.PrintStream out = System.out ;
 
