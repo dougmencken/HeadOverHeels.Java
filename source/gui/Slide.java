@@ -10,18 +10,25 @@ package head.over.heels.gui ;
 
 
 /**
- * A container for user interface elements
+ * A container for other user interface elements
  */
 
 public class Slide extends Widget
 {
 
+	/**
+	 * Add widget to this slide
+	 */
 	public void addWidget ( Widget theWidget )
 	{
 		// ...
 		theWidget.setContainingSlide( this );
 	}
 
+	/**
+	 * Remove widget from this slide
+	 * @return true if it is found and removed
+	 */
 	public boolean removeWidget ( Widget theWidget )
 	{
 		// ...

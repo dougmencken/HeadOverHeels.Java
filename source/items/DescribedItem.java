@@ -35,9 +35,11 @@ public abstract class DescribedItem extends TheMostAbstractItem
 	/**
 	 * The three spatial dimensions (widths) of the item, along the x, along the y, and height along the z
 	 */
-	int getWidthX () {  return this.descriptionOfItem.getWidthX() ;  }
-	int getWidthY () {  return this.descriptionOfItem.getWidthY() ;  }
-	int getHeight () {  return this.descriptionOfItem.getHeight() ;  }
+	public int getWidthX () {  return this.descriptionOfItem.getWidthX() ;  }
+	public int getWidthY () {  return this.descriptionOfItem.getWidthY() ;  }
+	public int getHeight () {  return this.descriptionOfItem.getHeight() ;  }
+
+	public String getKind () {  return this.descriptionOfItem.getKind() ;  }
 
 	protected int firstFrameWhenHeading ( String where )
 	{

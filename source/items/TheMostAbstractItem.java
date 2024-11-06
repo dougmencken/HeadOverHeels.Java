@@ -34,6 +34,11 @@ public abstract class TheMostAbstractItem extends ShadyMediated
 			this.setBehaviourOf( item.behavior.getName () );
 	}
 
+	private String uniqueName ;
+
+	public String getUniqueName () {  return this.uniqueName ;  }
+	public void setUniqueName ( String name ) {  this.uniqueName = name ;  }
+
 	// the behaviour of item
 	private Behaviour behavior = null ;
 
@@ -53,11 +58,11 @@ public abstract class TheMostAbstractItem extends ShadyMediated
 		return ( this.behavior != null ) ? this.behavior.update() : true ;
 	}
 
-	 // the pictures of item
-        Vector< OffscreenImage > frames = new Vector< OffscreenImage > ();
+	// the pictures of item
+	private Vector< OffscreenImage > frames = new Vector< OffscreenImage > ();
 
-        // the pictures of item’s shadow
-        Vector< OffscreenImage > shadows = new Vector< OffscreenImage > ();
+	// the pictures of item’s shadow
+	private Vector< OffscreenImage > shadows = new Vector< OffscreenImage > ();
 
 	// number of the current frame for drawing this item
 	private int currentFrame = 0 ;

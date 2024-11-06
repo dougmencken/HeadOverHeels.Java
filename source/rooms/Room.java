@@ -62,8 +62,12 @@ public class Room extends Mediated implements Drawable
 	// the free items in this room
 	private Vector < FreeItem > freeItems = new Vector< FreeItem > ();
 
+	public Vector< FreeItem > getFreeItems () {  return this.freeItems ;  }
+
 	// the grid items
 	private Vector < Vector < GridItem > > gridItems = new Vector< Vector < GridItem > > ();
+
+	public Vector< Vector< GridItem > > getGridItems () {  return this.gridItems ;  }
 
 	// the doors
 	private Map < String, Door > doors = new java.util.HashMap< String, Door > ();

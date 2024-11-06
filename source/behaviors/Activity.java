@@ -16,6 +16,8 @@ class Activity
 
 	protected Activity( String text ) {  this.letters = text ;  }
 
+	protected Activity( Activity copyMe ) {  this.letters = copyMe.letters ;  }
+
 	public boolean equals ( Activity that ) {  return that.letters.equals( this.letters );  }
 
 	/* constants */
@@ -23,20 +25,9 @@ class Activity
 	public static final Activity  Waiting		= new Activity( "waiting" );
 	public static final Activity  Blinking		= new Activity( "blinking" );
 
-	public static final Activity  MovingNorth	= new Activity( "moving north" );
-	public static final Activity  MovingSouth	= new Activity( "moving south" );
-	public static final Activity  MovingEast	= new Activity( "moving east" );
-	public static final Activity  MovingWest	= new Activity( "moving west" );
+	public static final Activity  Moving		= new Activity( "moving" );
 
-	public static final Activity  MovingNortheast	= new Activity( "moving northeast" );
-	public static final Activity  MovingNorthwest	= new Activity( "moving northwest" );
-	public static final Activity  MovingSoutheast	= new Activity( "moving southeast" );
-	public static final Activity  MovingSouthwest	= new Activity( "moving southwest" );
-
-	public static final Activity  AutomovingNorth	= new Activity( "automoving north" );
-	public static final Activity  AutomovingSouth	= new Activity( "automoving south" );
-	public static final Activity  AutomovingEast	= new Activity( "automoving east" );
-	public static final Activity  AutomovingWest	= new Activity( "automoving west" );
+	public static final Activity  Automoving	= new Activity( "automoving" );
 
 	public static final Activity  Jumping		= new Activity( "jumping" );
 	public static final Activity  Falling		= new Activity( "falling" );
