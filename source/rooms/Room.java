@@ -39,6 +39,14 @@ public class Room extends Mediated implements Drawable
 	public short getTilesOnX () {  return this.howManyTilesOnX ;  }
 	public short getTilesOnY () {  return this.howManyTilesOnY ;  }
 
+	/**
+	 * The length of a single tile’s side
+	 */
+	public static final int single_tile_size = 16 ;
+
+	// override in a subclass for other sizes but 16
+	public short getSizeOfOneTile () {  return Room.single_tile_size ;  }
+
 	private final String scenery ;
 
 	/**
@@ -75,8 +83,10 @@ public class Room extends Mediated implements Drawable
 	public Door getDoorOn ( String side ) {  return this.doors.get( side ) ;  }
 	public boolean hasDoorOn ( String side ) {  return getDoorOn( side ) != null ;  }
 
+	// the pieces of wall
 	private Vector < WallPiece > wallPieces = new Vector< WallPiece > ();
 
+	// the tiles of floor
 	private Vector < FloorTile > floorTiles = new Vector< FloorTile > ();
 
 	/**
@@ -111,6 +121,55 @@ public class Room extends Mediated implements Drawable
 	public void draw ( java.awt.Graphics2D g )
 	{
 		/* ....... */
+	}
+
+	public void removeFreeItemByUniqueName ( String whatName )
+	{
+		synchronized ( this.freeItems ) {
+			FreeItem foundFreeItem = null ;
+
+			for ( FreeItem item : this.freeItems )
+				if ( item != null && item.isNamed() && item.getUniqueName().equals( whatName ) ) {
+					foundFreeItem = item ;
+					break ;
+				}
+
+			if ( foundFreeItem != null ) {
+				System.out.println( "removing " + foundFreeItem.whichClassOfItem() + " “" + foundFreeItem.getUniqueName() + "”"
+							+ " from room " + getNameOfRoomDescriptionFile() );
+
+				this.freeItems.removeElement( foundFreeItem );
+
+				getMediator().wantShadowFromFreeItem( foundFreeItem );
+				getMediator().wantToMaskWithFreeItem( foundFreeItem );
+			}
+		}
+	}
+
+	public void removeGridItemByUniqueName ( String whatName )
+	{
+		synchronized ( this.gridItems ) {
+			GridItem foundGridItem = null ;
+			int inColumn = -2 ;
+
+			for ( int column = 0 ; column < this.gridItems.size() ; ++ column )
+				for ( GridItem item : this.gridItems.elementAt( column ) )
+					if ( item != null && item.isNamed() && item.getUniqueName().equals( whatName ) ) {
+						foundGridItem = item ;
+						inColumn = column ;
+						break ;
+					}
+
+			if ( foundGridItem != null && inColumn >= 0 ) {
+				System.out.println( "removing " + foundGridItem.whichClassOfItem() + " “" + foundGridItem.getUniqueName() + "”"
+							+ " from room " + getNameOfRoomDescriptionFile() );
+
+				this.gridItems.elementAt( inColumn ).removeElement( foundGridItem );
+
+				getMediator().wantShadowFromGridItem( foundGridItem );
+				getMediator().wantToMaskWithGridItem( foundGridItem );
+			}
+		}
 	}
 
 }

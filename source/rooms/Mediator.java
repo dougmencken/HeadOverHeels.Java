@@ -29,13 +29,6 @@ public class Mediator
 
 	public Room getRoom () {  return this.mediatedRoom ;  }
 
-	// the collected collisions
-	private Set < String > collisions = new java.util.HashSet< String > ();
-
-	public boolean isThereAnyCollision () {  return ! this.collisions.isEmpty() ;  }
-	public int howManyCollisions () {  return this.collisions.size() ;  }
-	public void clearCollisions () {  this.collisions.clear() ;  }
-
 	// the character yet controlled by the player
 	private AvatarItem activeCharacter = null ;
 
@@ -49,19 +42,19 @@ public class Mediator
 	/**
 	 * Look for an item in the room by its unique name
 	 */
-	public DescribedItem findItemByUniqueName( String whichName )
+	public DescribedItem findItemByUniqueName( String whatName )
 	{
 		// first look for a free item
 		Vector< FreeItem > allFreeItems = this.mediatedRoom.getFreeItems ();
 		for ( FreeItem item : allFreeItems )
-			if ( item != null && item.getUniqueName() != null && item.getUniqueName().equals( whichName ) )
+			if ( item != null && item.isNamed() && item.getUniqueName().equals( whatName ) )
 				return item ;
 
 		// then for a grid item
 		Vector< Vector< GridItem > > allGridItems = this.mediatedRoom.getGridItems ();
 		for ( int column = 0 ; column < allGridItems.size() ; ++ column )
 			for ( GridItem item : allGridItems.elementAt( column ) )
-				if ( item != null && item.getUniqueName() != null && item.getUniqueName().equals( whichName ) )
+				if ( item != null && item.isNamed() && item.getUniqueName().equals( whatName ) )
 					return item ;
 
 		return null ; // not found
@@ -108,6 +101,60 @@ public class Mediator
 					return item ;
 
 		return null ; // not found
+	}
+
+	private boolean needToSortGridItems = false ;
+	private boolean needToSortFreeItems = false ;
+
+	public void wantToMaskWithFreeItem( FreeItem item )
+	{
+		// .....
+	}
+
+	public void wantToMaskWithGridItem( GridItem item )
+	{
+		// ....
+	}
+
+	public void wantShadowFromGridItem( GridItem item )
+	{
+		// .....
+	}
+
+	public void wantShadowFromFreeItem( FreeItem item )
+	{
+		// ....
+	}
+
+	// the collected collisions
+	private Set < String > collisions = new java.util.HashSet< String > () ;
+
+	public boolean isThereAnyCollision () {  return ! this.collisions.isEmpty() ;  }
+	public int howManyCollisions () {  return this.collisions.size() ;  }
+	public void clearCollisions () {  this.collisions.clear() ;  }
+
+	public boolean collectCollisionsWith ( String uniqueNameOfItem )
+	{
+		this.collisions.clear () ;
+
+		DescribedItem thatItem = findItemByUniqueName( uniqueNameOfItem ) ;
+		if ( thatItem == null ) return false ;
+		if ( thatItem.isIgnoringCollisions() ) return false ;
+
+		// look for collisions with free items
+		Vector< FreeItem > allFreeItems = this.mediatedRoom.getFreeItems ();
+
+		for ( FreeItem freeItem : allFreeItems )
+			if ( freeItem != null && freeItem.isNotIgnoringCollisions()
+					&& freeItem.isNamed() && freeItem.getUniqueName() != uniqueNameOfItem )
+				if ( ( thatItem instanceof FreeItem && freeItem.overlapsWith( (FreeItem)thatItem ) )
+						|| ( thatItem instanceof GridItem && freeItem.overlapsWith( (GridItem)thatItem ) ) )
+					collisions.add( freeItem.getUniqueName() );
+
+		// look for collisions with grid items
+		// ....
+
+		return this.collisions.size() > 0 ;
 	}
 
 }

@@ -12,7 +12,7 @@ package head.over.heels.items ;
 public abstract class DescribedItem extends TheMostAbstractItem
 {
 
-	// creates an item by a description
+	// creates an item by description
 	protected DescribedItem( DescriptionOfItem description )
 	{
 		if ( description == null ) throw new NullPointerException( "null description at the time of item construction" ) ;
@@ -71,5 +71,28 @@ public abstract class DescribedItem extends TheMostAbstractItem
 		static final int  East = 3 ;
 
 	}
+
+	// the position in 3-dimensional space of this item’s lower north-west point, in free units
+	public abstract int getX () ;
+	public abstract int getY () ;
+	public abstract int getZ () ;
+
+	public boolean overlapsWith ( DescribedItem anotherItem )
+	{
+		return ( this.getX() < anotherItem.getX() + anotherItem.getWidthX() )
+					&& ( anotherItem.getX() < this.getX() + this.getWidthX() )
+			&& ( this.getY() > anotherItem.getY() - anotherItem.getWidthY() )
+					&& ( anotherItem.getY() > this.getY() - this.getWidthY() )
+			&& ( this.getZ() < anotherItem.getZ() + anotherItem.getHeight() )
+					&& ( anotherItem.getZ() < this.getZ() + this.getHeight() ) ;
+	}
+
+	// whether to ignore that this item collides with something
+	private boolean ignoreCollisions = false ;
+
+	public void setIgnoreCollisions ( boolean ignore ) {  this.ignoreCollisions = ignore ;  }
+
+	public boolean isIgnoringCollisions () {  return this.ignoreCollisions ;  }
+	public boolean isNotIgnoringCollisions () {  return ! this.ignoreCollisions ;  }
 
 }

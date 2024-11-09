@@ -9,6 +9,7 @@
 package head.over.heels.items ;
 
 import head.over.heels.Drawable ;
+import head.over.heels.rooms.Room ;
 
 
 /**
@@ -21,12 +22,12 @@ public class GridItem extends DescribedItem implements Drawable
 {
 	/**
 	 * @param description the description of this item
-	 * @param cx the X of the grid cell where the item is
-	 * @param cy the Y of the grid cell where the item is
-	 * @param z the position on Z, or how far is floor
+	 * @param cx the X of the grid cell where to place the item
+	 * @param cy the Y of the grid cell where to place the item
+	 * @param z the position on Z, or how far is the floor, in free units
 	 * @param where the angular orientation
 	 */
-	public GridItem( DescriptionOfItem description, int cx, int cy, int z, String where )
+	public GridItem( DescriptionOfItem description, short cx, short cy, int z, String where )
 	{
 		super( description );
 
@@ -48,11 +49,39 @@ public class GridItem extends DescribedItem implements Drawable
 	}
 
 	// the room’s grid cell where this item is placed
-	private int cellX ;
-	private int cellY ;
+	private short cellX ;
+	private short cellY ;
 
-        // the position on Z, or how far is floor, in free units
+	/**
+	 * Position along X of the room’s grid cell
+	 */
+	public short getCellX () {  return this.cellX ;  }
+
+	/**
+	 * Position along Y of the room’s grid cell
+	 */
+	public short getCellY () {  return this.cellY ;  }
+
+	/**
+	 * The length of the side of one room’s tile (cell)
+	 */
+	public short oneTileLong ()
+	{
+		return ( getMediator() != null ) ? getMediator().getRoom().getSizeOfOneTile() : Room.single_tile_size ;
+	}
+
+	// the position along Z, or how far is the floor, in free units
 	private int theZ ;
+
+	// gives the position in 3-dimensional space in free units
+	public int getZ () {  return this.theZ ;  }
+	public int getX () {  return this.cellX * getWidthX() ;  } // the widths of a grid item are equal to the size of a single room’s tile
+	public int getY () {  return ( this.cellY + 1 ) * getWidthY() - 1 ;  }
+
+	/**
+	 * Sets the position along Z (how far is the floor) in free units
+	 */
+	private void setZ ( int newZ ) {  this.theZ = newZ ;  }
 
 	// the angular orientation
 	private String orientation ;

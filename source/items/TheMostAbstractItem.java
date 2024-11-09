@@ -34,10 +34,13 @@ public abstract class TheMostAbstractItem extends ShadyMediated
 			this.setBehaviourOf( item.behavior.getName () );
 	}
 
-	private String uniqueName ;
+	// the name of this item by which it can be distinguished from any other item
+	private String uniqueName = null ;
 
 	public String getUniqueName () {  return this.uniqueName ;  }
 	public void setUniqueName ( String name ) {  this.uniqueName = name ;  }
+
+	public boolean isNamed () {  return this.uniqueName != null ;  }
 
 	// the behaviour of item
 	private Behaviour behavior = null ;
@@ -84,6 +87,25 @@ public abstract class TheMostAbstractItem extends ShadyMediated
 	public String toString ()
 	{
 		return "item " + super.toString() ;
+	}
+
+	public String whichClassOfItem ()
+	{
+		String nameOfClass = getClass().getName() ;
+
+		if ( nameOfClass.endsWith( "AvatarItem" ) )
+			return "avatar item" ;
+		else
+		if ( nameOfClass.endsWith( "FreeItem" ) )
+			return "free item" ;
+		else
+		if ( nameOfClass.endsWith( "GridItem" ) )
+			return "grid item" ;
+		else
+		if ( nameOfClass.endsWith( "DescribedItem" ) )
+			return "described item" ;
+		else
+			return "abstract item" ;
 	}
 
 }

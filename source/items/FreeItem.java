@@ -9,19 +9,21 @@
 package head.over.heels.items ;
 
 import head.over.heels.Drawable ;
+import head.over.heels.Masky ;
+import head.over.heels.TriBool ;
 
 
 /**
- * Free items may be anywhere and move within the room, such as player characters
+ * Free items may be anywhere and move within the room, such as the player characters
  */
 
-public class FreeItem extends DescribedItem implements Drawable
+public class FreeItem extends DescribedItem implements Drawable, Masky
 {
 	/**
 	 * @param description the description of this item
 	 * @param x the position on X
 	 * @param y the position on Y
-	 * @param z the position on Z, or how far is floor
+	 * @param z the position on Z, or how far is the floor
 	 * @param where the angular orientation
 	 */
 	public FreeItem( DescriptionOfItem description, int x, int y, int z, String where )
@@ -50,6 +52,14 @@ public class FreeItem extends DescribedItem implements Drawable
 	private int theY ;
 	private int theZ ;
 
+	public int getX () {  return this.theX ;  }
+	public int getY () {  return this.theY ;  }
+	public int getZ () {  return this.theZ ;  }
+
+	private void setX ( int newX ) {  this.theX = newX ;  }
+	private void setY ( int newY ) {  this.theY = newY ;  }
+	private void setZ ( int newZ ) {  this.theZ = newZ ;  }
+
 	// the angular orientation
 	private String heading ;
 
@@ -64,6 +74,15 @@ public class FreeItem extends DescribedItem implements Drawable
 	}
 
 	private int firstFrame () {  return firstFrameWhenHeading( this.heading ) ;  }
+
+	private TriBool wantMask ;
+
+	public TriBool getWantMask () {  return this.wantMask ;  }
+	public void setWantMask ( TriBool wanna ) {  this.wantMask = wanna ;  }
+
+	public void setWantMaskFalse () {  this.wantMask.setFalse() ;  }
+	public void setWantMaskTrue () {  this.wantMask.setTrue() ;  }
+	public void setWantMaskNeither () {  this.wantMask.setNeither() ;  }
 
 	/**
 	 * Draw this free item
