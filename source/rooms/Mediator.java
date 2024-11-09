@@ -147,8 +147,7 @@ public class Mediator
 		for ( FreeItem freeItem : allFreeItems )
 			if ( freeItem != null && freeItem.isNotIgnoringCollisions()
 					&& freeItem.isNamed() && freeItem.getUniqueName() != uniqueNameOfItem )
-				if ( ( thatItem instanceof FreeItem && freeItem.overlapsWith( (FreeItem)thatItem ) )
-						|| ( thatItem instanceof GridItem && freeItem.overlapsWith( (GridItem)thatItem ) ) )
+				if ( freeItem.overlapsWith( thatItem ) )
 					collisions.add( freeItem.getUniqueName() );
 
 		// look for collisions with grid items
