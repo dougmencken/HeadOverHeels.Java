@@ -8,8 +8,8 @@
 
 package head.over.heels.items ;
 
+import head.over.heels.Mediated ;
 import head.over.heels.OffscreenImage ;
-import head.over.heels.ShadyMediated ;
 
 import head.over.heels.behaviors.Behaviour ;
 
@@ -20,7 +20,7 @@ import java.util.Vector ;
  * The most abstract item of the game
  */
 
-public abstract class TheMostAbstractItem extends ShadyMediated
+public abstract class TheMostAbstractItem extends Mediated
 {
 
 	protected TheMostAbstractItem() {  super() ;  }

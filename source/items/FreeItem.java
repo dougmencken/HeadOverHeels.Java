@@ -75,8 +75,10 @@ public class FreeItem extends DescribedItem implements Drawable, Masky
 
 	private int firstFrame () {  return firstFrameWhenHeading( this.heading ) ;  }
 
+	// redo the mask or not
 	private TriBool wantMask ;
 
+	// implementing Masky
 	public TriBool getWantMask () {  return this.wantMask ;  }
 	public void setWantMask ( TriBool wanna ) {  this.wantMask = wanna ;  }
 

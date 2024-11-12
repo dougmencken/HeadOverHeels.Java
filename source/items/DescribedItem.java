@@ -8,8 +8,10 @@
 
 package head.over.heels.items ;
 
+import head.over.heels.Shady ;
 
-public abstract class DescribedItem extends TheMostAbstractItem
+
+public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 {
 
 	// creates an item by description
@@ -94,5 +96,12 @@ public abstract class DescribedItem extends TheMostAbstractItem
 
 	public boolean isIgnoringCollisions () {  return this.ignoreCollisions ;  }
 	public boolean isNotIgnoringCollisions () {  return ! this.ignoreCollisions ;  }
+
+	// redo the shadow or not
+	private boolean wantShadow = false ;
+
+        // implementing Shady
+	public boolean getWantShadow () {  return this.wantShadow ;  }
+	public void setWantShadow ( boolean wanna ) {  this.wantShadow = wanna ;  }
 
 }
