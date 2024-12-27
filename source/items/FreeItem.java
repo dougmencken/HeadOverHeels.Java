@@ -56,9 +56,9 @@ public class FreeItem extends DescribedItem implements Drawable, Masky
 	public int getY () {  return this.theY ;  }
 	public int getZ () {  return this.theZ ;  }
 
-	private void setX ( int newX ) {  this.theX = newX ;  }
-	private void setY ( int newY ) {  this.theY = newY ;  }
-	private void setZ ( int newZ ) {  this.theZ = newZ ;  }
+	public void setX ( int newX ) {  this.theX = newX ;  }
+	public void setY ( int newY ) {  this.theY = newY ;  }
+	public void setZ ( int newZ ) {  this.theZ = newZ ;  }
 
 	// the angular orientation
 	private String heading ;
@@ -72,8 +72,6 @@ public class FreeItem extends DescribedItem implements Drawable, Masky
 			changeFrame( firstFrame() );
 		}
 	}
-
-	private int firstFrame () {  return firstFrameWhenHeading( this.heading ) ;  }
 
 	// redo the mask or not
 	private TriBool wantMask ;

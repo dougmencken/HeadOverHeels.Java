@@ -15,7 +15,7 @@ import head.over.heels.rooms.Room ;
 /**
  * The grid items are those which are placed in a single grid cell. They have the same
  * widths as the grid cells have. Grid items are mostly static. Only the Z coordinate
- * of a grid item can be changed, but not the position on X and Y
+ * of a grid item can be changed, but not the position along X and Y
  */
 
 public class GridItem extends DescribedItem implements Drawable
@@ -75,13 +75,16 @@ public class GridItem extends DescribedItem implements Drawable
 
 	// gives the position in 3-dimensional space in free units
 	public int getZ () {  return this.theZ ;  }
-	public int getX () {  return this.cellX * getWidthX() ;  } // the widths of a grid item are equal to the size of a single room’s tile
-	public int getY () {  return ( this.cellY + 1 ) * getWidthY() - 1 ;  }
+	public int getX () {  return getCellX() * getWidthX() ;  } // the widths of a grid item are equal to the size of a single room’s tile
+	public int getY () {  return ( getCellY() + 1 ) * getWidthY() - 1 ;  }
 
 	/**
 	 * Sets the position along Z (how far is the floor) in free units
 	 */
-	private void setZ ( int newZ ) {  this.theZ = newZ ;  }
+	public void setZ ( int newZ ) {  this.theZ = newZ ;  }
+
+	public void setX ( int newX ) {  /* don’t do anything here */  }
+	public void setY ( int newY ) {  /* do nothing here */  }
 
 	// the angular orientation
 	private String orientation ;

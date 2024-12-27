@@ -43,28 +43,10 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 
 	public String getKind () {  return this.descriptionOfItem.getKind() ;  }
 
-	protected int firstFrameWhenHeading ( String where )
-	{
-		if ( this.descriptionOfItem.howManyOrientations() > 1 ) {
-			int orientOccident = 0 ;
-			     if ( where.equals( "south" ) ) orientOccident = Frames.South ;
-			else if ( where.equals( "west" ) )  orientOccident = Frames.West ;
-			else
-			 if ( this.descriptionOfItem.howManyOrientations() > 2 ) {
-				     if ( where.equals( "east" ) )  orientOccident = Frames.East ;
-				else if ( where.equals( "north" ) ) orientOccident = Frames.North ;
-			}
-
-			return this.descriptionOfItem.howManyFramesPerOrientation() * orientOccident ;
-		}
-
-		return 0 ;
-	}
-
 	/**
 	 * The sequence in which frames for various orientations are presented in a graphics file
 	 */
-	static class Frames
+	/* ////// static class Frames
 	{
 
 		static final int South = 0 ;
@@ -72,12 +54,16 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 		static final int North = 2 ;
 		static final int  East = 3 ;
 
-	}
+	} ////// */
 
 	// the position in 3-dimensional space of this item’s lower north-west point, in free units
 	public abstract int getX () ;
 	public abstract int getY () ;
 	public abstract int getZ () ;
+
+	public abstract void setX ( int newX ) ;
+	public abstract void setY ( int newY ) ;
+	public abstract void setZ ( int newZ ) ;
 
 	public boolean overlapsWith ( DescribedItem anotherItem )
 	{

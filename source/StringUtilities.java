@@ -36,6 +36,11 @@ public class StringUtilities
 		return result.toString() ;
         }
 
+	public static String putInQuotes( String in )
+	{
+		return "\"" + in + "\"" ;
+	}
+
 	public static String reverseString( String in )
 	{
 		/* StringBuilder out = new StringBuilder() ;

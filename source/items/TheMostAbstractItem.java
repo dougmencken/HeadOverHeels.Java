@@ -10,9 +10,12 @@ package head.over.heels.items ;
 
 import head.over.heels.Mediated ;
 import head.over.heels.OffscreenImage ;
+import head.over.heels.StringUtilities ;
+import head.over.heels.NoSuchPictureException ;
 
 import head.over.heels.behaviors.Behaviour ;
 
+import java.util.Map ;
 import java.util.Vector ;
 
 
@@ -23,11 +26,17 @@ import java.util.Vector ;
 public abstract class TheMostAbstractItem extends Mediated
 {
 
-	protected TheMostAbstractItem() {  super() ;  }
+	protected TheMostAbstractItem()
+	{
+		super() ;
+		// ....
+	}
 
 	// the copy constructor
 	protected TheMostAbstractItem( TheMostAbstractItem item )
 	{
+		// ...
+
 		if ( item.behavior == null )
 			this.behavior = null ;
 		else
@@ -61,27 +70,118 @@ public abstract class TheMostAbstractItem extends Mediated
 		return ( this.behavior != null ) ? this.behavior.update() : true ;
 	}
 
-	// the pictures of item
-	private Vector< OffscreenImage > frames = new Vector< OffscreenImage > ();
+	// the sequences of pictures of item
+	private Map< String, Vector< OffscreenImage > > frames = new java.util.HashMap< String, Vector< OffscreenImage > > () ;
 
-	// the pictures of item’s shadow
-	private Vector< OffscreenImage > shadows = new Vector< OffscreenImage > ();
+	// the sequences of pictures of item’s shadow
+	private Map< String, Vector< OffscreenImage > > shadows = null ;
 
-	// number of the current frame for drawing this item
-	private int currentFrame = 0 ;
+	public boolean hasShadow () {  return this.shadows != null && ! this.shadows.isEmpty() ;  }
+
+	// the current sequence of frames
+	private String currentSequence = "" ;
+
+	protected String getCurrentFrameSequence () {  return this.currentSequence ;  }
 
 	/**
-	 * Changes the current frame. Frames usually change when looping in the sequence of animation
-	 * or when the angular orientation changes. However there’re some cases when frames are changed
-	 * manually. As example, in the behavior of a spring stool the one frame is for rest
-	 * and the other is for fold
+	 * The sequence of frames usually changes when the heading, aka angular orientation, changes
 	 */
-	void changeFrame ( int newFrame )
+	protected void setCurrentFrameSequence ( String whatSequence ) {  this.currentSequence = whatSequence ; setupAnimation() ;  }
+
+	public int howManyFramesIn ( String sequence )
 	{
-		if ( this.currentFrame != newFrame ) {
-			this.currentFrame = newFrame ;
-			// ...
+		for ( String key : this.frames.keySet() )
+			if ( key.equals( sequence ) ) return this.frames.get( key ).size() ;
+
+		return 0 ;
+        }
+
+	public int howManyFramesInTheCurrentSequence () {  return howManyFramesIn( getCurrentFrameSequence() ) ;  }
+
+	public int howManyFramesAtAll ()
+	{
+		int howManyFrames = 0 ;
+
+		for ( String key : this.frames.keySet() )
+			howManyFrames += this.frames.get( key ).size() ;
+
+		return howManyFrames ;
+	}
+
+	// the current frame in the sequence
+	private int currentFrame = 0 ;
+
+	protected int getCurrentFrame () {  return this.currentFrame ;  }
+
+	protected int firstFrame () {  return 0 ;  }
+
+	protected int lastFrame ()
+	{
+		int howMany = howManyFramesInTheCurrentSequence() ;
+		return ( howMany > 0 ) ? howMany - 1 : 0 ;
+	}
+
+	protected OffscreenImage getNthFrameIn ( String sequence, int n ) throws NoSuchPictureException
+	{
+		for ( String key : this.frames.keySet() ) {
+			Vector< OffscreenImage > framesIn = this.frames.get( key );
+			if ( key.equals( sequence ) && n < framesIn.size() )
+				return framesIn.elementAt( n );
 		}
+
+		StringBuilder message = new StringBuilder() ;
+		message.append( "there’s no " ).append( StringUtilities.toStringWithOrdinalSuffix( n ) ).append( " frame in " )
+				.append( StringUtilities.putInQuotes( sequence ) ).append( " for " ).append( StringUtilities.putInQuotes( getUniqueName() ) ) ;
+		System.err.println( message );
+		throw new NoSuchPictureException( message );
+	}
+
+	protected OffscreenImage getNthShadowIn ( String sequence, int n ) throws NoSuchPictureException
+	{
+		throw new NoSuchPictureException() ;
+	}
+
+	/**
+	 * Changes the current frame. Frames usually change when looping in the sequence of animation.
+	 * However there’re some cases when frames are changed manually. As example, in the behavior
+	 * of a spring stool the one frame is for resting and the other is for being fold
+	 */
+	public void changeFrame ( int newFrame )
+	{
+		if ( this.currentFrame == newFrame ) return ;
+
+		if ( newFrame < howManyFramesInTheCurrentSequence() ) {
+			this.currentFrame = newFrame ;
+			// ....
+		}
+	}
+
+	// true to reverse the animation sequence
+	private boolean backwardsMotion = false ;
+
+	public boolean isAnimatedBackwards () {  return this.backwardsMotion ;  }
+
+	/**
+	 * Animate from the first to the last frame, which is by default
+	 */
+	public void doForthMotion ()
+	{
+		this.backwardsMotion = false ;
+		changeFrame( firstFrame() );
+	}
+
+	/**
+	 * Animate from the last to the first frame, backwards
+	 */
+	public void doBackwardsMotion ()
+	{
+		this.backwardsMotion = true ;
+		changeFrame( lastFrame() );
+	}
+
+	protected void setupAnimation ()
+	{
+		changeFrame( isAnimatedBackwards() ? lastFrame() : firstFrame() );
 	}
 
 	public String toString ()
@@ -105,6 +205,7 @@ public abstract class TheMostAbstractItem extends Mediated
 		if ( nameOfClass.endsWith( "DescribedItem" ) )
 			return "described item" ;
 		else
+		/* if ( nameOfClass.endsWith( "TheMostAbstractItem" ) ) */
 			return "abstract item" ;
 	}
 
