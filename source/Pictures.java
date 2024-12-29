@@ -172,7 +172,7 @@ public class Pictures
 		return part ;
 	}
 
-	public static BufferedImage cloneAsIndexedColor ( BufferedImage picture )
+	public static BufferedImage cloneAsIndexedColor ( BufferedImage picture ) throws TooManyColoursException
 	{
 		java.util.Set < Integer > colors
 			= new java.util.TreeSet < Integer > (	/*new java.util.Comparator < Integer > ()
@@ -202,7 +202,7 @@ public class Pictures
 
 		int howManyColors = colors.size ();
 		if ( howManyColors > 256 )
-			throw new IllegalArgumentException( "the picture has " + howManyColors + " various colors, it's more than 256" );
+			throw new TooManyColoursException( howManyColors, 256 );
 
 		Object [] array = colors.toArray ();
 		int [] colorMap = new int [ howManyColors ];
@@ -327,46 +327,52 @@ public class Pictures
 	{
 		final java.io.PrintStream out = System.out ;
 
-		if ( arguments.length != 2 ) {
-			out.println( "to get the difference and the summation, two image files are needed as arguments" );
+		if ( arguments.length == 0 ) {
+			out.println( "image files are expected as arguments" );
 			return ;
 		}
 
-		String firstImageFilename = arguments[ 0 ];
-		String secondImageFilename = arguments[ 1 ];
-		java.io.File gamedata = FilesystemPaths.getPathToGameData() ;
+		for ( int a = 0 ; a < arguments.length ; ++ a )
+		{
+			String nameOFile = arguments[ a ];
 
-		BufferedImage firstImage  = Pictures.readFromFile( new java.io.File( gamedata, firstImageFilename ) );
-		if ( firstImage == null )
-			firstImage = Pictures.readFromFile( new java.io.File( firstImageFilename ) );
+			BufferedImage image = Pictures.readFromFile( new java.io.File( FilesystemPaths.getPathToGameData(), nameOFile ) );
+			if ( image == null ) {
+				image = Pictures.readFromFile( new java.io.File( nameOFile ) );
+				if ( image == null ) {
+					out.println( "☹️ oops, can’t read an image from " + StringUtilities.putInQuotes( nameOFile ) );
+					continue ;
+				}
+			}
 
-		BufferedImage secondImage = Pictures.readFromFile( new java.io.File( gamedata, secondImageFilename ) );
-		if ( secondImage == null )
-			secondImage = Pictures.readFromFile( new java.io.File( secondImageFilename ) );
+			out.println( "🖼 got an image from file " + StringUtilities.putInQuotes( nameOFile ) );
 
-		if ( firstImage == null || secondImage == null ) {
-			out.println( "☹️ oops, can’t read image from one of files"
-					+ " \"" + firstImageFilename + "\" or \"" + secondImageFilename + "\"" );
-			return ;
+			// replace the opaque magenta background with transparent 50% gray
+			BufferedImage newImage = Pictures.cloneAsARGBWithReplacingColor( image, Color.magenta, Colours.makeTransparent( Colours.gray50 ) ); ;
+			try {
+				// try to convert to the indexed colors
+				newImage = Pictures.cloneAsIndexedColor( newImage );
+			}
+			// if can’t convert to indexed colors, it fails like "29671 various colors is more than 256"
+			catch ( TooManyColoursException e ) {  out.println( e.getMessage() );  }
+
+			// list the colors
+			Pictures.listColorModelIfIndexed( newImage );
+
+			int lastSeparatorAt = nameOFile.lastIndexOf( java.io.File.separatorChar );
+			if ( lastSeparatorAt > 0 ) nameOFile = nameOFile.substring( lastSeparatorAt );
+			int lastDotAt = nameOFile.lastIndexOf( '.' );
+			String withoutSuffix = ( lastDotAt > 0 ) ? nameOFile.substring( 0, lastDotAt ) : nameOFile ;
+			String extraSuffix = "" ; // = ".new" ;
+			java.io.File newImageFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), withoutSuffix + extraSuffix + ".png" );
+			if ( Pictures.saveAsPNG( newImage, newImageFile ) )
+				out.println( "saved as PNG file " + StringUtilities.putInQuotes( newImageFile.getPath() ) );
 		}
-
-		out.println( "🖼 got the two images :"
-				+ " the first from file \"" + firstImageFilename + "\" and"
-				+ " the second from file \"" + secondImageFilename + "\"" );
-
-		// get the difference between the two images
-		BufferedImage difference = Pictures.difference( firstImage, secondImage );
-		java.io.File differenceFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "difference.png" );
-		if ( Pictures.saveAsPNG( difference, differenceFile ) )
-			out.println( "the difference is saved as PNG file \"" + differenceFile.getPath() + "\"" );
-
-		// get the summation of the two images
-		BufferedImage summation = Pictures.summation( firstImage, secondImage );
-		java.io.File summationFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "summation.png" );
-		if ( Pictures.saveAsPNG( summation, summationFile ) )
-			out.println( "the summation is saved as PNG file \"" + summationFile.getPath() + "\"" );
 	}
 
+	/**
+	 * Convert white-on-magenta images to black-on-transparent-white
+	 */
 	public static void previous_main ( String [] arguments )
 	{
 		final java.io.PrintStream out = System.out ;
@@ -384,26 +390,21 @@ public class Pictures
 			if ( image == null ) {
 				image = Pictures.readFromFile( new java.io.File( nameOFile ) );
 				if ( image == null ) {
-					out.println( "☹️ oops, can’t read the image from file \"" + nameOFile + "\"" );
+					out.println( "☹️ oops, can’t read an image from " + StringUtilities.putInQuotes( nameOFile ) );
 					continue ;
 				}
 			}
 
-			out.println( "🖼 got image file \"" + nameOFile + "\"" );
+			out.println( "🖼 got an image from file " + StringUtilities.putInQuotes( nameOFile ) );
 
-			// replace magenta background with transparent white
-			BufferedImage withRealTransparency = Pictures.cloneAsARGBWithReplacingColor( image,
-									Color.magenta, new Color( 255, 255, 255, /* alpha */ 0 ) );
-			// and white foreground with black
-			BufferedImage withBlackForeground = Pictures.cloneAsARGBWithReplacingColor( withRealTransparency, Color.white, Color.black );
-
-			// then convert it to the indexed colors
-			BufferedImage newImage = withBlackForeground ;
+			// convert white-on-magenta to black-on-transparent-white
+			BufferedImage newImage = Pictures.whiteOnMagentaToBlackOnTransparentWhite( image ) ;
 			try {
-				newImage = Pictures.cloneAsIndexedColor( withBlackForeground );
+				// try to convert to the indexed colors
+				newImage = Pictures.cloneAsIndexedColor( newImage );
 			}
-			// if can't convert to indexed colors, it fails like "the picture has 29671 various colors, it's more than 256"
-			catch ( IllegalArgumentException e ) { /* ignore it */ }
+			// if can’t convert to indexed colors, it fails like "29671 various colors is more than 256"
+			catch ( TooManyColoursException e ) {  out.println( e.getMessage() );  }
 
 			// list the colors
 			Pictures.listColorModelIfIndexed( newImage );
@@ -412,10 +413,70 @@ public class Pictures
 			if ( lastSeparatorAt > 0 ) nameOFile = nameOFile.substring( lastSeparatorAt );
 			int lastDotAt = nameOFile.lastIndexOf( '.' );
 			String withoutSuffix = ( lastDotAt > 0 ) ? nameOFile.substring( 0, lastDotAt ) : nameOFile ;
-			java.io.File newImageFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), withoutSuffix + ".new.png" );
+			String extraSuffix = ".new" ;
+			java.io.File newImageFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), withoutSuffix + extraSuffix + ".png" );
 			if ( Pictures.saveAsPNG( newImage, newImageFile ) )
-				out.println( "saved as PNG file \"" + newImageFile.getPath() + "\"" );
+				out.println( "saved as PNG file " + StringUtilities.putInQuotes( newImageFile.getPath() ) );
 		}
+	}
+
+	/**
+	 * Get the difference and the summation of two images
+	 */
+	public static void difference_main ( String [] arguments )
+	{
+		final java.io.PrintStream out = System.out ;
+
+		if ( arguments.length != 2 ) {
+			out.println( "to get the difference and the summation, the two image files are needed as arguments" );
+			return ;
+		}
+
+		String firstImageFilename = arguments[ 0 ];
+		String secondImageFilename = arguments[ 1 ];
+		java.io.File gamedata = FilesystemPaths.getPathToGameData() ;
+
+		BufferedImage firstImage  = Pictures.readFromFile( new java.io.File( gamedata, firstImageFilename ) );
+		if ( firstImage == null )
+			firstImage = Pictures.readFromFile( new java.io.File( firstImageFilename ) );
+
+		BufferedImage secondImage = Pictures.readFromFile( new java.io.File( gamedata, secondImageFilename ) );
+		if ( secondImage == null )
+			secondImage = Pictures.readFromFile( new java.io.File( secondImageFilename ) );
+
+		if ( firstImage == null || secondImage == null ) {
+			out.println( "☹️ oops, can’t read an image"
+					+ " from " + StringUtilities.putInQuotes( firstImageFilename )
+					+ " or " + StringUtilities.putInQuotes( secondImageFilename ) );
+			return ;
+		}
+
+		out.println( "🖼 got the two images :"
+				+ " the first from file " + StringUtilities.putInQuotes( firstImageFilename )
+				+ " and"
+				+ " the second from file " + StringUtilities.putInQuotes( secondImageFilename ) );
+
+		// get the difference between the two images
+		BufferedImage difference = Pictures.difference( firstImage, secondImage );
+		java.io.File differenceFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "difference.png" );
+		if ( Pictures.saveAsPNG( difference, differenceFile ) )
+			out.println( "the difference is saved as PNG file " + StringUtilities.putInQuotes( differenceFile.getPath() ) );
+
+		// get the summation of the two images
+		BufferedImage summation = Pictures.summation( firstImage, secondImage );
+		java.io.File summationFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "summation.png" );
+		if ( Pictures.saveAsPNG( summation, summationFile ) )
+			out.println( "the summation is saved as PNG file " + StringUtilities.putInQuotes( summationFile.getPath() ) );
+	}
+
+	// convert a white-on-magenta image to black-on-transparent-white
+	//
+	private static BufferedImage whiteOnMagentaToBlackOnTransparentWhite ( BufferedImage in )
+	{
+		// replace the opaque magenta background with transparent white
+		BufferedImage withRealTransparency = Pictures.cloneAsARGBWithReplacingColor( in, Color.magenta, Colours.makeTransparent( Color.white ) );
+		// and then the foreground white with black
+		return Pictures.cloneAsARGBWithReplacingColor( withRealTransparency, Color.white, Color.black );
 	}
 
 }

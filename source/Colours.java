@@ -65,6 +65,11 @@ public class Colours
 		return c.getAlpha() == 0 ; /// || /* the "pure" magenta */ ( c.getRed() == 255 && c.getGreen() == 0 && c.getBlue() == 255 ) ;
 	}
 
+	public static Color makeTransparent ( Color in )
+	{
+		return new Color( in.getRed(), in.getGreen(), in.getBlue(), /* transparent */ 0 ) ;
+	}
+
 	public static Color byName( String name )
 	{
 		if ( name.equals( "white" ) ) return Colours.white ;

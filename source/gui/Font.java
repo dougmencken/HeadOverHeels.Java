@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage ;
 import head.over.heels.Colours ;
 import head.over.heels.Pictures ;
 import head.over.heels.FilesystemPaths ;
+import head.over.heels.TooManyColoursException ;
 
 
 /**
@@ -104,7 +105,13 @@ public class Font
 			return null ;
 		}
 
-		return Pictures.cloneAsIndexedColor( fontFromFile );
+		BufferedImage theImage = fontFromFile ;
+		try {
+			// convert to the indexed colors
+			theImage = Pictures.cloneAsIndexedColor( fontFromFile );
+		} catch ( TooManyColoursException e ) {}
+
+		return theImage ;
 	}
 
 	private static java.util.Vector < String [] > decomposeImageOFont( BufferedImage imageOFont )
@@ -154,11 +161,14 @@ public class Font
 
 		int i = 0 ;
 		for ( int y = 0 ; y < fontImageHeight ; y += charStepY )
-			for ( int x = 0 ; x < fontImageWidth; x += charStepX )
-				letters[ i ++ ] = Pictures.cloneAsIndexedColor (
-							Pictures.cloneSubpictureAsARGB (
-								Pictures.cloneSubpictureAsARGB ( imageOFont, x, y, charStepX, charStepY ),
-									0, yShift, lineWidth, netHeight ) );
+			for ( int x = 0 ; x < fontImageWidth; x += charStepX ) {
+				try {
+					letters[ i ++ ] = Pictures.cloneAsIndexedColor (
+								Pictures.cloneSubpictureAsARGB (
+									Pictures.cloneSubpictureAsARGB ( imageOFont, x, y, charStepX, charStepY ),
+										0, yShift, lineWidth, netHeight ) );
+				} catch ( TooManyColoursException e ) { /* impossible */ }
+			}
 
 		// generate the textual bitmaps
 		java.util.Vector < String [] > lettersInStrings = new java.util.Vector < String [] > ( letters.length ) ;
