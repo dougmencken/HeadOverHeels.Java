@@ -1,6 +1,6 @@
 // The Java port of the free and open source remake of the game “Head over Heels”
 //
-// Copyright © 2024 Douglas Mencken dougmencken@gmail.com
+// Copyright © 2025 Douglas Mencken dougmencken@gmail.com
 //
 // This program is free software
 // You may redistribute it and~or modify it under the terms of the GNU General Public License
@@ -326,147 +326,187 @@ public class Pictures
 	public static void main ( String [] arguments )
 	{
 		final java.io.PrintStream out = System.out ;
+		String newline = System.getProperty( "line.separator" );
 
-		if ( arguments.length == 0 ) {
-			out.println( "image files are expected as arguments" );
+		out.append( "💫 welcome to the little collection of some handy utilities to deal with pictures ✨" ).append( newline ).append( newline );
+		boolean showUsage = ( arguments.length == 0 ) ;
+
+		String what2do = "" ;
+		if ( arguments.length > 0 ) {
+			String the0th = arguments[ 0 ] ;
+			while ( the0th.startsWith( "-" ) )
+				the0th = the0th.substring( 1 );
+
+			     if ( the0th.equals( "tg" ) || the0th.equals( "transparent-gray" ) ) what2do = "transparent gray" ;
+			else if ( the0th.equals( "tm" ) || the0th.equals( "transparent-magenta" ) ) what2do = "transparent magenta" ;
+			else if ( the0th.equals( "btw" ) || the0th.equals( "black-on-transparent-white" ) ) what2do = "black on transparent white" ;
+			else if ( the0th.equals( "diff" ) || the0th.equals( "difference" ) ) what2do = "difference" ;
+			else if ( the0th.equals( "summ" ) || the0th.equals( "sum" ) || the0th.equals( "summation" ) ) what2do = "summation" ;
+			else if ( the0th.equals( "help" ) || the0th.equals( "usage" ) ) what2do = "usage" ;
+			else
+				out.append( "hey, yet I don’t know how to do " ).append( StringUtilities.putInQuotes( the0th ) ).append( newline )
+					.append( newline ) ;
+		}
+
+		showUsage = showUsage || what2do.isEmpty() || what2do.equals( "usage" ) ;
+		if ( ! what2do.isEmpty() )
+			out.append( "doing " ).append( StringUtilities.putInQuotes( what2do ) ).append( newline ).append( newline ) ;
+
+		if ( showUsage ) {
+			printTheUsage( out );
 			return ;
 		}
 
-		for ( int a = 0 ; a < arguments.length ; ++ a )
+		int firstFileName = 1 ;
+		String extraSuffix = "" ; // to append to the output file names before ".png"
+
+		String the1st = arguments[ 1 ] ;
+		if ( the1st.startsWith( "--suffix=" ) ) {
+			int indexOfEquality = the1st.indexOf( '=' );
+			if ( indexOfEquality >= 0 && the1st.length() > indexOfEquality + 1 ) {
+				extraSuffix = the1st.substring( indexOfEquality + 1 );
+				extraSuffix.replace( "\"", "" ) ; // remove any double quotes from a suffix
+				extraSuffix = ( new StringBuilder() ).append( '.' ).append( extraSuffix ).toString() ; // precede with a dot
+			}
+
+			firstFileName = 2 ;
+		}
+
+		int howManyFileNames = arguments.length - firstFileName ;
+
+		if ( what2do.equals( "transparent gray" ) || what2do.equals( "transparent magenta" )
+				|| what2do.equals( "black on transparent white" ) )
 		{
-			String nameOFile = arguments[ a ];
+			if ( howManyFileNames < 1 ) {
+				out.println( "image files are expected as arguments" );
+				return ;
+			}
 
-			BufferedImage image = Pictures.readFromFile( new java.io.File( FilesystemPaths.getPathToGameData(), nameOFile ) );
-			if ( image == null ) {
-				image = Pictures.readFromFile( new java.io.File( nameOFile ) );
+			for ( int a = firstFileName ; a < arguments.length ; ++ a ) {
+				String nameOFile = arguments[ a ];
+
+				BufferedImage image = Pictures.readFromFile( new java.io.File( FilesystemPaths.getPathToGameData(), nameOFile ) );
 				if ( image == null ) {
-					out.println( "☹️ oops, can’t read an image from " + StringUtilities.putInQuotes( nameOFile ) );
-					continue ;
+					image = Pictures.readFromFile( new java.io.File( nameOFile ) );
+					if ( image == null ) {
+						out.println( "☹️ oops, can’t read an image from " + StringUtilities.putInQuotes( nameOFile ) );
+						continue ;
+					}
 				}
+
+				out.println( "🖼 got an image from file " + StringUtilities.putInQuotes( nameOFile ) );
+
+				BufferedImage newImage = image ;
+
+				if ( what2do.equals( "transparent gray" ) ) {
+					// replace the opaque magenta background with transparent 50% gray
+					newImage = Pictures.cloneAsARGBWithReplacingColor( image,
+								Color.magenta, Colours.makeTransparent( Colours.gray50 ) );
+				}
+				else if ( what2do.equals( "transparent magenta" ) ) {
+					// replace the transparent 50% gray with transparent magenta
+					newImage = Pictures.cloneAsARGBWithReplacingColor( image,
+								Colours.makeTransparent( Colours.gray50 ),
+								Colours.makeTransparent( Colours.magenta ) );
+				}
+				else if ( what2do.equals( "black on transparent white" ) ) {
+					// convert a white-on-magenta image to black-on-transparent-white
+					newImage = Pictures.whiteOnMagentaToBlackOnTransparentWhite( image ) ;
+				}
+
+				try {
+					// try to convert to the indexed colors
+					newImage = Pictures.cloneAsIndexedColor( newImage );
+				}
+				// if can’t convert to indexed colors, it fails like "29671 various colors is more than 256"
+				catch ( TooManyColoursException e ) {  out.println( e.getMessage() );  }
+
+				// list the colors
+				Pictures.listColorModelIfIndexed( newImage );
+
+				int lastSeparatorAt = nameOFile.lastIndexOf( java.io.File.separatorChar );
+				if ( lastSeparatorAt > 0 ) nameOFile = nameOFile.substring( lastSeparatorAt );
+				int lastDotAt = nameOFile.lastIndexOf( '.' );
+				String withoutSuffix = ( lastDotAt > 0 ) ? nameOFile.substring( 0, lastDotAt ) : nameOFile ;
+
+				java.io.File newImageFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), withoutSuffix + extraSuffix + ".png" );
+				if ( Pictures.saveAsPNG( newImage, newImageFile ) )
+					out.println( "saved as PNG file " + StringUtilities.putInQuotes( newImageFile.getPath() ) );
+			}
+		}
+		else if ( what2do.equals( "difference" ) || what2do.equals( "summation" ) )
+		{
+			if ( howManyFileNames != 2 ) {
+				out.println( "to get the difference or the summation, the two image files are needed as arguments, got " + howManyFileNames );
+				return ;
 			}
 
-			out.println( "🖼 got an image from file " + StringUtilities.putInQuotes( nameOFile ) );
+			String firstImageFilename = arguments[ firstFileName ];
+			String secondImageFilename = arguments[ firstFileName + 1 ];
+			java.io.File gamedata = FilesystemPaths.getPathToGameData() ;
 
-			// replace the opaque magenta background with transparent 50% gray
-			BufferedImage newImage = Pictures.cloneAsARGBWithReplacingColor( image, Color.magenta, Colours.makeTransparent( Colours.gray50 ) ); ;
-			try {
-				// try to convert to the indexed colors
-				newImage = Pictures.cloneAsIndexedColor( newImage );
+			BufferedImage firstImage  = Pictures.readFromFile( new java.io.File( gamedata, firstImageFilename ) );
+			if ( firstImage == null )
+				firstImage = Pictures.readFromFile( new java.io.File( firstImageFilename ) );
+
+			BufferedImage secondImage = Pictures.readFromFile( new java.io.File( gamedata, secondImageFilename ) );
+			if ( secondImage == null )
+				secondImage = Pictures.readFromFile( new java.io.File( secondImageFilename ) );
+
+			if ( firstImage == null || secondImage == null ) {
+				out.println( "☹️ oops, can’t read an image"
+						+ " from " + StringUtilities.putInQuotes( firstImageFilename )
+						+ " or " + StringUtilities.putInQuotes( secondImageFilename ) );
+				return ;
 			}
-			// if can’t convert to indexed colors, it fails like "29671 various colors is more than 256"
-			catch ( TooManyColoursException e ) {  out.println( e.getMessage() );  }
 
-			// list the colors
-			Pictures.listColorModelIfIndexed( newImage );
+			out.println( "🖼 got the two images :"
+					+ " the first from file " + StringUtilities.putInQuotes( firstImageFilename )
+					+ " and"
+					+ " the second from file " + StringUtilities.putInQuotes( secondImageFilename ) );
 
-			int lastSeparatorAt = nameOFile.lastIndexOf( java.io.File.separatorChar );
-			if ( lastSeparatorAt > 0 ) nameOFile = nameOFile.substring( lastSeparatorAt );
-			int lastDotAt = nameOFile.lastIndexOf( '.' );
-			String withoutSuffix = ( lastDotAt > 0 ) ? nameOFile.substring( 0, lastDotAt ) : nameOFile ;
-			String extraSuffix = "" ; // = ".new" ;
-			java.io.File newImageFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), withoutSuffix + extraSuffix + ".png" );
-			if ( Pictures.saveAsPNG( newImage, newImageFile ) )
-				out.println( "saved as PNG file " + StringUtilities.putInQuotes( newImageFile.getPath() ) );
+			if ( what2do.equals( "difference" ) ) {
+				// get the difference between the two images
+				BufferedImage difference = Pictures.difference( firstImage, secondImage );
+				java.io.File differenceFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "difference" + extraSuffix + ".png" );
+				if ( Pictures.saveAsPNG( difference, differenceFile ) )
+					out.println( "the difference is saved as PNG file " + StringUtilities.putInQuotes( differenceFile.getPath() ) );
+			}
+			else if ( what2do.equals( "summation" ) ) {
+				// get the summation of the two images
+				BufferedImage summation = Pictures.summation( firstImage, secondImage );
+				java.io.File summationFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "summation" + extraSuffix + ".png" );
+				if ( Pictures.saveAsPNG( summation, summationFile ) )
+					out.println( "the summation is saved as PNG file " + StringUtilities.putInQuotes( summationFile.getPath() ) );
+			}
 		}
 	}
 
-	/**
-	 * Convert white-on-magenta images to black-on-transparent-white
-	 */
-	public static void previous_main ( String [] arguments )
+	private static void printTheUsage ( java.io.PrintStream out )
 	{
-		final java.io.PrintStream out = System.out ;
+		String newline = System.getProperty( "line.separator" );
+		String indent = "    " ;
 
-		if ( arguments.length == 0 ) {
-			out.println( "image files are expected as arguments" );
-			return ;
-		}
-
-		for ( int a = 0 ; a < arguments.length ; ++ a )
-		{
-			String nameOFile = arguments[ a ];
-
-			BufferedImage image = Pictures.readFromFile( new java.io.File( FilesystemPaths.getPathToGameData(), nameOFile ) );
-			if ( image == null ) {
-				image = Pictures.readFromFile( new java.io.File( nameOFile ) );
-				if ( image == null ) {
-					out.println( "☹️ oops, can’t read an image from " + StringUtilities.putInQuotes( nameOFile ) );
-					continue ;
-				}
-			}
-
-			out.println( "🖼 got an image from file " + StringUtilities.putInQuotes( nameOFile ) );
-
-			// convert white-on-magenta to black-on-transparent-white
-			BufferedImage newImage = Pictures.whiteOnMagentaToBlackOnTransparentWhite( image ) ;
-			try {
-				// try to convert to the indexed colors
-				newImage = Pictures.cloneAsIndexedColor( newImage );
-			}
-			// if can’t convert to indexed colors, it fails like "29671 various colors is more than 256"
-			catch ( TooManyColoursException e ) {  out.println( e.getMessage() );  }
-
-			// list the colors
-			Pictures.listColorModelIfIndexed( newImage );
-
-			int lastSeparatorAt = nameOFile.lastIndexOf( java.io.File.separatorChar );
-			if ( lastSeparatorAt > 0 ) nameOFile = nameOFile.substring( lastSeparatorAt );
-			int lastDotAt = nameOFile.lastIndexOf( '.' );
-			String withoutSuffix = ( lastDotAt > 0 ) ? nameOFile.substring( 0, lastDotAt ) : nameOFile ;
-			String extraSuffix = ".new" ;
-			java.io.File newImageFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), withoutSuffix + extraSuffix + ".png" );
-			if ( Pictures.saveAsPNG( newImage, newImageFile ) )
-				out.println( "saved as PNG file " + StringUtilities.putInQuotes( newImageFile.getPath() ) );
-		}
-	}
-
-	/**
-	 * Get the difference and the summation of two images
-	 */
-	public static void difference_main ( String [] arguments )
-	{
-		final java.io.PrintStream out = System.out ;
-
-		if ( arguments.length != 2 ) {
-			out.println( "to get the difference and the summation, the two image files are needed as arguments" );
-			return ;
-		}
-
-		String firstImageFilename = arguments[ 0 ];
-		String secondImageFilename = arguments[ 1 ];
-		java.io.File gamedata = FilesystemPaths.getPathToGameData() ;
-
-		BufferedImage firstImage  = Pictures.readFromFile( new java.io.File( gamedata, firstImageFilename ) );
-		if ( firstImage == null )
-			firstImage = Pictures.readFromFile( new java.io.File( firstImageFilename ) );
-
-		BufferedImage secondImage = Pictures.readFromFile( new java.io.File( gamedata, secondImageFilename ) );
-		if ( secondImage == null )
-			secondImage = Pictures.readFromFile( new java.io.File( secondImageFilename ) );
-
-		if ( firstImage == null || secondImage == null ) {
-			out.println( "☹️ oops, can’t read an image"
-					+ " from " + StringUtilities.putInQuotes( firstImageFilename )
-					+ " or " + StringUtilities.putInQuotes( secondImageFilename ) );
-			return ;
-		}
-
-		out.println( "🖼 got the two images :"
-				+ " the first from file " + StringUtilities.putInQuotes( firstImageFilename )
-				+ " and"
-				+ " the second from file " + StringUtilities.putInQuotes( secondImageFilename ) );
-
-		// get the difference between the two images
-		BufferedImage difference = Pictures.difference( firstImage, secondImage );
-		java.io.File differenceFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "difference.png" );
-		if ( Pictures.saveAsPNG( difference, differenceFile ) )
-			out.println( "the difference is saved as PNG file " + StringUtilities.putInQuotes( differenceFile.getPath() ) );
-
-		// get the summation of the two images
-		BufferedImage summation = Pictures.summation( firstImage, secondImage );
-		java.io.File summationFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "summation.png" );
-		if ( Pictures.saveAsPNG( summation, summationFile ) )
-			out.println( "the summation is saved as PNG file " + StringUtilities.putInQuotes( summationFile.getPath() ) );
+		out.append( "usage" ).append( newline )
+				.append( indent ).append( "java " ).append( Pictures.class.getName() ).append( " " )
+				.append( "<what2do>" ).append( " " ).append( "[--suffix=<string>]" ).append( " " ).append( "<filenames>" ).append( newline )
+			.append( newline )
+			.append( "<what2do> is one of" ).append( newline )
+				.append( indent ).append( "✔ " ).append( "tg" ).append( " or " ).append( "transparent-gray" )
+					.append( " - to " ).append( "replace the opaque magenta background with transparent 50% gray" ).append( newline )
+				.append( indent ).append( "✔ " ).append( "tm" ).append( " or " ).append( "transparent-magenta" )
+					.append( " - to " ).append( "replace the transparent 50% gray with transparent magenta" ).append( newline )
+				.append( indent ).append( "✔ " ).append( "btw" ).append( " or " ).append( "black-on-transparent-white" )
+					.append( " - to " ).append( "convert a white-on-magenta image to black-on-transparent-white" ).append( newline )
+				.append( indent ).append( "✔ " ).append( "diff" ).append( " or " ).append( "difference" )
+					.append( " - to " ).append( "get the difference between the two images" ).append( newline )
+				.append( indent ).append( "✔ " ).append( "summ" ).append( " or " ).append( "sum" ).append( " or " ).append( "summation" )
+					.append( " - to " ).append( "get the summation of the two images" ).append( newline )
+				.append( indent ).append( "✔ " ).append( "help" ).append( " or " ).append( "usage" )
+					.append( " - to " ).append( "show this text" ).append( newline )
+			.append( newline )
+			.append( "the optional argument --suffix=foo adds an extra ‘.foo’ suffix to the output file names" ).append( newline )
+			;
 	}
 
 	// convert a white-on-magenta image to black-on-transparent-white
