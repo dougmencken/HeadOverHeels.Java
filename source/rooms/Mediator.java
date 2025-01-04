@@ -95,8 +95,8 @@ public class Mediator
 
 		// then in grid items
 		Vector< Vector< GridItem > > allGridItems = this.mediatedRoom.getGridItems ();
-		for ( int column = 0 ; column < allGridItems.size() ; ++ column )
-			for ( GridItem item : allGridItems.elementAt( column ) )
+		for ( Vector< GridItem > column : allGridItems )
+			for ( GridItem item : column )
 				if ( item != null && item.getBehaviour() != null && item.getBehaviour().getName().equals( thatBehaviour ) )
 					return item ;
 

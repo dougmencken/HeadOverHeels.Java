@@ -8,9 +8,11 @@
 
 package head.over.heels.gui ;
 
+import head.over.heels.StringUtilities ;
+
 
 /**
- * The list of letters that the font draws, stored in a file
+ * The list of letters that the font draws, optionally stored in a file
  */
 
 public class LettersFile
@@ -29,7 +31,7 @@ public class LettersFile
 	public LettersFile( java.io.File file )
 	{
 		if ( ! file.exists() || ! file.isFile() || ! file.canRead() ) {
-			System.out.println( "there's no file \"" + file.getPath () + "\" with the list of letters" );
+			System.out.println( "there’s no file " + StringUtilities.putInQuotes( file.getPath () ) + " with the list of letters" );
 			this.letters = generateListOfLetters () ;
 			return ;
 		}
@@ -50,7 +52,7 @@ public class LettersFile
 			if ( ( b == 0 ) || ( ( b & 0x80 ) == 0 ) || ( ( b & 0xC0 ) == 0xC0 ) )
 				howManyLetters++;
 		}
-		System.out.println( "🧐 file \"" + file.getPath () + "\" lists " + howManyLetters + " letters" );
+		System.out.println( "🧐 file " + StringUtilities.putInQuotes( file.getPath () ) + " lists " + howManyLetters + " letters" );
 
 		this.letters = new java.util.Vector < String > ( howManyLetters );
 

@@ -8,6 +8,9 @@
 
 package head.over.heels.items ;
 
+import head.over.heels.FilesystemPaths ;
+import head.over.heels.StringUtilities ;
+
 import java.util.TreeMap ;
 
 import java.io.File ;
@@ -23,19 +26,32 @@ import org.w3c.dom.NodeList ;
 
 
 /**
- * All the descriptions of the game's items as read from items.xml
+ * All the descriptions of the game items, read from items.xml
  */
 
 public class ItemDescriptions
 {
 
-	private TreeMap < String, DescriptionOfItem >
-	        descriptionsOfItems = new TreeMap < String, DescriptionOfItem > () ;
+	private TreeMap < String, DescriptionOfItem > descriptionsOfItems
+			= new TreeMap < String, DescriptionOfItem > () ;
 
 	private transient boolean alreadyRead = false ;
 
+	public ItemDescriptions ( )
+	{
+		if ( ItemDescriptions.theDescriptions != null )
+			System.out.println( "constructing another instance of ItemDescriptions, why do you need it again?" ) ;
 
-	public ItemDescriptions () { }
+		ItemDescriptions.theDescriptions = this ;
+	}
+
+	private static ItemDescriptions theDescriptions = null ;
+
+	public static ItemDescriptions descriptions ()
+	{
+		if ( ItemDescriptions.theDescriptions == null ) new ItemDescriptions() ;
+		return ItemDescriptions.theDescriptions ;
+	}
 
 	public boolean equals( Object that )
 	{
@@ -64,6 +80,28 @@ public class ItemDescriptions
 		return true ;
 	}
 
+	public DescriptionOfItem getDescriptionByKind ( String kind )
+	{
+		// auto-read the item descriptions file if it hasn’t been done before
+		if ( ! this.alreadyRead )
+			readDescriptions() ;
+
+		DescriptionOfItem theDescription = this.descriptionsOfItems.get( kind ) ;
+
+		if ( theDescription == null )
+			System.out.println( "the description of the item kind " + StringUtilities.putInQuotes( kind ) + " is absent" ) ;
+
+		return theDescription ;
+	}
+
+	public static final File the_file_full_of_item_descriptions
+					= new File( FilesystemPaths.getPathToGameData(), "items.xml" ) ;
+
+	public boolean readDescriptions ()
+	{
+		return readDescriptionsFromFile( ItemDescriptions.the_file_full_of_item_descriptions ) ;
+	}
+
 	/**
 	 * Read the descriptions of items from the XML file
 	 */
@@ -72,7 +110,7 @@ public class ItemDescriptions
 		if ( this.alreadyRead ) return true ;
 
 		if ( ! xmlFile.exists() || ! xmlFile.canRead() ) {
-			System.out.println( "can't read file \"" + xmlFile.getPath() + "\"" );
+			System.out.println( "can’t read file " + StringUtilities.putInQuotes( xmlFile.getPath() ) );
 			return false ;
 		}
 
@@ -307,7 +345,7 @@ public class ItemDescriptions
 
 		// ... if neither
 		if ( description.howManyFramesPerOrientation () == 0 )
-			description.makeSequenceOFrames( 1 ) ; // then it's static
+			description.makeSequenceOFrames( 1 ) ; // then it’s static
 
 		// how many various orientations
 		byte variousOrientations = 0 ;

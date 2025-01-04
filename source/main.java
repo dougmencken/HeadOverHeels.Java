@@ -161,8 +161,7 @@ public final class main
 		}
 
 	/**/// temporary lines
-	ItemDescriptions descriptions = new ItemDescriptions( ) ;
-	descriptions.readDescriptionsFromFile( new java.io.File( FilesystemPaths.getPathToGameData(), "items.xml" ) ) ;
+	ItemDescriptions.descriptions().readDescriptions() ;
 	/**/// ❌ ✔️
 
 		GameWindow window = new GameWindow( width, height ) ;

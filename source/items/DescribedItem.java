@@ -20,14 +20,16 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 		if ( description == null ) throw new NullPointerException( "null description at the time of item construction" ) ;
 
 		this.descriptionOfItem = description ;
+		this.originalKind = description.getKind() ;
 	}
 
 	// the copy constructor
-	protected DescribedItem( DescribedItem item )
+	protected DescribedItem( DescribedItem thatItem )
 	{
-		super( item );
+		super( thatItem );
 
-		this.descriptionOfItem = item.descriptionOfItem ;
+		this.descriptionOfItem = thatItem.getDescriptionOfItem() ;
+		this.originalKind = thatItem.getOriginalKind() ;
 	}
 
 	private DescriptionOfItem descriptionOfItem ;
@@ -42,6 +44,13 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 	public int getHeight () {  return this.descriptionOfItem.getHeight() ;  }
 
 	public String getKind () {  return this.descriptionOfItem.getKind() ;  }
+
+	/**
+	 * The original kind of item, while the current kind may change via metamorphosis
+	 */
+	private String originalKind ;
+
+	public String getOriginalKind () {  return this.originalKind ;  }
 
 	/**
 	 * The sequence in which frames for various orientations are presented in a graphics file

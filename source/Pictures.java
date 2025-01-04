@@ -188,50 +188,51 @@ public class Pictures
 							    ) ;
 		int indexOfTransparent = -1 ;
 
-		int  width = picture.getWidth ();
-		int height = picture.getHeight ();
-
 		synchronized ( picture ) {
+			int  width = picture.getWidth ();
+			int height = picture.getHeight ();
+
 			for ( int y = 0 ; y < height ; y ++ )
 				for ( int x = 0 ; x < width ; x ++ ) {
 					int argb = picture.getRGB( x, y );
 					if ( ( ( argb >> 24 ) & 0xff ) == 0 ) indexOfTransparent = colors.size ();
 					colors.add( argb );
 				}
-		}
 
-		int howManyColors = colors.size ();
-		if ( howManyColors > 256 )
-			throw new TooManyColoursException( howManyColors, 256 );
+			int howManyColors = colors.size ();
+			if ( howManyColors > 256 )
+				throw new TooManyColoursException( howManyColors, 256 );
 
-		Object [] array = colors.toArray ();
-		int [] colorMap = new int [ howManyColors ];
-		for ( int i = 0 ; i < howManyColors ; ++ i )
-			colorMap[ i ] = ( (Integer) array[ i ] ).intValue ();
+			int [] colorMap = new int [ howManyColors ];
+			int indexOfColor = 0 ;
+			java.util.Iterator< Integer > colorsIterator = colors.iterator() ;
+			while ( colorsIterator.hasNext() )
+				colorMap[ indexOfColor ++ ] = colorsIterator.next().intValue ();
 
-		int bits = 8 ;
-		     if ( howManyColors <=  2 ) bits = 1 ;
-		else if ( howManyColors <=  4 ) bits = 2 ;
-		else if ( howManyColors <= 16 ) bits = 4 ;
+			int bits = 8 ;
+			     if ( howManyColors <=  2 ) bits = 1 ;
+			else if ( howManyColors <=  4 ) bits = 2 ;
+			else if ( howManyColors <= 16 ) bits = 4 ;
 
-		java.awt.image.IndexColorModel indexedColors
-						= new java.awt.image.IndexColorModel (
-							/* bits per pixel */ bits,
-							/* size */ howManyColors, /* colors */ colorMap, /* first index in colors */ 0,
-							/* has alpha */ indexOfTransparent >= 0,
-							/* transIndex */ indexOfTransparent,
-							/* transferType */ java.awt.image.DataBuffer.TYPE_BYTE );
+			java.awt.image.IndexColorModel indexedColors
+							= new java.awt.image.IndexColorModel (
+								/* bits per pixel */ bits,
+								/* size */ howManyColors,
+								/* colors */ colorMap,
+								/* first index in colors */ 0,
+								/* has alpha */ indexOfTransparent >= 0,
+								/* transIndex */ indexOfTransparent,
+								/* transferType */ java.awt.image.DataBuffer.TYPE_BYTE );
 
-		int imageType = ( bits < 8 ) ? BufferedImage.TYPE_BYTE_BINARY : BufferedImage.TYPE_BYTE_INDEXED ;
-		BufferedImage newPicture = new BufferedImage( width, height, imageType, indexedColors );
+			int imageType = ( bits < 8 ) ? BufferedImage.TYPE_BYTE_BINARY : BufferedImage.TYPE_BYTE_INDEXED ;
+			BufferedImage newPicture = new BufferedImage( width, height, imageType, indexedColors );
 
-		synchronized ( picture ) {
 			for ( int y = 0 ; y < height ; y ++ )
 				for ( int x = 0 ; x < width ; x ++ )
 					newPicture.setRGB( x, y, picture.getRGB( x, y ) );
-		}
 
-		return newPicture ;
+			return newPicture ;
+		}
 	}
 
 	public static BufferedImage cloneWithTwiceTheHeight ( BufferedImage before )

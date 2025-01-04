@@ -20,7 +20,7 @@ public class DescriptionOfItem implements Cloneable
 
 	private String kind ;
 
-	public String getKind () {  return kind ;  }
+	public String getKind () {  return this.kind ;  }
 	protected void setKind ( String newKind ) {  this.kind = newKind ;  }
 
 	/**
