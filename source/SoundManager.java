@@ -88,6 +88,7 @@ class MusicPlaying implements Runnable
 			} catch ( javax.sound.sampled.LineUnavailableException ex ) {
 				System.err.println( "an audio mixer’s output line cannot be opened" );
 			} catch ( java.io.IOException x ) {  x.printStackTrace ();  }
+			  catch ( IllegalArgumentException e ) { /* ignore */ }
 		}
 	}
 
