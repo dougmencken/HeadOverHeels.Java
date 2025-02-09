@@ -59,7 +59,12 @@ public class Room extends Mediated implements Drawable
 
 	public String getKindOfFloor () {  return this.floorKind ;  }
 
-        public boolean hasFloor () {  return ! this.floorKind.equals( "absent" );  }
+	public boolean hasFloor () {  return ! this.floorKind.equals( "absent" );  }
+
+	private String roomColor = "white" ;
+
+	public String getColour () {  return this.roomColor ;  }
+	public void setColour ( String colour ) {  this.roomColor = colour ;  }
 
 	// the connections of this room with other rooms on the map
 	private ConnectedRooms connections = null ;

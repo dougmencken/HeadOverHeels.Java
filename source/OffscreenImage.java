@@ -21,9 +21,14 @@ public class OffscreenImage extends BufferedImage
 		super( width, height, BufferedImage.TYPE_INT_ARGB );
 	}
 
+	public OffscreenImage( IntegerDimensions2D size )
+	{
+		super( size.getWidth(), size.getHeight(), BufferedImage.TYPE_INT_ARGB );
+	}
+
 	public OffscreenImage( OffscreenImage toCopy ) // the copy constructor
 	{
-		this( toCopy, toCopy.getWidth (), toCopy.getHeight (), new java.awt.Color( 0, 0, 0, /* alpha */ 0 ) );
+		this( toCopy, toCopy.getWidth (), toCopy.getHeight (), Colours.makeTransparent( Colours.grey50 ) );
 	}
 
 	public OffscreenImage( OffscreenImage toCopy, int newWidth, int newHeight, java.awt.Color backColor )
