@@ -34,7 +34,7 @@ public class StringUtilities
 			result.append( "th" );
 
 		return result.toString() ;
-        }
+	}
 
 	public static String putInQuotes( String in )
 	{
@@ -51,6 +51,27 @@ public class StringUtilities
 		return out.toString () ; */
 
 		return ( new StringBuilder( in ) ).reverse().toString () ;
+	}
+
+	public static String makeRandomString ( int length )
+	{
+		String characters = "0123456789"
+					+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+						+ "abcdefghijklmnopqrstuvwxyz" ;
+		int howManyChars = characters.length() ;
+
+		StringBuilder out = new StringBuilder() ;
+		java.util.Random random = new java.util.Random() ;
+
+		for ( int i = 0 ; i < length; ++ i )
+			out.append( characters.charAt( random.nextInt( howManyChars ) ) );
+
+		return out.toString() ;
+	}
+
+	public static void main( String[] ignored )
+	{
+		System.out.println( StringUtilities.makeRandomString( 16 ) );
 	}
 
 }

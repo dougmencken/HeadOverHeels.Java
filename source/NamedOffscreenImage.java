@@ -12,7 +12,7 @@ package head.over.heels ;
 public class NamedOffscreenImage extends OffscreenImage
 {
 
-	private String theName ;
+	private String theName = "image-" + StringUtilities.makeRandomString( 12 ) ;
 
 	public String getName () {  return this.theName ;  }
 	public void setName ( String name ) {  this.theName = name ;  }
