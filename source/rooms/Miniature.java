@@ -10,6 +10,8 @@ package head.over.heels.rooms ;
 
 import java.awt.Color ;
 
+import java.util.Map ;
+
 import head.over.heels.Colours ;
 import head.over.heels.Drawable ;
 import head.over.heels.IntegerPoint2D ;
@@ -100,35 +102,33 @@ public class Miniature implements Drawable
 
 		int tilesX = getRoom().getTilesOnX ();
 		int tilesY = getRoom().getTilesOnY ();
+
 		int firstTileX = 0 ;
 		int firstTileY = 0 ;
 		int lastTileX = tilesX - 1 ;
 		int lastTileY = tilesY - 1 ;
 
-		Door eastDoor = getRoom().getDoorOn( "east" );
-		Door southDoor = getRoom().getDoorOn( "south" );
-		Door northDoor = getRoom().getDoorOn( "north" );
-		Door westDoor = getRoom().getDoorOn( "west" );
+		Map< String, Door > doors = new java.util.HashMap< String, Door >() ;
 
-		Door eastnorthDoor = getRoom().getDoorOn( "eastnorth" );
-		Door eastsouthDoor = getRoom().getDoorOn( "eastsouth" );
-		Door southeastDoor = getRoom().getDoorOn( "southeast" );
-		Door southwestDoor = getRoom().getDoorOn( "southwest" );
-		Door northeastDoor = getRoom().getDoorOn( "northeast" );
-		Door northwestDoor = getRoom().getDoorOn( "northwest" );
-		Door westnorthDoor = getRoom().getDoorOn( "westnorth" );
-		Door westsouthDoor = getRoom().getDoorOn( "westsouth" );
+		String [] sides = { "south", "west", "north", "east" } ;
+		for ( String side : sides )
+			doors.put( side, getRoom().getDoorOn( side ) );
 
-		if ( northDoor != null || northeastDoor != null || northwestDoor != null )
+		String [] bigroomsides = { "northeast", "northwest", "eastnorth", "eastsouth",
+						"southeast", "southwest", "westnorth", "westsouth" };
+		for ( String side : bigroomsides )
+			doors.put( side, getRoom().getDoorOn( side ) );
+
+		if ( doors.get( "north" ) != null || doors.get( "northeast" ) != null || doors.get( "northwest" ) != null )
 			firstTileX ++ ;
 
-		if ( eastDoor != null || eastnorthDoor != null || eastsouthDoor != null )
+		if ( doors.get( "east" ) != null || doors.get( "eastnorth" ) != null || doors.get( "eastsouth" ) != null )
 			firstTileY ++ ;
 
-		if ( southDoor != null || southeastDoor != null || southwestDoor != null )
+		if ( doors.get( "south" ) != null || doors.get( "southeast" ) != null || doors.get( "southwest" ) != null )
 			-- lastTileX ;
 
-		if ( westDoor != null || westnorthDoor != null || westsouthDoor != null )
+		if ( doors.get( "west" ) != null || doors.get( "westnorth" ) != null || doors.get( "westsouth" ) != null )
 			-- lastTileY ;
 
 		boolean narrowRoomAlongX = ( lastTileY == firstTileY + 1 ) ;

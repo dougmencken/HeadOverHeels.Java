@@ -9,7 +9,7 @@
 package head.over.heels.items ;
 
 import head.over.heels.Mediated ;
-import head.over.heels.OffscreenImage ;
+import head.over.heels.NamedOffscreenImage ;
 import head.over.heels.StringUtilities ;
 import head.over.heels.NoSuchPictureException ;
 
@@ -71,12 +71,7 @@ public abstract class TheMostAbstractItem extends Mediated
 	}
 
 	// the sequences of pictures of item
-	private Map< String, Vector< OffscreenImage > > frames = new java.util.HashMap< String, Vector< OffscreenImage > > () ;
-
-	// the sequences of pictures of item’s shadow
-	private Map< String, Vector< OffscreenImage > > shadows = null ;
-
-	public boolean hasShadow () {  return this.shadows != null && ! this.shadows.isEmpty() ;  }
+	private Map< String, Vector< NamedOffscreenImage > > frames = new java.util.HashMap< String, Vector< NamedOffscreenImage > > () ;
 
 	// the current sequence of frames
 	private String currentSequence = "" ;
@@ -121,10 +116,10 @@ public abstract class TheMostAbstractItem extends Mediated
 		return ( howMany > 0 ) ? howMany - 1 : 0 ;
 	}
 
-	protected OffscreenImage getNthFrameIn ( String sequence, int n ) throws NoSuchPictureException
+	protected NamedOffscreenImage getNthFrameIn ( String sequence, int n ) throws NoSuchPictureException
 	{
 		for ( String key : this.frames.keySet() ) {
-			Vector< OffscreenImage > framesIn = this.frames.get( key );
+			Vector< NamedOffscreenImage > framesIn = this.frames.get( key );
 			if ( key.equals( sequence ) && n < framesIn.size() )
 				return framesIn.elementAt( n );
 		}
@@ -134,11 +129,6 @@ public abstract class TheMostAbstractItem extends Mediated
 				.append( StringUtilities.putInQuotes( sequence ) ).append( " for " ).append( StringUtilities.putInQuotes( getUniqueName() ) ) ;
 		System.err.println( message );
 		throw new NoSuchPictureException( message );
-	}
-
-	protected OffscreenImage getNthShadowIn ( String sequence, int n ) throws NoSuchPictureException
-	{
-		throw new NoSuchPictureException() ;
 	}
 
 	/**

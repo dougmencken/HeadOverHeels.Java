@@ -9,6 +9,11 @@
 package head.over.heels.items ;
 
 import head.over.heels.Shady ;
+import head.over.heels.NamedOffscreenImage ;
+import head.over.heels.NoSuchPictureException ;
+
+import java.util.Map ;
+import java.util.Vector ;
 
 
 public abstract class DescribedItem extends TheMostAbstractItem implements Shady
@@ -52,18 +57,15 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 
 	public String getOriginalKind () {  return this.originalKind ;  }
 
-	/**
-	 * The sequence in which frames for various orientations are presented in a graphics file
-	 */
-	/* ////// static class Frames
+	// the sequences of pictures of item’s shadow
+	private Map< String, Vector< NamedOffscreenImage > > shadows = null ;
+
+	public boolean hasShadow () {  return this.shadows != null && ! this.shadows.isEmpty() ;  }
+
+	protected NamedOffscreenImage getNthShadowIn ( String sequence, int n ) throws NoSuchPictureException
 	{
-
-		static final int South = 0 ;
-		static final int  West = 1 ;
-		static final int North = 2 ;
-		static final int  East = 3 ;
-
-	} ////// */
+		throw new NoSuchPictureException() ;
+	}
 
 	// the position in 3-dimensional space of this item’s lower north-west point, in free units
 	public abstract int getX () ;
