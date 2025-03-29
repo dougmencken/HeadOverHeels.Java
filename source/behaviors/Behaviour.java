@@ -14,6 +14,8 @@ import head.over.heels.items.FreeItem ;
 import head.over.heels.items.GridItem ;
 import head.over.heels.items.TheMostAbstractItem ;
 
+import head.over.heels.StringUtilities ;
+
 
 /**
  * Abstraction for the item’s behaviour. A game’s item changes its activity in each cycle of update.
@@ -89,13 +91,19 @@ public abstract class Behaviour
 		}
 
 		// none of the above
-		if ( name.contains( "disappearing" ) && item instanceof DescribedItem )
-			return new Volatile( (DescribedItem) item, name );
+
+		if ( name.contains( "vanishing" ) )	// vanishing on contact,
+							// vanishing when something is above, slowly vanishing when something is above,
+							// vanishing as soon as Head appears,
+							// vanishing after a while
+			return
+				( item instanceof DescribedItem ) ?
+					new Volatile( (DescribedItem) item, name ) : null ;
 		else
 		if ( name.isEmpty () || name.equals( "still" ) || name.equals( "bubbles" ) )
 			return null ;
 		else
-		throw new IllegalArgumentException( "unknown behavior \"" + name + "\" for " + item.toString () );
+		throw new IllegalArgumentException( "unknown behavior " + StringUtilities.putInQuotes( name ) + " for " + item.toString () );
 	}
 
 }

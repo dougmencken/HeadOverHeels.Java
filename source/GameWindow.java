@@ -72,13 +72,16 @@ class ContentOfGameWindow extends JComponent
 
 	void resizeBufferToDraw ( int width, int height )
 	{
-		if ( this.whatToDraw == null ) {
-			this.whatToDraw = new OffscreenImage( width, height );
+		if ( this.whatToDraw != null && this.whatToDraw.getWidth() == width && height == this.whatToDraw.getHeight() )
+			/* nothing to do */ return ;
+
+		OffscreenImage previousBuffer = this.whatToDraw ;
+		this.whatToDraw = new OffscreenImage( width, height );
+
+		if ( previousBuffer == null )
 			this.whatToDraw.fillWithColor( getBackground () );
-		} else
-		   if ( this.whatToDraw.getWidth() != width || height != this.whatToDraw.getHeight() ) {
-			this.whatToDraw = new OffscreenImage( this.whatToDraw, width, height, getBackground () );
-		}
+		else
+			this.whatToDraw.replicateImage( previousBuffer, getBackground() );
 	}
 
 	public void update( java.awt.Graphics g )

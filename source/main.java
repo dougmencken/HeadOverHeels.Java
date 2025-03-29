@@ -161,6 +161,13 @@ public final class main
 		}
 
 	/**/// temporary lines
+	try {
+		OffscreenImage eee = new OffscreenImage( FilesystemPaths.getPathToGameData(), "fail.epic" );
+	} catch ( NoSuchPictureException x ) {
+		System.err.println( "CAUGHT " + x.getClass().getName()
+					+ " saying " + StringUtilities.putInSingleQuotes( x.getMessage() ) ) ;
+	}
+
 	ItemDescriptions.descriptions().readDescriptions() ;
 	/**/// ❌ ✔️
 

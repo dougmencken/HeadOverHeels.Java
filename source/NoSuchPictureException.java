@@ -8,11 +8,11 @@
 
 package head.over.heels ;
 
-public class NoSuchPictureException extends java.lang.Exception
+public class NoSuchPictureException extends NoSuchThingException
 {
 
 	public NoSuchPictureException( ) {  super( "there’s no such picture" ) ;  }
 	public NoSuchPictureException( java.lang.String message ) {  super( message ) ;  }
-	public NoSuchPictureException( java.lang.Appendable message ) {  super( message.toString() ) ;  }
+	public NoSuchPictureException( java.lang.Appendable message ) {  super( message ) ;  }
 
 }

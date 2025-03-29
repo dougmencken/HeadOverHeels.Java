@@ -12,6 +12,10 @@ import java.awt.image.BufferedImage ;
 
 import java.awt.Graphics2D ;
 
+import head.over.heels.Pictures ;
+import head.over.heels.NoSuchPictureException ;
+import head.over.heels.StringUtilities ;
+
 
 public class OffscreenImage extends BufferedImage
 {
@@ -26,24 +30,23 @@ public class OffscreenImage extends BufferedImage
 		super( size.getWidth(), size.getHeight(), BufferedImage.TYPE_INT_ARGB );
 	}
 
-	public OffscreenImage( OffscreenImage toCopy ) // the copy constructor
+	public OffscreenImage( BufferedImage toCopy ) // the copy constructor
 	{
-		this( toCopy, toCopy.getWidth (), toCopy.getHeight (), Colours.makeTransparent( Colours.grey50 ) );
+		this( toCopy != null ? toCopy.getWidth() : 1, toCopy != null ? toCopy.getHeight() : 1 );
+		replicateImage( toCopy );
 	}
 
-	public OffscreenImage( OffscreenImage toCopy, int newWidth, int newHeight, java.awt.Color backColor )
+	/**
+	 * Takes a path and a file name to read an image from file
+	 */
+	public OffscreenImage( java.io.File path, String name ) throws NoSuchPictureException
 	{
-		this( newWidth, newHeight );
+		this( /* make a copy */ Pictures.readFromFile( new java.io.File( path, name ) ) );
 
-		Graphics2D g = super.createGraphics ();
-
-		if ( toCopy.getWidth () < newWidth || toCopy.getHeight () < newHeight )
-			fillWithColor( backColor, g );
-
-		// the copying itself happens here
-		g.drawImage( toCopy, 0, 0, null );
-
-		g.dispose ();
+		if ( getWidth() == 1 && getHeight() == 1 ) // 1×1 pixel means an image wasn’t read
+			throw new NoSuchPictureException( "can’t read image from file "
+								+ StringUtilities.putInQuotes( name )
+								+ " in " + path.getAbsolutePath() );
 	}
 
 	public void fillWithColor ( java.awt.Color color )
@@ -57,6 +60,26 @@ public class OffscreenImage extends BufferedImage
 	{
 		g2d.setColor( fillColor );
 		g2d.fillRect( 0, 0, getWidth(), getHeight() );
+	}
+
+	public void replicateImage( BufferedImage toCopy )
+	{
+		replicateImage( toCopy, Colours.makeTransparent( Colours.grey50 ) );
+	}
+
+	public void replicateImage( BufferedImage toCopy, java.awt.Color backColor )
+	{
+		if ( toCopy == null ) return ; // can’t replicate null
+
+		Graphics2D g = super.createGraphics ();
+
+		if ( toCopy.getWidth() < getWidth() || toCopy.getHeight() < getHeight() )
+			fillWithColor( backColor, g );
+
+		// the copying itself happens here
+		g.drawImage( toCopy, 0, 0, null );
+
+		g.dispose ();
 	}
 
 }

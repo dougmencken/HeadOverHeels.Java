@@ -21,6 +21,12 @@ public class NamedOffscreenImage extends OffscreenImage
 
 	public NamedOffscreenImage( IntegerDimensions2D size ) {  super( size );  }
 
+	public NamedOffscreenImage( java.io.File path, String fileName ) throws NoSuchPictureException
+	{
+		super( path, fileName );
+		setName( fileName );
+	}
+
 	public NamedOffscreenImage( NamedOffscreenImage toCopy ) // the copy constructor
 	{
 		super( toCopy );

@@ -36,9 +36,19 @@ public class StringUtilities
 		return result.toString() ;
 	}
 
-	public static String putInQuotes( String in )
+	public static String encloseIn( String what, String beforeAfter )
 	{
-		return "\"" + in + "\"" ;
+		return beforeAfter + what + beforeAfter ;
+	}
+
+	public static String putInQuotes( String what )
+	{
+		return encloseIn( what, "\"" );
+	}
+
+	public static String putInSingleQuotes( String what )
+	{
+		return encloseIn( what, "\'" );
 	}
 
 	public static String reverseString( String in )
