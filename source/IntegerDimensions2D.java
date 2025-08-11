@@ -16,8 +16,8 @@ package head.over.heels ;
 public class IntegerDimensions2D
 {
 
-	private int width ;
-	private int height ;
+	private final int width ;
+	private final int height ;
 
 	public int getWidth () {  return this.width ;  }
 	public int getHeight () {  return this.height ;  }

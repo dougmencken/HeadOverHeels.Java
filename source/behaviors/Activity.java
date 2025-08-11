@@ -9,7 +9,7 @@
 package head.over.heels.behaviors ;
 
 
-class Activity
+public class Activity
 {
 
 	private String letters ;

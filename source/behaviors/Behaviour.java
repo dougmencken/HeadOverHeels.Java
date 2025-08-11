@@ -90,10 +90,8 @@ public abstract class Behaviour
 			// ....
 		}
 
-		// none of the above
-
 		if ( name.contains( "vanishing" ) )	// vanishing on contact,
-							// vanishing when something is above, slowly vanishing when something is above,
+							// vanishing when some free dude is above, slowly vanishing when some free dude is above,
 							// vanishing as soon as Head appears,
 							// vanishing after a while
 			return

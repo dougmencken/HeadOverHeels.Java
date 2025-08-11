@@ -16,8 +16,8 @@ package head.over.heels ;
 public class IntegerPoint2D
 {
 
-	private int x ;
-	private int y ;
+	private final int x ;
+	private final int y ;
 
 	public int getX () {  return this.x ;  }
 	public int getY () {  return this.y ;  }

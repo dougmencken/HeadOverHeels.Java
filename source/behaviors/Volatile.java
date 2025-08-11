@@ -39,4 +39,12 @@ public class Volatile extends Behaviour
 	 */
 	private boolean solid ;
 
+	// string constants found in room description files
+
+	public static final String on_contact = "vanishing on contact" ;
+	public static final String when_above = "vanishing when some free dude is above" ;
+	public static final String when_above_slower = "slowly " + when_above ; // "slowly vanishing when some free dude is above"
+	public static final String as_Head_appears = "vanishing as soon as Head appears" ;
+	public static final String after_a_while = "vanishing after a while" ;
+
 }

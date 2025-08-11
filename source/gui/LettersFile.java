@@ -31,7 +31,7 @@ public class LettersFile
 	public LettersFile( java.io.File file )
 	{
 		if ( ! file.exists() || ! file.isFile() || ! file.canRead() ) {
-			System.out.println( "there’s no file " + StringUtilities.putInQuotes( file.getPath () ) + " with the list of letters" );
+			System.out.println( "generating the list of letters since there’s no " + StringUtilities.putInSingleQuotes( file.getPath() ) + " file" );
 			this.letters = generateListOfLetters () ;
 			return ;
 		}
