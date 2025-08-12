@@ -20,11 +20,18 @@ public class ConnectedRooms
 	/**
 	 * Connections to other rooms are stored here
 	 */
-	private HashMap < String /* where */, String /* file of room */ > connections ;
+	private final HashMap < String /* how */, String /* room */ > connections ;
+
+	public HashMap< String, String > getConnections () {  return this.connections ;  }
 
 	public ConnectedRooms()
 	{
-		this.connections = new HashMap < String, String > () ;
+		this.connections = new HashMap< String, String > () ;
+	}
+
+	public int howMany ()
+	{
+		return ( this.connections != null ) ? this.connections.keySet().size() : 0 ;
 	}
 
 	/**
@@ -42,6 +49,23 @@ public class ConnectedRooms
 		else if ( where == "teleport2" ) where = "via second teleport" ;
 
 		this.connections.put( where, room );
+	}
+
+	public String toString ()
+	{
+		StringBuilder out = new StringBuilder( );
+
+		boolean first = true ;
+		for ( String where : this.connections.keySet() ) {
+			if ( first )	first = false ;
+			else		out.append( ", " );
+
+			out.append( this.connections.get( where )
+					+ ( where.equals( "above" ) || where.equals( "below" ) || where.startsWith( "via" ) ? " " : " on " )
+					+ where );
+		}
+
+		return out.toString() ;
 	}
 
 }

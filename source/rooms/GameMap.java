@@ -13,6 +13,9 @@ import head.over.heels.FilesystemPaths ;
 import java.io.File ;
 
 import java.util.HashMap ;
+import java.util.TreeSet ;
+import java.util.Vector ;
+import java.util.Iterator ;
 
 import javax.xml.parsers.DocumentBuilderFactory ;
 import javax.xml.parsers.DocumentBuilder ;
@@ -70,13 +73,14 @@ public class GameMap
 		Element root = xml.getDocumentElement() ;
 		if ( root == null || root.getTagName() != "map" ) return false ;
 
-		System.out.println( "reading the game map from " + mapFile.getAbsolutePath() );
-
 		this.linksBetweenRooms = new HashMap< String, ConnectedRooms > () ;
 
 		NodeList roomNodes = xml.getElementsByTagName( "room" );
 		int howManyRooms = roomNodes.getLength() ;
-		System.out.println( "the game map consists of the " + howManyRooms + " rooms" );
+
+		System.out.print( "reading the game map" );
+		System.out.print( " consisting of " + howManyRooms + " rooms" );
+		System.out.println( " from " + mapFile.getAbsolutePath() );
 
 		for ( int roomNth = 0; roomNth < howManyRooms; ++ roomNth )
 		{
@@ -107,6 +111,111 @@ public class GameMap
 		return true ;
 	}
 
+	private boolean checkCoherence () {  return checkCoherence( null ) ;  }
+
+	/**
+	 * When there’s room B below some room A, then for coherence
+	 * room A needs to be above B as well. The same for a room
+	 * on the east | north | west | south of some room C : that room
+	 * accordingly has C on the west | south | east | north
+	 */
+	private boolean checkCoherence ( java.io.PrintStream out )
+	{
+		if ( out != null ) out.println( "checking coherence of the game map" );
+		String indent = "  " ;
+
+		TreeSet< TwoJoiningRooms > joiningRooms = new TreeSet< TwoJoiningRooms >( ) ;
+
+		for ( String room : this.linksBetweenRooms.keySet() ) {
+			ConnectedRooms connectedTo = this.linksBetweenRooms.get( room );
+			if ( connectedTo == null ) continue ;
+
+			HashMap< String /* how */, String /* room */ > connections = connectedTo.getConnections() ;
+			for ( String howJoined : connections.keySet() )
+				joiningRooms.add( new TwoJoiningRooms( room, connections.get( howJoined ), howJoined ) );
+		}
+
+		///Vector< MutuallyJoinedRooms > mutuallyJoined = new Vector< MutuallyJoinedRooms >( );
+
+		MutuallyJoinedRooms joined = null ;
+		do {
+			joined = null ;
+
+			for ( TwoJoiningRooms link : joiningRooms ) {
+				java.util.SortedSet< TwoJoiningRooms > tailOfLinks = joiningRooms.tailSet( link, false );
+				for ( TwoJoiningRooms otherLink : tailOfLinks ) {
+					if ( link.isReciprocalWith( otherLink ) ) {
+						joined = new MutuallyJoinedRooms( link, otherLink );
+						break ;
+					}
+				}
+
+				if ( joined != null ) break ;
+			}
+
+			if ( joined != null ) {
+				///mutuallyJoined.add( joined ) ;
+
+				if ( out != null ) {
+					out.print( indent + joined.getFirst().getFirstRoom() + " <-- " ) ;
+					out.print( joined.getSecond().getHowJoined() + " & " + joined.getFirst().getHowJoined() );
+					out.print( " --> " + joined.getSecond().getFirstRoom() );
+					out.println() ;
+				}
+
+				joiningRooms.remove( joined.getFirst() );
+				joiningRooms.remove( joined.getSecond() );
+			}
+		} while ( joined != null ) ;
+
+		int incoherencies = joiningRooms.size() ;
+		if ( out != null ) out.println( "there are " + incoherencies + " map incoherencies" );
+
+		if ( incoherencies > 0 ) {
+			if ( out != null ) out.println( "incoherencies are" );
+
+			for ( TwoJoiningRooms link : joiningRooms ) {
+				if ( out != null ) out.println( indent + link );
+			}
+
+			return false ;
+		}
+
+		return true ;
+	}
+
+	public String toString ()
+	{
+		if ( this.linksBetweenRooms == null ) return "the game map hasn’t been read yet" ;
+
+		StringBuilder out = new StringBuilder( );
+		String newline = System.getProperty( "line.separator" );
+
+		out.append( "the game map" );
+
+		int howManyRooms = this.linksBetweenRooms.keySet().size() ;
+		out.append( " consists of " ).append( howManyRooms ).append( " rooms" );
+		out.append( newline );
+
+		TreeSet< String > sortedKeys = new TreeSet< String >( this.linksBetweenRooms.keySet() );
+		for ( String room : sortedKeys ) {
+			out.append( "  " ).append( "room " + room + " has " ) ;
+
+			ConnectedRooms connectedTo = this.linksBetweenRooms.get( room );
+			int howMany = ( connectedTo != null ) ? connectedTo.howMany() : 0 ;
+			if ( howMany > 0 ) {
+				out.append( howMany + ( howMany == 1 ? " connection" : " connections" ) );
+				out.append(" ~ ") ;
+				out.append( connectedTo.toString() );
+			} else
+				out.append( "*no* connections" );
+
+			out.append( newline );
+		}
+
+		return out.toString() ;
+	}
+
 	/**
 	 * Which room is connected to which
 	 */
@@ -125,11 +234,11 @@ public class GameMap
 	public Room getActiveRoom () {  return this.activeRoom ;  }
 	public void setActiveRoom ( Room newRoom ) {  this.activeRoom = newRoom ;  }
 
-	public static void main( String [] ignored )
+	public static void main ( String [] ignored )
 	{
 		GameMap theMap = new GameMap( );
-
-		// ...
+		System.out.println( theMap.toString() );
+		theMap.checkCoherence( System.out ) ;
 	}
 
 }
