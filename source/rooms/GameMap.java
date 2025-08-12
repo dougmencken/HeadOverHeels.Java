@@ -14,8 +14,6 @@ import java.io.File ;
 
 import java.util.HashMap ;
 import java.util.TreeSet ;
-import java.util.Vector ;
-import java.util.Iterator ;
 
 import javax.xml.parsers.DocumentBuilderFactory ;
 import javax.xml.parsers.DocumentBuilder ;
@@ -135,7 +133,7 @@ public class GameMap
 				joiningRooms.add( new TwoJoiningRooms( room, connections.get( howJoined ), howJoined ) );
 		}
 
-		///Vector< MutuallyJoinedRooms > mutuallyJoined = new Vector< MutuallyJoinedRooms >( );
+		///java.util.Vector< MutuallyJoinedRooms > mutuallyJoined = new java.util.Vector< MutuallyJoinedRooms >( );
 
 		MutuallyJoinedRooms joined = null ;
 		do {
