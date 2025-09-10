@@ -10,7 +10,7 @@ package head.over.heels ;
 
 import java.io.File ;
 
-public class FilesystemPaths
+public class Storage
 {
 
 	private static boolean printOnce = true ;
@@ -37,6 +37,6 @@ public class FilesystemPaths
 		return new File( "gamedata" );
 	}
 
-	private FilesystemPaths() {} // no instances
+	private Storage() {} // no instances
 
 }

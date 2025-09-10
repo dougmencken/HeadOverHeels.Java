@@ -29,16 +29,12 @@ public class Miniature implements Drawable
 {
 
 	public Miniature( Room roomForMiniature )
-		{  this( roomForMiniature, Miniature.the_default_size_of_tile, 0, 0 ) ;  }
+		{  this( roomForMiniature, Miniature.the_default_size_of_tile ) ;  }
 
-	public Miniature( Room roomForMiniature, int leftX, int topY )
-		{  this( roomForMiniature, Miniature.the_default_size_of_tile, leftX, topY ) ;  }
-
-	public Miniature( Room roomForMiniature, byte singleTileSize, int leftX, int topY )
+	public Miniature( Room roomForMiniature, byte singleTileSize )
 	{
 		this.theRoom = roomForMiniature ;
 		setSizeOfTile( singleTileSize );
-		setDrawingOffset( leftX, topY );
 	}
 
 	private NamedOffscreenImage theImage = null ;

@@ -169,7 +169,7 @@ public final class main
 		window.randomPixelFadeIn( java.awt.Color.black );
 
 	String musicFile = "music" + java.io.File.separator + "freedom.ogg" ;
-	SoundManager.getInstance().play( new java.io.File( FilesystemPaths.getPathToGameData(), musicFile ), /* loop */ true );
+	SoundManager.getInstance().play( new java.io.File( Storage.getPathToGameData(), musicFile ), /* loop */ true );
 
 	}
 

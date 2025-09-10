@@ -8,7 +8,7 @@
 
 package head.over.heels.rooms ;
 
-public class TwoJoiningRooms implements Comparable
+class TwoJoiningRooms implements Comparable
 {
 
 	private final String firstRoom ;

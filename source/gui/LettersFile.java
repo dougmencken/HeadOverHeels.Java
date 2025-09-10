@@ -587,7 +587,7 @@ public class LettersFile
 		if ( arguments != null && arguments.length > 0 ) nameOfNewLettersFile = arguments[ 0 ] ;
 
 		LettersFile oldLetters = null ;
-		java.io.File oldFile = new java.io.File( head.over.heels.FilesystemPaths.getPathToGameData(), "letters.utf8" );
+		java.io.File oldFile = new java.io.File( head.over.heels.Storage.getPathToGameData(), "letters.utf8" );
 		if ( oldFile.exists() && oldFile.isFile() && oldFile.canRead() ) {
 			oldLetters = new LettersFile( oldFile );
 			System.out.println( "old letters" );
@@ -600,7 +600,7 @@ public class LettersFile
 		System.out.println( "———————————" );
 		System.out.println( newLetters );
 
-		newLetters.writeTo( new java.io.File( head.over.heels.FilesystemPaths.getGameStorageInHome (), nameOfNewLettersFile ) );
+		newLetters.writeTo( new java.io.File( head.over.heels.Storage.getGameStorageInHome (), nameOfNewLettersFile ) );
 	}
 
 }

@@ -8,7 +8,7 @@
 
 package head.over.heels.items ;
 
-import head.over.heels.FilesystemPaths ;
+import head.over.heels.Storage ;
 import head.over.heels.StringUtilities ;
 
 import java.util.TreeMap ;
@@ -95,7 +95,7 @@ public class ItemDescriptions
 	}
 
 	public static final File the_file_full_of_item_descriptions
-					= new File( FilesystemPaths.getPathToGameData(), "items.xml" ) ;
+					= new File( Storage.getPathToGameData(), "items.xml" ) ;
 
 	public boolean readDescriptions ()
 	{

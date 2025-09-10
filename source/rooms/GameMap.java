@@ -8,7 +8,7 @@
 
 package head.over.heels.rooms ;
 
-import head.over.heels.FilesystemPaths ;
+import head.over.heels.Storage ;
 
 import java.io.File ;
 
@@ -28,7 +28,7 @@ import org.w3c.dom.NodeList ;
 public class GameMap
 {
 
-	public static final File game_map_folder = new File( FilesystemPaths.getPathToGameData(), "map" );
+	public static final File game_map_folder = new File( Storage.getPathToGameData(), "map" );
 
 	private GameMap( )
 	{
@@ -133,14 +133,12 @@ public class GameMap
 				joiningRooms.add( new TwoJoiningRooms( room, connections.get( howJoined ), howJoined ) );
 		}
 
-		///java.util.Vector< MutuallyJoinedRooms > mutuallyJoined = new java.util.Vector< MutuallyJoinedRooms >( );
-
 		MutuallyJoinedRooms joined = null ;
 		do {
 			joined = null ;
 
 			for ( TwoJoiningRooms link : joiningRooms ) {
-				java.util.SortedSet< TwoJoiningRooms > tailOfLinks = joiningRooms.tailSet( link, false );
+				java.util.SortedSet< TwoJoiningRooms > tailOfLinks = joiningRooms.tailSet( link, /* not including link */ false );
 				for ( TwoJoiningRooms otherLink : tailOfLinks ) {
 					if ( link.isReciprocalWith( otherLink ) ) {
 						joined = new MutuallyJoinedRooms( link, otherLink );
@@ -151,9 +149,8 @@ public class GameMap
 				if ( joined != null ) break ;
 			}
 
-			if ( joined != null ) {
-				///mutuallyJoined.add( joined ) ;
-
+			if ( joined != null )
+			{
 				if ( out != null ) {
 					out.print( indent + joined.getFirst().getFirstRoom() + " <-- " ) ;
 					out.print( joined.getSecond().getHowJoined() + " & " + joined.getFirst().getHowJoined() );
@@ -164,7 +161,7 @@ public class GameMap
 				joiningRooms.remove( joined.getFirst() );
 				joiningRooms.remove( joined.getSecond() );
 			}
-		} while ( joined != null ) ;
+		} while ( joined != null /* there’s some mutually joined pair of rooms */ ) ;
 
 		int incoherencies = joiningRooms.size() ;
 		if ( out != null ) out.println( "there are " + incoherencies + " map incoherencies" );

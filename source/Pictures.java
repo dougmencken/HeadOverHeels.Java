@@ -386,7 +386,7 @@ public class Pictures
 			for ( int a = firstFileName ; a < arguments.length ; ++ a ) {
 				String nameOFile = arguments[ a ];
 
-				BufferedImage image = Pictures.readFromFile( new java.io.File( FilesystemPaths.getPathToGameData(), nameOFile ) );
+				BufferedImage image = Pictures.readFromFile( new java.io.File( Storage.getPathToGameData(), nameOFile ) );
 				if ( image == null ) {
 					image = Pictures.readFromFile( new java.io.File( nameOFile ) );
 					if ( image == null ) {
@@ -430,7 +430,7 @@ public class Pictures
 				int lastDotAt = nameOFile.lastIndexOf( '.' );
 				String withoutSuffix = ( lastDotAt > 0 ) ? nameOFile.substring( 0, lastDotAt ) : nameOFile ;
 
-				java.io.File newImageFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), withoutSuffix + extraSuffix + ".png" );
+				java.io.File newImageFile = new java.io.File( Storage.getGameStorageInHome (), withoutSuffix + extraSuffix + ".png" );
 				if ( Pictures.saveAsPNG( newImage, newImageFile ) )
 					out.println( "saved as PNG file " + StringUtilities.putInQuotes( newImageFile.getPath() ) );
 			}
@@ -444,7 +444,7 @@ public class Pictures
 
 			String firstImageFilename = arguments[ firstFileName ];
 			String secondImageFilename = arguments[ firstFileName + 1 ];
-			java.io.File gamedata = FilesystemPaths.getPathToGameData() ;
+			java.io.File gamedata = Storage.getPathToGameData() ;
 
 			BufferedImage firstImage  = Pictures.readFromFile( new java.io.File( gamedata, firstImageFilename ) );
 			if ( firstImage == null )
@@ -469,14 +469,14 @@ public class Pictures
 			if ( what2do.equals( "difference" ) ) {
 				// get the difference between the two images
 				BufferedImage difference = Pictures.difference( firstImage, secondImage );
-				java.io.File differenceFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "difference" + extraSuffix + ".png" );
+				java.io.File differenceFile = new java.io.File( Storage.getGameStorageInHome (), "difference" + extraSuffix + ".png" );
 				if ( Pictures.saveAsPNG( difference, differenceFile ) )
 					out.println( "the difference is saved as PNG file " + StringUtilities.putInQuotes( differenceFile.getPath() ) );
 			}
 			else if ( what2do.equals( "summation" ) ) {
 				// get the summation of the two images
 				BufferedImage summation = Pictures.summation( firstImage, secondImage );
-				java.io.File summationFile = new java.io.File( FilesystemPaths.getGameStorageInHome (), "summation" + extraSuffix + ".png" );
+				java.io.File summationFile = new java.io.File( Storage.getGameStorageInHome (), "summation" + extraSuffix + ".png" );
 				if ( Pictures.saveAsPNG( summation, summationFile ) )
 					out.println( "the summation is saved as PNG file " + StringUtilities.putInQuotes( summationFile.getPath() ) );
 			}

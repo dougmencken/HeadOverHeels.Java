@@ -70,7 +70,7 @@ public class GamePreferences
 	public GamePreferences( String fileName )
 	{
 		// it resides in the game storage in the home path
-		this.preferencesFile = new File( FilesystemPaths.getGameStorageInHome(), fileName );
+		this.preferencesFile = new File( Storage.getGameStorageInHome(), fileName );
 
 		try {
 			this.xmlDocumentBuilder = javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder() ;

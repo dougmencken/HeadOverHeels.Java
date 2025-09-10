@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage ;
 
 import head.over.heels.Colours ;
 import head.over.heels.Pictures ;
-import head.over.heels.FilesystemPaths ;
+import head.over.heels.Storage ;
 import head.over.heels.TooManyColoursException ;
 
 
@@ -88,9 +88,9 @@ public class Font
 
 		if ( Font.letterToImage == null ) // once for all the instances of the font
 		{
-			BufferedImage font = Font.readImageOFont( new java.io.File( FilesystemPaths.getPathToGameData(), "font.png" ) );
+			BufferedImage font = Font.readImageOFont( new java.io.File( Storage.getPathToGameData(), "font.png" ) );
 			java.util.Vector < String [] > imagesOfLetters = Font.decomposeImageOFont( font );
-			LettersFile listOfLetters = new LettersFile( new java.io.File( FilesystemPaths.getPathToGameData(), "letters.utf8" ) );
+			LettersFile listOfLetters = new LettersFile( new java.io.File( Storage.getPathToGameData(), "letters.utf8" ) );
 			Font.fillTheMapping( listOfLetters, imagesOfLetters );
 		}
 	}
@@ -472,7 +472,7 @@ public class Font
 		System.out.println( letters );
 
 		/* BufferedImage allTheLetters = testFont.composeImageOfString( letters.toString () );
-		Pictures.saveAsPNG( allTheLetters, new java.io.File( FilesystemPaths.getGameStorageInHome (), "Font.test.png" ) ); */
+		Pictures.saveAsPNG( allTheLetters, new java.io.File( Storage.getGameStorageInHome (), "Font.test.png" ) ); */
 
 		// dump the images of letters as lines of text
 		for ( String letter : Font.letterToImage.keySet() ) {
@@ -619,7 +619,7 @@ public class Font
 			Font.letterToImage.put( letter, reversedlines );
 		}***/
 
-		Font.composeAndWriteImageOFont( new java.io.File( FilesystemPaths.getGameStorageInHome (), "font.new.png" ) );
+		Font.composeAndWriteImageOFont( new java.io.File( Storage.getGameStorageInHome (), "font.new.png" ) );
 	}
 
 	/***** private static String fillGaps( String in )
