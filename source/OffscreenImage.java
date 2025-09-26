@@ -62,6 +62,29 @@ public class OffscreenImage extends BufferedImage
 		g2d.fillRect( 0, 0, getWidth(), getHeight() );
 	}
 
+	public void fillWithTransparencyGrid () {  fillWithTransparencyGrid( 8 );  }
+
+	public synchronized void fillWithTransparencyGrid ( int sizeOfTile )
+	{
+		if ( sizeOfTile < 1 )
+			throw new IllegalArgumentException( "the size of transparency grid tile is " + sizeOfTile + ", which is less than 1" );
+
+		int doubleTile = sizeOfTile << 1 ;
+
+		int width = getWidth ();
+		int height = getHeight ();
+
+		for ( int y = 0 ; y < height ; y ++ ) {
+			for ( int x = 0 ; x < width ; x ++ )
+			{
+				boolean grey = ( ( y % sizeOfTile ) == ( y % doubleTile ) && ( x % sizeOfTile ) != ( x % doubleTile ) ) ||
+							( ( y % sizeOfTile ) != ( y % doubleTile ) && ( x % sizeOfTile ) == ( x % doubleTile ) ) ;
+
+				setRGB( x, y, grey ? Colours.grey75white.getRGB() : Colours.white.getRGB() );
+			}
+		}
+	}
+
 	public void replicateImage( BufferedImage toCopy )
 	{
 		replicateImage( toCopy, Colours.makeTransparent( Colours.grey50 ) );

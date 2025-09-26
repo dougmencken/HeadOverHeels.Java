@@ -8,6 +8,8 @@
 
 package head.over.heels ;
 
+import java.awt.image.BufferedImage ;
+
 
 public class NamedOffscreenImage extends OffscreenImage
 {
@@ -25,6 +27,12 @@ public class NamedOffscreenImage extends OffscreenImage
 	{
 		super( path, fileName );
 		setName( fileName );
+	}
+
+	public NamedOffscreenImage( BufferedImage toCopy ) // the copy constructor
+	{
+		super( toCopy );
+		setName( "copied-" + getName() );
 	}
 
 	public NamedOffscreenImage( NamedOffscreenImage toCopy ) // the copy constructor

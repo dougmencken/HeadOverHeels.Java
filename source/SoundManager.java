@@ -40,7 +40,7 @@ class MusicPlaying implements Runnable
 				this.streamIn = AudioSystem.getAudioInputStream( musicFile );
 			}
 			  catch ( javax.sound.sampled.UnsupportedAudioFileException e ) {
-				System.err.println( "audio file \"" + pathToMusic + "\" is not supported" );
+				System.err.println( "audio file " + StringUtilities.putInQuotes( pathToMusic ) + " is not supported" );
 			} catch ( java.io.IOException x ) {  x.printStackTrace ();  }
 		}
 	}
@@ -126,9 +126,12 @@ public class SoundManager
 	/**
 	 * the playlist as a mapping of the music file name (path) to the MusicPlaying object
 	 */
-	private java.util.Map < String, MusicPlaying > playlist = new java.util.HashMap < String, MusicPlaying > () ;
+	private final java.util.Map < String, MusicPlaying > playlist ;
 
-	public SoundManager () {}
+	public SoundManager ()
+	{
+		this.playlist = new java.util.HashMap < String, MusicPlaying > () ;
+	}
 
 	public void play( java.io.File musicFile, boolean loop )
 	{
@@ -180,7 +183,7 @@ public class SoundManager
 
 			for ( int i = 0 ; i < instruments.length ; ++ i )
 				System.out.println( StringUtilities.toStringWithOrdinalSuffix( i )
-							+ " MIDI instrument is \"" + instruments[ i ].getName() + "\"" );
+							+ " MIDI instrument is " + StringUtilities.putInQuotes( instruments[ i ].getName() ) );
 
 			midiSynthesizer.close ();
 		}
@@ -234,10 +237,10 @@ public class SoundManager
 		Instrument squareLead = loadMidiInstrumentByName( midiSynthesizer, "square", "lead" );
 		Instrument vibraphone = loadMidiInstrumentByName( midiSynthesizer, "vibraphone" );
 
-		System.out.println( "the square lead instrument is known as \""
-					+ ( squareLead != null ? squareLead.getName() : "null" ) + "\"" );
-		System.out.println( "the vibraphone instrument  is known as \""
-					+ ( vibraphone != null ? vibraphone.getName() : "null" ) + "\"" );
+		System.out.println( "the square lead instrument is known as "
+					+ StringUtilities.putInQuotes( squareLead != null ? squareLead.getName() : "null" ) );
+		System.out.println( "the vibraphone instrument  is known as "
+					+ StringUtilities.putInQuotes( vibraphone != null ? vibraphone.getName() : "null" ) );
 
 		voiceOne.programChange( squareLead.getPatch().getProgram() );
 		voiceToo.programChange( vibraphone.getPatch().getProgram() );

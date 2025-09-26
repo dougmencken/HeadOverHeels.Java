@@ -152,7 +152,7 @@ public class DescriptionOfItem implements Cloneable
 	 */
 	private byte orientations = 0 ;
 
-	public byte howManyOrientations () {  return orientations ;  }
+	public byte howManyOrientations () {  return this.orientations ;  }
 
 	public void setHowManyOrientations( byte newOrientations )
 	{
@@ -167,13 +167,13 @@ public class DescriptionOfItem implements Cloneable
 	 */
 	private short extraFrames = 0 ;
 
-	public short howManyExtraFrames () {  return extraFrames ;  }
+	public short howManyExtraFrames () {  return this.extraFrames ;  }
 	public void setHowManyExtraFrames( short newExtraFrames ) {  this.extraFrames = newExtraFrames ;  }
 
 	// used when a door is disassembled into three parts
 	private transient boolean partOfDoor = false ;
 
-	public boolean isPartOfDoor () {  return partOfDoor ;  }
+	public boolean isPartOfDoor () {  return this.partOfDoor ;  }
 	protected void markAsPartOfDoor () {  this.partOfDoor = true ;  }
 
 	/*

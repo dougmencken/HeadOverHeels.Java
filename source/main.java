@@ -162,6 +162,10 @@ public final class main
 
 	/**/// temporary lines
 	ItemDescriptions.descriptions().readDescriptions() ;
+	head.over.heels.items.FreeItem head = new head.over.heels.items.FreeItem( ItemDescriptions.descriptions().getDescriptionByKind( "head" ), 0, 0, 0, "south" );
+	NamedOffscreenImage imageOfHead = head.getCurrentRawImage() ;
+	if ( imageOfHead != null )
+		Pictures.saveAsPNG( imageOfHead, new java.io.File( Storage.getGameStorageInHome(), "(from main) " + imageOfHead.getName() + ".png" ) );
 	/**/// ❌ ✔️
 
 		GameWindow window = new GameWindow( width, height ) ;

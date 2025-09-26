@@ -9,7 +9,6 @@
 package head.over.heels ;
 
 import java.awt.Color ;
-import java.awt.image.BufferedImage ;
 
 
 /**
