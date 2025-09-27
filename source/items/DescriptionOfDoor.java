@@ -43,9 +43,9 @@ public class DescriptionOfDoor extends DescriptionOfItem
 		this.scenery = sceneryOfDoor ;
 		this.doorAt = where ;
 
-		super.setNameOfPicturesFile( super.getKind() + ".png" );
-		super.setWidthOfFrame( WIDTH_OF_DOOR_IMAGE );
-		super.setHeightOfFrame( HEIGHT_OF_DOOR_IMAGE );
+		super.setNameOfFramesFile( super.getKind() + ".png" );
+		super.setWidthOfFrame( DescriptionOfDoor.WIDTH_OF_DOOR_IMAGE );
+		super.setHeightOfFrame( DescriptionOfDoor.HEIGHT_OF_DOOR_IMAGE );
 		super.setHowManyOrientations( (byte) 1 );
 
 		this.lintel = this.cloneAsLintelOfDoor() ;

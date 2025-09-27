@@ -86,12 +86,37 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 
 	protected NamedOffscreenImage getNthShadowIn ( String sequence, int n ) throws NoSuchPictureException
 	{
-		throw new NoSuchPictureException() ;
+		for ( String key : this.shadows.keySet() ) {
+			Vector< NamedOffscreenImage > shadowsIn = this.shadows.get( key );
+			if ( key.equals( sequence ) && n < shadowsIn.size() )
+				return shadowsIn.elementAt( n );
+		}
+
+		StringBuilder message = new StringBuilder() ;
+		message.append( "there’s no " ).append( StringUtilities.toStringWithOrdinalSuffix( n ) ).append( " shadow in " )
+				.append( StringUtilities.putInQuotes( sequence ) ).append( " for " ).append( StringUtilities.putInQuotes( getUniqueName() ) ) ;
+		System.err.println( message );
+		throw new NoSuchPictureException( message );
 	}
+
+	public NamedOffscreenImage getCurrentImageOfShadowIn ( String sequence )
+	{
+		try {
+			return getNthShadowIn( sequence, getCurrentFrame() ) ;
+		} catch ( NoSuchPictureException x ) {
+			System.err.println( x.getClass().getName() + ": " + x.getMessage() );
+			return null ;
+		}
+	}
+
+	public NamedOffscreenImage getCurrentImageOfShadow () {  return getCurrentImageOfShadowIn( getCurrentFrameSequence() ) ;  }
 
 	public void addShadowTo ( String sequence, NamedOffscreenImage shadow )
 	{
 		if ( sequence == null || sequence.isEmpty() ) return ; // don’t add to ""
+
+		if ( this.shadows == null )
+			this.shadows = new java.util.HashMap< String, Vector< NamedOffscreenImage > > () ;
 
 		if ( this.shadows.get( sequence ) == null )
 			this.shadows.put( sequence, new Vector< NamedOffscreenImage >() );
@@ -146,7 +171,7 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 
 		DescriptionOfItem description = getDescriptionOfItem() ;
 
-		if ( ! description.isPartOfDoor() && ! description.getNameOfPicturesFile().isEmpty() ) {
+		if ( ! description.isPartOfDoor() && ! description.getNameOfFramesFile().isEmpty() ) {
 			this.makeFrames() ;
 
 			if ( description.getWidthOfShadow() > 0 && description.getHeightOfShadow() > 0 )
@@ -160,35 +185,35 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 
 		final int frameWidth = description.getWidthOfFrame() ;
 		final int frameHeight = description.getHeightOfFrame() ;
-		final String picturesFile = description.getNameOfPicturesFile() ;
+		final String framesFile = description.getNameOfFramesFile() ;
 
 		if ( frameWidth == 0 || frameHeight == 0 )
 			throw new UnlikelyToHappenException( "zero frame width or height for item " + StringUtilities.putInQuotes( getKind() ) );
-		if ( picturesFile.isEmpty() )
-			throw new UnlikelyToHappenException( "empty graphics file name for item " + StringUtilities.putInQuotes( getKind() ) );
+		if ( framesFile.isEmpty() )
+			throw new UnlikelyToHappenException( "empty file name with frames for item " + StringUtilities.putInQuotes( getKind() ) );
 
-		NamedOffscreenImage allTheFrames = PoolOfPictures.getRecentPool().getPicture( picturesFile );
+		NamedOffscreenImage allTheFrames = PoolOfPictures.getRecentPool().getPicture( framesFile );
 
-		if ( allTheFrames == null ) {
-		// suddenly there’s no such image file
-		// then make a fresh image with the dimensions ??of a single frame??? and filled with the transparency grid
-			allTheFrames = new NamedOffscreenImage( frameWidth, frameHeight );
+		if ( allTheFrames == null )
+		// suddenly there’s no file with frames for this item
+		{
+			int framesAtAll = ( description.howManyFramesPerOrientation() * description.howManyOrientations() ) + description.howManyExtraFrames() ;
+
+			// make a fresh image filled with the transparency grid
+			allTheFrames = new NamedOffscreenImage( frameWidth * framesAtAll, frameHeight );
 			allTheFrames.fillWithTransparencyGrid() ;
-			allTheFrames.setName( "transparency grid for absent image " + picturesFile );
-			PoolOfPictures.getRecentPool().putPicture( picturesFile, allTheFrames );
+			allTheFrames.setName( "transparency grid for absent image " + framesFile );
+
+			PoolOfPictures.getRecentPool().putPicture( framesFile, allTheFrames );
 		}
 
-		// decompose the image into frames
+		// cut the image into frames
 
 		Vector< BufferedImage > rawFrames = new Vector< BufferedImage >() ;
 
-		for ( int y = 0; y < allTheFrames.getHeight() ; y += frameHeight ) {
+		for ( int y = 0; y < allTheFrames.getHeight() ; y += frameHeight )
 			for ( int x = 0; x < allTheFrames.getWidth() ; x += frameWidth )
-			{
-				BufferedImage rawFrame = Pictures.cloneSubpictureAsARGB( allTheFrames, x, y, frameWidth, frameHeight );
-				rawFrames.add( rawFrame );
-			}
-		}
+				rawFrames.add( Pictures.cloneSubpictureAsARGB( allTheFrames, x, y, frameWidth, frameHeight ) );
 
 		// split frames by orientations
 
@@ -196,24 +221,22 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 		Vector< String > orientations = whatOrientations() ;
 
 		int howManyFramesWithoutExtra = rawFrames.size() - description.howManyExtraFrames() ;
-		if ( howManyFramesWithoutExtra % howManyOrientations != 0 )
+		if ( ( howManyFramesWithoutExtra % howManyOrientations != 0 ) || ( howManyOrientations > howManyFramesWithoutExtra ) )
 			throw new UnlikelyToHappenException( "item " + StringUtilities.putInQuotes( getKind() )
-								+ " has " + howManyOrientations + " orientations "
-								+ " but " + howManyFramesWithoutExtra + " frames for these orientations" );
+								+ " has " + howManyOrientations + StringUtilities.pluralForNot1( howManyOrientations, " orientation" )
+								+ " but " + howManyFramesWithoutExtra + StringUtilities.pluralForNot1( howManyFramesWithoutExtra, " frame" ) );
 
 		int rawRow = howManyFramesWithoutExtra / howManyOrientations ;
 
 		for ( int o = 0 ; o < howManyOrientations ; o ++ ) {
 			for ( int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
 			{
-				NamedOffscreenImage animationFrame = new NamedOffscreenImage( rawFrames.elementAt( ( o * rawRow ) + description.getFrameAt( f ) ) );
-				animationFrame.setName( description.getKind() + " "
-							+ StringUtilities.toStringWithOrdinalSuffix( f ) + " frame "
-							+ "in " + orientations.elementAt( o ) );
+				NamedOffscreenImage frame = new NamedOffscreenImage( rawFrames.elementAt(( o * rawRow ) + description.getFrameAt( f )) );
+				frame.setName( description.getKind() + " "
+						+ StringUtilities.toStringWithOrdinalSuffix( f ) + " frame "
+						+ "in " + orientations.elementAt( o ) );
 
-				Pictures.saveAsPNG( animationFrame, new java.io.File( head.over.heels.Storage.getGameStorageInHome(), animationFrame.getName() + ".png" ) );
-
-				addFrameTo( orientations.elementAt( o ), animationFrame );
+				addFrameTo( orientations.elementAt( o ), frame );
 			}
 		}
 
@@ -223,15 +246,79 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 			NamedOffscreenImage extraFrame = new NamedOffscreenImage( rawFrames.elementAt( extra + ( rawRow * howManyOrientations ) ) );
 			extraFrame.setName( description.getKind () + " " + StringUtilities.toStringWithOrdinalSuffix( extra ) + " extra frame" );
 
-			Pictures.saveAsPNG( extraFrame, new java.io.File( head.over.heels.Storage.getGameStorageInHome(), extraFrame.getName() + ".png" ) );
-
 			addFrameTo( "extra", extraFrame );
 		}
 	}
 
 	private void makeShadowFrames ()
 	{
-		// ....
+		DescriptionOfItem description = getDescriptionOfItem() ;
+
+		final int shadowWidth = description.getWidthOfShadow() ;
+		final int shadowHeight = description.getHeightOfShadow() ;
+		final String shadowsFile = description.getNameOfShadowsFile() ;
+
+		if ( shadowWidth == 0 || shadowHeight == 0 )
+			throw new UnlikelyToHappenException( "zero width or height of shadow for item " + StringUtilities.putInQuotes( getKind() ) );
+		if ( shadowsFile.isEmpty() )
+			throw new UnlikelyToHappenException( "empty file name with shadows for item " + StringUtilities.putInQuotes( getKind() ) );
+
+		NamedOffscreenImage allTheShadows = PoolOfPictures.getRecentPool().getPicture( shadowsFile );
+
+		if ( allTheShadows == null )
+		// suddenly there’s no file with shadows for this item
+		{
+			int framesAtAll = ( description.howManyFramesPerOrientation() * description.howManyOrientations() ) + description.howManyExtraFrames() ;
+
+			// make a fresh image filled with the transparency grid
+			allTheShadows = new NamedOffscreenImage( shadowWidth * framesAtAll, shadowHeight );
+			allTheShadows.fillWithTransparencyGrid() ;
+			allTheShadows.setName( "transparency grid for absent image " + shadowsFile );
+
+			PoolOfPictures.getRecentPool().putPicture( shadowsFile, allTheShadows );
+		}
+
+		// cut the image of shadow into frames
+
+		Vector< BufferedImage > rawShadows = new Vector< BufferedImage >() ;
+
+		for ( int y = 0; y < allTheShadows.getHeight() ; y += shadowHeight )
+			for ( int x = 0; x < allTheShadows.getWidth() ; x += shadowWidth )
+				rawShadows.add( Pictures.cloneSubpictureAsARGB( allTheShadows, x, y, shadowWidth, shadowHeight ) );
+
+		// split frames of shadow by orientations
+
+		int howManyOrientations = description.howManyOrientations() ;
+		Vector< String > orientations = whatOrientations() ;
+
+		int howManyShadowsWithoutExtra = rawShadows.size() - description.howManyExtraFrames() ;
+		if ( ( howManyShadowsWithoutExtra % howManyOrientations != 0 ) || ( howManyOrientations > howManyShadowsWithoutExtra ) )
+			throw new UnlikelyToHappenException( "item " + StringUtilities.putInQuotes( getKind() )
+								+ " has " + howManyOrientations + StringUtilities.pluralForNot1( howManyOrientations, " orientation" )
+								+ " but " + howManyShadowsWithoutExtra + StringUtilities.pluralForNot1( howManyShadowsWithoutExtra, " shadow" ) );
+
+		int rawRow = howManyShadowsWithoutExtra / howManyOrientations ;
+
+		for ( int o = 0 ; o < howManyOrientations ; o ++ ) {
+			for ( int f = 0 ; f < description.howManyFramesPerOrientation() ; f ++ )
+			{
+				NamedOffscreenImage shadow = new NamedOffscreenImage( rawShadows.elementAt(( o * rawRow ) + description.getFrameAt( f )) );
+				shadow.setName( description.getKind() + " "
+						+ StringUtilities.toStringWithOrdinalSuffix( f ) + " shadow "
+						+ "in " + orientations.elementAt( o ) );
+
+				addShadowTo( orientations.elementAt( o ), shadow );
+			}
+		}
+
+		// add extra frames of shadow, if any
+
+		for ( int extra = 0 ; extra < description.howManyExtraFrames() ; extra ++ ) {
+			NamedOffscreenImage extraShadow = new NamedOffscreenImage( rawShadows.elementAt( extra + ( rawRow * howManyOrientations ) ) );
+			extraShadow.setName( description.getKind () + " " + StringUtilities.toStringWithOrdinalSuffix( extra ) + " extra shadow" );
+
+			addShadowTo( "extra", extraShadow );
+		}
 	}
 
 	/** returns the various orientations of this item’s graphics

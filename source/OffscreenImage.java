@@ -10,6 +10,7 @@ package head.over.heels ;
 
 import java.awt.image.BufferedImage ;
 
+import java.awt.Color ;
 import java.awt.Graphics2D ;
 
 import head.over.heels.Pictures ;
@@ -64,10 +65,13 @@ public class OffscreenImage extends BufferedImage
 
 	public void fillWithTransparencyGrid () {  fillWithTransparencyGrid( 8 );  }
 
-	public synchronized void fillWithTransparencyGrid ( int sizeOfTile )
+	public void fillWithTransparencyGrid ( int sizeOfTile )
 	{
 		if ( sizeOfTile < 1 )
 			throw new IllegalArgumentException( "the size of transparency grid tile is " + sizeOfTile + ", which is less than 1" );
+
+		final int lighterGrey = ( new Color( 0xcc, 0xcc, 0xcc, 0xff ) ).getRGB() ;
+		final int darkerGrey = ( new Color( 0x80, 0x80, 0x80, 0xff ) ).getRGB() ;
 
 		int doubleTile = sizeOfTile << 1 ;
 
@@ -77,10 +81,10 @@ public class OffscreenImage extends BufferedImage
 		for ( int y = 0 ; y < height ; y ++ ) {
 			for ( int x = 0 ; x < width ; x ++ )
 			{
-				boolean grey = ( ( y % sizeOfTile ) == ( y % doubleTile ) && ( x % sizeOfTile ) != ( x % doubleTile ) ) ||
+				boolean lighter = ( ( y % sizeOfTile ) == ( y % doubleTile ) && ( x % sizeOfTile ) != ( x % doubleTile ) ) ||
 							( ( y % sizeOfTile ) != ( y % doubleTile ) && ( x % sizeOfTile ) == ( x % doubleTile ) ) ;
 
-				setRGB( x, y, grey ? Colours.grey75white.getRGB() : Colours.white.getRGB() );
+				setRGB( x, y, lighter ? lighterGrey : darkerGrey );
 			}
 		}
 	}

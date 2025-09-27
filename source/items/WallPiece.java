@@ -25,21 +25,21 @@ public class WallPiece extends Mediated implements Drawable
 
 	public int getPosition () {  return this.position ;  }
 
-	// name of the picture file for this part of the wall
-	private final String nameOfImage ;
+	// the name of the image file for this part of the wall
+	private final String nameOfImageFile ;
 
-	public String getNameOfImage () {  return this.nameOfImage ;  }
+	public String getNameOfImageFile () {  return this.nameOfImageFile ;  }
 
 	/**
 	 * @param trueXfalseY is this a piece of the wall along X or not
 	 * @param index where’s this piece on the wall, the number from zero onwards
-	 * @param pictureFile the name of picture file
+	 * @param imageFile the name of file with graphics
 	 */
-	public WallPiece( boolean trueXfalseY, int index, String pictureFile )
+	public WallPiece( boolean trueXfalseY, int index, String imageFile )
 	{
 		this.alongX = trueXfalseY ;
 		this.position = index ;
-		this.nameOfImage = pictureFile ;
+		this.nameOfImageFile = imageFile ;
 	}
 
 	/**

@@ -162,10 +162,24 @@ public final class main
 
 	/**/// temporary lines
 	ItemDescriptions.descriptions().readDescriptions() ;
+	{
 	head.over.heels.items.FreeItem head = new head.over.heels.items.FreeItem( ItemDescriptions.descriptions().getDescriptionByKind( "head" ), 0, 0, 0, "south" );
 	NamedOffscreenImage imageOfHead = head.getCurrentRawImage() ;
 	if ( imageOfHead != null )
 		Pictures.saveAsPNG( imageOfHead, new java.io.File( Storage.getGameStorageInHome(), "(from main) " + imageOfHead.getName() + ".png" ) );
+	NamedOffscreenImage shadowOfHead = head.getCurrentImageOfShadow() ;
+	if ( shadowOfHead != null )
+		Pictures.saveAsPNG( shadowOfHead, new java.io.File( Storage.getGameStorageInHome(), "(from main) " + shadowOfHead.getName() + ".png" ) );
+	}
+	{
+	head.over.heels.items.FreeItem puppy = new head.over.heels.items.FreeItem( ItemDescriptions.descriptions().getDescriptionByKind( "puppy" ), 0, 0, 0, "south" );
+	NamedOffscreenImage imageOfPuppy = puppy.getCurrentRawImage() ;
+	if ( imageOfPuppy != null )
+		Pictures.saveAsPNG( imageOfPuppy, new java.io.File( Storage.getGameStorageInHome(), "(from main) " + imageOfPuppy.getName() + ".png" ) );
+	NamedOffscreenImage shadowOfPuppy = puppy.getCurrentImageOfShadow() ;
+	if ( shadowOfPuppy != null )
+		Pictures.saveAsPNG( shadowOfPuppy, new java.io.File( Storage.getGameStorageInHome(), "(from main) " + shadowOfPuppy.getName() + ".png" ) );
+	}
 	/**/// ❌ ✔️
 
 		GameWindow window = new GameWindow( width, height ) ;

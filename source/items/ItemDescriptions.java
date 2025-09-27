@@ -10,6 +10,7 @@ package head.over.heels.items ;
 
 import head.over.heels.Storage ;
 import head.over.heels.StringUtilities ;
+import head.over.heels.UnlikelyToHappenException ;
 
 import java.util.TreeMap ;
 
@@ -40,7 +41,7 @@ public class ItemDescriptions
 	public ItemDescriptions ( )
 	{
 		if ( ItemDescriptions.theDescriptions != null )
-			System.out.println( "constructing another instance of ItemDescriptions, why do you need it again?" ) ;
+			throw new UnlikelyToHappenException( "constructing another instance of ItemDescriptions, why do you need it again?" ) ;
 
 		ItemDescriptions.theDescriptions = this ;
 	}
@@ -248,23 +249,23 @@ public class ItemDescriptions
 
 		// graphics for this item
 
-		NodeList pictureNodes = element.getElementsByTagName( "picture" );
-		if ( pictureNodes.getLength () > 0
-				&& pictureNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
+		NodeList graphicsNodes = element.getElementsByTagName( "picture" );
+		if ( graphicsNodes.getLength () > 0
+				&& graphicsNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
 		{
-			Element picture = (Element) pictureNodes.item( 0 ) ;
+			Element graphics = (Element) graphicsNodes.item( 0 ) ;
 
 			// the name of file with graphics for this item
-			description.setNameOfPicturesFile( picture.getAttribute( "file" ) );
+			description.setNameOfFramesFile( graphics.getAttribute( "file" ) );
 
 			// the width and height in pixels of a single frame
-			Node widthNode = picture.getElementsByTagName( "width" ).item( 0 );
+			Node widthNode = graphics.getElementsByTagName( "width" ).item( 0 );
 			if ( widthNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setWidthOfFrame( Integer.parseInt( widthNode.getTextContent () ) );
 				} catch ( NumberFormatException e ) { }
 			}
-			Node heightNode = picture.getElementsByTagName( "height" ).item( 0 );
+			Node heightNode = graphics.getElementsByTagName( "height" ).item( 0 );
 			if ( heightNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setHeightOfFrame( Integer.parseInt( heightNode.getTextContent () ) );
@@ -274,7 +275,7 @@ public class ItemDescriptions
 		{
 			if ( description.getKind().startsWith( "invisible-wall" ) )
 			{
-				description.setNameOfPicturesFile( "" );
+				description.setNameOfFramesFile( "" );
 				description.setWidthOfFrame( 64 );
 				description.setHeightOfFrame( 115 );
 			}
@@ -295,23 +296,23 @@ public class ItemDescriptions
 
 		// shadows for this item
 
-		NodeList shadowNodes = element.getElementsByTagName( "shadow" );
-		if ( shadowNodes.getLength () > 0
-				&& shadowNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
+		NodeList shadowsNodes = element.getElementsByTagName( "shadow" );
+		if ( shadowsNodes.getLength () > 0
+				&& shadowsNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
 		{
-			Element shadow = (Element) shadowNodes.item( 0 ) ;
+			Element shadows = (Element) shadowsNodes.item( 0 ) ;
 
 			// the name of file with shadows for this item
-			description.setNameOfShadowsFile( shadow.getAttribute( "file" ) );
+			description.setNameOfShadowsFile( shadows.getAttribute( "file" ) );
 
 			// the width and height in pixels of a single frame of the item’s shadow
-			Node widthNode = shadow.getElementsByTagName( "width" ).item( 0 );
+			Node widthNode = shadows.getElementsByTagName( "width" ).item( 0 );
 			if ( widthNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setWidthOfShadow( Integer.parseInt( widthNode.getTextContent () ) );
 				} catch ( NumberFormatException e ) { }
 			}
-			Node heightNode = shadow.getElementsByTagName( "height" ).item( 0 );
+			Node heightNode = shadows.getElementsByTagName( "height" ).item( 0 );
 			if ( heightNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setHeightOfShadow( Integer.parseInt( heightNode.getTextContent () ) );

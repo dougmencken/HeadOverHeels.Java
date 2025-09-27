@@ -51,6 +51,11 @@ public class StringUtilities
 		return encloseIn( what, "\'" );
 	}
 
+	public static String pluralForNot1( int howMany, String singular )
+	{
+		return ( howMany == 1 ) ? singular : singular + "s" ;
+	}
+
 	public static String reverseString( String in )
 	{
 		/* StringBuilder out = new StringBuilder() ;

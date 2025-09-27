@@ -30,13 +30,13 @@ public class DescriptionOfItem implements Cloneable
 	private int widthY = 0 ;
 	private int height = 0 ;
 
-	public int getWidthX () {  return widthX ;  }
+	public int getWidthX () {  return this.widthX ;  }
 	public void setWidthX ( int wx ) {  this.widthX = wx ;  }
 
-	public int getWidthY () {  return widthY ;  }
+	public int getWidthY () {  return this.widthY ;  }
 	public void setWidthY ( int wy ) {  this.widthY = wy ;  }
 
-	public int getHeight () {  return height ;  }
+	public int getHeight () {  return this.height ;  }
 	public void setHeight ( int wz ) {  this.height = wz ;  }
 
 	/**
@@ -44,7 +44,7 @@ public class DescriptionOfItem implements Cloneable
 	 */
 	private int weight = 0 ;
 
-	public int getWeight () {  return weight ;  }
+	public int getWeight () {  return this.weight ;  }
 	public void setWeight( int newWeight ) {  this.weight = newWeight ;  }
 
 	/**
@@ -52,7 +52,7 @@ public class DescriptionOfItem implements Cloneable
 	 */
 	private int speed = 0 ;
 
-	public int getSpeed () {  return speed ;  }
+	public int getSpeed () {  return this.speed ;  }
 	public void setSpeed( int newSpeed ) {  this.speed = newSpeed ;  }
 
 	/**
@@ -60,16 +60,16 @@ public class DescriptionOfItem implements Cloneable
 	 */
 	private boolean mortal = false ;
 
-	public boolean isMortal() {  return mortal ;  }
+	public boolean isMortal() {  return this.mortal ;  }
 	public void setMortal( boolean newMortal ) {  this.mortal = newMortal ;  }
 
 	/**
 	 * The file with graphics for this item
 	 */
-	private String nameOfPicturesFile = "" ;
+	private String nameOfFramesFile = "" ;
 
-	public String getNameOfPicturesFile () {  return nameOfPicturesFile ;  }
-	public void setNameOfPicturesFile ( String newPicturesFile ) {  this.nameOfPicturesFile = newPicturesFile ;  }
+	public String getNameOfFramesFile () {  return this.nameOfFramesFile ;  }
+	public void setNameOfFramesFile ( String newFramesFile ) {  this.nameOfFramesFile = newFramesFile ;  }
 
 	/**
 	 * The width and height in pixels of a single frame of the item’s image
@@ -77,10 +77,10 @@ public class DescriptionOfItem implements Cloneable
 	private int widthOfFrame  = 0 ;
 	private int heightOfFrame = 0 ;
 
-	public int getWidthOfFrame () {  return widthOfFrame ;  }
+	public int getWidthOfFrame () {  return this.widthOfFrame ;  }
 	public void setWidthOfFrame( int newWidthOfFrame ) {  this.widthOfFrame = newWidthOfFrame ;  }
 
-	public int getHeightOfFrame () {  return heightOfFrame ;  }
+	public int getHeightOfFrame () {  return this.heightOfFrame ;  }
 	public void setHeightOfFrame( int newHeightOfFrame ) {  this.heightOfFrame = newHeightOfFrame ;  }
 
 	/**
@@ -88,7 +88,7 @@ public class DescriptionOfItem implements Cloneable
 	 */
 	private int delayBetweenFrames = 0 ;
 
-	public int getDelayBetweenFrames () {  return delayBetweenFrames ;  }
+	public int getDelayBetweenFrames () {  return this.delayBetweenFrames ;  }
 	public void setDelayBetweenFrames( int newDelay ) {  this.delayBetweenFrames = newDelay ;  }
 
 	/**
@@ -96,7 +96,7 @@ public class DescriptionOfItem implements Cloneable
 	 */
 	private String nameOfShadowsFile = "" ;
 
-	public String getNameOfShadowsFile () {  return nameOfShadowsFile ;  }
+	public String getNameOfShadowsFile () {  return this.nameOfShadowsFile ;  }
 	public void setNameOfShadowsFile ( String newShadowsFile ) {  this.nameOfShadowsFile = newShadowsFile ;  }
 
 	/**
@@ -105,10 +105,10 @@ public class DescriptionOfItem implements Cloneable
 	private int widthOfShadow  = 0 ;
 	private int heightOfShadow = 0 ;
 
-	public int getWidthOfShadow () {  return widthOfShadow ;  }
+	public int getWidthOfShadow () {  return this.widthOfShadow ;  }
 	public void setWidthOfShadow( int newWidthOfShadow ) {  this.widthOfShadow = newWidthOfShadow ;  }
 
-	public int getHeightOfShadow () {  return heightOfShadow ;  }
+	public int getHeightOfShadow () {  return this.heightOfShadow ;  }
 	public void setHeightOfShadow( int newHeightOfShadow ) {  this.heightOfShadow = newHeightOfShadow ;  }
 
 	/**
@@ -116,16 +116,15 @@ public class DescriptionOfItem implements Cloneable
 	 */
 	private Vector< Integer > sequenceOFrames = new Vector< Integer >() ;
 
-	public int howManyFramesPerOrientation () {
-		return /* ( sequenceOFrames != null ) ? */ sequenceOFrames.size () /* : 0 */ ;  }
+	public int howManyFramesPerOrientation () {  return this.sequenceOFrames.size() ;  }
 
 	int getFrameAt( int at ) {
-		return ( at >= 0 && at < sequenceOFrames.size () ) ? sequenceOFrames.elementAt( at ) : 0 ;  }
+		return ( at >= 0 && at < this.sequenceOFrames.size () ) ? this.sequenceOFrames.elementAt( at ) : 0 ;  }
 
 	public boolean isSequenceOFramesSimple ()
 	{
-		for ( int i = 0 ; i < sequenceOFrames.size () ; i ++ )
-			if ( sequenceOFrames.elementAt( i ) != i ) return false ;
+		for ( int i = 0 ; i < this.sequenceOFrames.size () ; i ++ )
+			if ( this.sequenceOFrames.elementAt( i ) != i ) return false ;
 
 		return true ;
 	}
@@ -197,7 +196,7 @@ public class DescriptionOfItem implements Cloneable
 				&& this.widthX == that.widthX && this.widthY == that.widthY && this.height == that.height
 				&& this.weight == that.weight && this.speed == that.speed
 				&& this.mortal == that.mortal
-				&& this.nameOfPicturesFile.equals( that.nameOfPicturesFile )
+				&& this.nameOfFramesFile.equals( that.nameOfFramesFile )
 				&& this.widthOfFrame == that.widthOfFrame && this.heightOfFrame == that.heightOfFrame
 				&& this.delayBetweenFrames == that.delayBetweenFrames
 				&& this.nameOfShadowsFile.equals( that.nameOfShadowsFile )
@@ -226,7 +225,7 @@ public class DescriptionOfItem implements Cloneable
 
 		theClone.mortal = this.mortal ;
 
-		theClone.nameOfPicturesFile = new String( this.nameOfPicturesFile );
+		theClone.nameOfFramesFile = new String( this.nameOfFramesFile );
 
 		theClone.widthOfFrame = this.widthOfFrame ;
 		theClone.heightOfFrame = this.heightOfFrame ;
@@ -261,11 +260,11 @@ public class DescriptionOfItem implements Cloneable
 		text.append( newline );
 
 		text.append( indent );
-		text.append( "<widthX>" + getWidthX () + "</widthX>" );
+		text.append( "<width-x>" + getWidthX () + "</width-x>" );
 		text.append( newline );
 
 		text.append( indent );
-		text.append( "<widthY>" + getWidthY () + "</widthY>" );
+		text.append( "<width-y>" + getWidthY () + "</width-y>" );
 		text.append( newline );
 
 		text.append( indent );
@@ -290,45 +289,45 @@ public class DescriptionOfItem implements Cloneable
 			text.append( newline );
 		}
 
-		if ( getNameOfPicturesFile().length() > 0 ) {
+		if ( getNameOfFramesFile().length() > 0 ) {
 			text.append( indent );
-			text.append( "<picture file=\"" + getNameOfPicturesFile () + "\">" );
+			text.append( "<graphics file=\"" + getNameOfFramesFile () + "\">" );
 			text.append( newline );
 
 			text.append( indent ); text.append( indent );
-			text.append( "<width>" + getWidthOfFrame () + "</width>" );
+			text.append( "<width-of-frame>" + getWidthOfFrame () + "</width-of-frame>" );
 			text.append( newline );
 
 			text.append( indent ); text.append( indent );
-			text.append( "<height>" + getHeightOfFrame () + "</height>" );
+			text.append( "<height-of-frame>" + getHeightOfFrame () + "</height-of-frame>" );
 			text.append( newline );
 
 			text.append( indent );
-			text.append( "</picture>" );
+			text.append( "</graphics>" );
 			text.append( newline );
 		}
 
 		if ( getDelayBetweenFrames () > 0 ) {
 			text.append( indent );
-			text.append( "<betweenFrames>" + getDelayBetweenFrames () + "</betweenFrames>" );
+			text.append( "<delay-between-frames>" + getDelayBetweenFrames () + "</delay-between-frames>" );
 			text.append( newline );
 		}
 
 		if ( getNameOfShadowsFile().length() > 0 ) {
 			text.append( indent );
-			text.append( "<shadow file=\"" + getNameOfShadowsFile () + "\">" );
+			text.append( "<shadows file=\"" + getNameOfShadowsFile () + "\">" );
 			text.append( newline );
 
 			text.append( indent ); text.append( indent );
-			text.append( "<width>" + getWidthOfShadow () + "</width>" );
+			text.append( "<width-of-shadow>" + getWidthOfShadow () + "</width-of-shadow>" );
 			text.append( newline );
 
 			text.append( indent ); text.append( indent );
-			text.append( "<height>" + getHeightOfShadow () + "</height>" );
+			text.append( "<height-of-shadow>" + getHeightOfShadow () + "</height-of-shadow>" );
 			text.append( newline );
 
 			text.append( indent );
-			text.append( "</shadow>" );
+			text.append( "</shadows>" );
 			text.append( newline );
 		}
 
@@ -351,7 +350,7 @@ public class DescriptionOfItem implements Cloneable
 
 		if ( howManyExtraFrames () > 0 ) {
 			text.append( indent );
-			text.append( "<extraFrames>" + howManyExtraFrames () + "</extraFrames>" );
+			text.append( "<extra-frames>" + howManyExtraFrames () + "</extra-frames>" );
 			text.append( newline );
 		}
 
