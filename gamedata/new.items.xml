@@ -1,0 +1,1946 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<items>
+
+<item kind="brick1">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <weight>32</weight>
+    <graphics file="brick1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="brick1-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="brick2">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <weight>32</weight>
+    <graphics file="brick2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="brick2-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="vulcano">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <mortal>yes</mortal>
+    <graphics file="vulcano.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="vulcano-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="spikes">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <mortal>yes</mortal>
+    <graphics file="spikes.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="spikes-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="toaster">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <mortal>yes</mortal>
+    <graphics file="toaster.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="toaster-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <orientations>2</orientations>
+</item>
+
+<item kind="conveyor">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <speed>40</speed>
+    <graphics file="conveyor.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="conveyor-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <frames>4</frames>
+    <orientations>4</orientations>
+</item>
+
+<item kind="book">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <weight>20</weight>
+    <speed>40</speed>
+    <graphics file="book.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="book-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <orientations>2</orientations>
+</item>
+
+<item kind="stool">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <weight>20</weight>
+    <speed>40</speed>
+    <graphics file="stool.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="stool-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <orientations>4</orientations>
+</item>
+
+<item kind="puppy">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="puppy.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="puppy-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <orientations>2</orientations>
+</item>
+
+<item kind="sandwich">
+    <width-x>15</width-x>
+    <width-y>15</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="sandwich.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <shadows file="sandwich-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <orientations>4</orientations>
+</item>
+
+<item kind="switch">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <graphics file="switch.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="switch-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>2</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="bars-ns">
+    <width-x>8</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="bars-ns.png">
+        <width-of-frame>42</width-of-frame>
+        <height-of-frame>44</height-of-frame>
+    </graphics>
+    <shadows file="bars-ns-shadows.png">
+        <width-of-shadow>40</width-of-shadow>
+        <height-of-shadow>22</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="bars-ew">
+    <width-x>16</width-x>
+    <width-y>8</width-y>
+    <height>24</height>
+    <graphics file="bars-ew.png">
+        <width-of-frame>42</width-of-frame>
+        <height-of-frame>44</height-of-frame>
+    </graphics>
+    <shadows file="bars-ew-shadows.png">
+        <width-of-shadow>40</width-of-shadow>
+        <height-of-shadow>22</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="drum">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="drum.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="drum-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="portable-brick">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="portable-brick.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="portable-brick-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="handbag">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <graphics file="handbag.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="horn">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>28</height>
+    <weight>10</weight>
+    <graphics file="horn.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>52</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="donuts">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <graphics file="donuts.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="donuts-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>2</orientations>
+</item>
+
+<item kind="extra-life">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="rabbit-gold.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="rabbit-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>2</orientations>
+</item>
+
+<item kind="big-jumps">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="rabbit-bronze.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="rabbit-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>2</orientations>
+</item>
+
+<item kind="quick-steps">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="rabbit-bronze.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="rabbit-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>2</orientations>
+</item>
+
+<item kind="shield">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="rabbit-silver.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="rabbit-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>2</orientations>
+</item>
+
+<item kind="crown">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="crown.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="crown-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="bomb">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>20</speed>
+    <mortal>yes</mortal>
+    <graphics file="bomb.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="bomb-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="another-portable-brick">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="portable-brick2.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="portable-brick2-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="ball">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>20</speed>
+    <graphics file="ball.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="ball-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="remote-control">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <graphics file="remote-control.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="remote-control-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="cylinder">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <graphics file="cylinder.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="imperial-guard-head">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <graphics file="imperial-guard-head.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <orientations>4</orientations>
+</item>
+
+<item kind="elephant-head">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <mortal>yes</mortal>
+    <graphics file="elephant-head.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <orientations>4</orientations>
+</item>
+
+<item kind="monkey-head">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <mortal>yes</mortal>
+    <graphics file="monkey-head.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>50</height-of-frame>
+    </graphics>
+    <orientations>4</orientations>
+</item>
+
+<item kind="elevator">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <speed>20</speed>
+    <graphics file="elevator.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <delay-between-frames>100</delay-between-frames>
+    <shadows file="elevator-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>4</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="helicopter-bug">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>30</speed>
+    <mortal>yes</mortal>
+    <graphics file="helicopter-bug.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <delay-between-frames>100</delay-between-frames>
+    <shadows file="helicopter-bug-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>4</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="reincarnation-fish">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <graphics file="fish.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <delay-between-frames>200</delay-between-frames>
+    <shadows file="fish-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>2</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="mortal-fish">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <mortal>yes</mortal>
+    <graphics file="fish.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="fish-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="siren">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <graphics file="siren.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <delay-between-frames>40</delay-between-frames>
+    <shadows file="siren-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>2</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="teleport">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="teleport.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <delay-between-frames>150</delay-between-frames>
+    <shadows file="teleport-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <frames>2</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="teleport-too">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="teleport.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <delay-between-frames>150</delay-between-frames>
+    <shadows file="teleport-shadows.png">
+        <width-of-shadow>64</width-of-shadow>
+        <height-of-shadow>31</height-of-shadow>
+    </shadows>
+    <frames>2</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="turtle">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <graphics file="turtle.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <delay-between-frames>150</delay-between-frames>
+    <shadows file="turtle-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>2</frames>
+    <orientations>4</orientations>
+</item>
+
+<item kind="spring-stool">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="spring-stool.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <delay-between-frames>80</delay-between-frames>
+    <shadows file="spring-stool-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>2</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="bubbles">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <speed>10</speed>
+    <graphics file="bubbles.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <delay-between-frames>130</delay-between-frames>
+    <shadows file="bubbles-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>6</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="double-bubbles">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>48</height>
+    <speed>10</speed>
+    <graphics file="double-bubbles.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>130</delay-between-frames>
+    <shadows file="bubbles-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>6</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="mortal-cap">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>20</speed>
+    <mortal>yes</mortal>
+    <graphics file="cap.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="cap-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="cap">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>20</speed>
+    <graphics file="cap.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <shadows file="cap-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>1</orientations>
+</item>
+
+<item kind="bighead-robot">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>48</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <graphics file="big-head-robot.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>150</delay-between-frames>
+    <shadows file="big-head-robot-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>4</orientations>
+</item>
+
+<item kind="elephant">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>48</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <graphics file="elephant.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>150</delay-between-frames>
+    <shadows file="elephant-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>4</orientations>
+</item>
+
+<item kind="monkey">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>48</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <graphics file="monkey.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>150</delay-between-frames>
+    <shadows file="monkey-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>4</orientations>
+</item>
+
+<item kind="diver">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>48</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <graphics file="diver.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>150</delay-between-frames>
+    <shadows file="diver-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>4</orientations>
+</item>
+
+<item kind="bubble-robot">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>48</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <graphics file="bubble-robot.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>100</delay-between-frames>
+    <shadows file="bubble-robot-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>4</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="imperial-guard">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>48</height>
+    <speed>40</speed>
+    <mortal>yes</mortal>
+    <graphics file="imperial-guard.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>100</delay-between-frames>
+    <shadows file="imperial-guard-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>4</frames>
+    <orientations>4</orientations>
+</item>
+
+<item kind="charles-robot">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>48</height>
+    <weight>10</weight>
+    <speed>40</speed>
+    <graphics file="charles-robot.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>150</delay-between-frames>
+    <shadows file="charles-robot-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <orientations>4</orientations>
+</item>
+
+<item kind="head">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>23</height>
+    <weight>20</weight>
+    <speed>40</speed>
+    <graphics file="head.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <delay-between-frames>90</delay-between-frames>
+    <shadows file="head-shadow.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frame>0</frame>
+    <frame>2</frame>
+    <frame>1</frame>
+    <frame>2</frame>
+    <orientations>4</orientations>
+    <extra-frames>6</extra-frames>
+</item>
+
+<item kind="heels">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>20</speed>
+    <graphics file="heels.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <delay-between-frames>90</delay-between-frames>
+    <shadows file="heels-shadow.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frame>0</frame>
+    <frame>1</frame>
+    <frame>0</frame>
+    <frame>2</frame>
+    <orientations>4</orientations>
+</item>
+
+<item kind="headoverheels">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>47</height>
+    <weight>20</weight>
+    <speed>20</speed>
+    <graphics file="headoverheels.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>100</delay-between-frames>
+    <shadows file="headoverheels-shadow.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>4</frames>
+    <orientations>4</orientations>
+    <extra-frames>4</extra-frames>
+</item>
+
+<item kind="throne-guard">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>48</height>
+    <weight>10</weight>
+    <speed>20</speed>
+    <mortal>yes</mortal>
+    <graphics file="throne-guard.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>80</height-of-frame>
+    </graphics>
+    <delay-between-frames>100</delay-between-frames>
+    <shadows file="throne-guard-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>4</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="emperor">
+    <width-x>12</width-x>
+    <width-y>12</width-y>
+    <height>24</height>
+    <weight>10</weight>
+    <speed>20</speed>
+    <mortal>yes</mortal>
+    <graphics file="emperor.png">
+        <width-of-frame>48</width-of-frame>
+        <height-of-frame>48</height-of-frame>
+    </graphics>
+    <delay-between-frames>200</delay-between-frames>
+    <shadows file="emperor-shadows.png">
+        <width-of-shadow>48</width-of-shadow>
+        <height-of-shadow>25</height-of-shadow>
+    </shadows>
+    <frames>2</frames>
+    <orientations>1</orientations>
+</item>
+
+<item kind="invisible-wall-x">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>240</height>
+    <orientations>1</orientations>
+</item>
+
+<item kind="invisible-wall-y">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>240</height>
+    <orientations>1</orientations>
+</item>
+
+<item kind="jail-wall-x">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>101</height>
+    <graphics file="jail-wall-x.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>117</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="jail-wall-y">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>101</height>
+    <graphics file="jail-wall-y.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>117</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="jail-shaft-north">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>24</height>
+    <graphics file="jail-column-shaft-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="jail-capital-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="jail-column-capital-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="jail-shaft-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="jail-column-shaft-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="jail-capital-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="jail-column-capital-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="jail-capital-south">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="jail-column-capital-south.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="jail-capital-west">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="jail-column-capital-west.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-wall-x-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="blacktooth-wall-x-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-wall-y-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="blacktooth-wall-y-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-wall-x-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="blacktooth-wall-x-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-wall-y-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="blacktooth-wall-y-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-wall-x-3">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="blacktooth-wall-x-3.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-wall-y-3">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="blacktooth-wall-y-3.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-column-shaft-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="blacktooth-column-shaft-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-column-capital-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="blacktooth-column-capital-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-column-shaft-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="blacktooth-column-shaft-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-column-capital-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="blacktooth-column-capital-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-column-capital-south">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="blacktooth-column-capital-south.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="blacktooth-column-capital-west">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="blacktooth-column-capital-west.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-wall-x-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="market-wall-x-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-wall-y-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="market-wall-y-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-wall-x-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="market-wall-x-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-wall-y-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="market-wall-y-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-wall-x-3">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="market-wall-x-3.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-wall-y-3">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="market-wall-y-3.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-column-shaft-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="market-column-shaft-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-column-capital-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="market-column-capital-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-column-shaft-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="market-column-shaft-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-column-capital-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="market-column-capital-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-column-capital-south">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="market-column-capital-south.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="market-column-capital-west">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="market-column-capital-west.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-wall-x-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="moon-wall-x-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-wall-y-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="moon-wall-y-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-wall-x-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="moon-wall-x-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-wall-y-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="moon-wall-y-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-wall-x-3">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="moon-wall-x-3.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-wall-y-3">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="moon-wall-y-3.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-wall-x-4">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="moon-wall-x-4.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-wall-y-4">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="moon-wall-y-4.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-shaft-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="moon-column-shaft-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-capital-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="moon-column-capital-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-shaft-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="moon-column-shaft-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-capital-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="moon-column-capital-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-capital-south">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="moon-column-capital-south.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="moon-capital-west">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="moon-column-capital-west.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-wall-x-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="byblos-wall-x-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-wall-y-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="byblos-wall-y-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-wall-x-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="byblos-wall-x-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-wall-y-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="byblos-wall-y-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-shaft-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="byblos-column-shaft-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-capital-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="byblos-column-capital-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-shaft-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="byblos-column-shaft-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-capital-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="byblos-column-capital-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-capital-south">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="byblos-column-capital-south.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="byblos-capital-west">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="byblos-column-capital-west.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-wall-x-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="egyptus-wall-x-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-wall-y-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="egyptus-wall-y-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-wall-x-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="egyptus-wall-x-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-wall-y-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="egyptus-wall-y-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-shaft-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="egyptus-column-shaft-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-capital-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="egyptus-column-capital-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-shaft-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="egyptus-column-shaft-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-capital-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="egyptus-column-capital-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-capital-south">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="egyptus-column-capital-south.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="egyptus-capital-west">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="egyptus-column-capital-west.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-wall-x-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="penitentiary-wall-x-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-wall-y-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="penitentiary-wall-y-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-wall-x-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="penitentiary-wall-x-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-wall-y-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>99</height>
+    <graphics file="penitentiary-wall-y-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>115</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-shaft-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="penitentiary-column-shaft-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-capital-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="penitentiary-column-capital-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-shaft-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="penitentiary-column-shaft-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-capital-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="penitentiary-column-capital-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-capital-south">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="penitentiary-column-capital-south.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="penitentiary-capital-west">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="penitentiary-column-capital-west.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-wall-x-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="safari-wall-x-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-wall-y-1">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="safari-wall-y-1.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-wall-x-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="safari-wall-x-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-wall-y-2">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="safari-wall-y-2.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-wall-x-3">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="safari-wall-x-3.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-wall-y-3">
+    <width-x>16</width-x>
+    <width-y>0</width-y>
+    <height>100</height>
+    <graphics file="safari-wall-y-3.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>116</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-shaft-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="safari-column-shaft-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-capital-north">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="safari-column-capital-north.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-shaft-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="safari-column-shaft-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>39</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-capital-east">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="safari-column-capital-east.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>49</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-capital-south">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="safari-column-capital-south.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+<item kind="safari-capital-west">
+    <width-x>16</width-x>
+    <width-y>16</width-y>
+    <height>24</height>
+    <graphics file="safari-column-capital-west.png">
+        <width-of-frame>64</width-of-frame>
+        <height-of-frame>56</height-of-frame>
+    </graphics>
+    <orientations>1</orientations>
+</item>
+
+</items>

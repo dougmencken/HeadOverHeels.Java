@@ -33,25 +33,40 @@ import org.w3c.dom.NodeList ;
 public class ItemDescriptions
 {
 
-	private TreeMap < String, DescriptionOfItem > descriptionsOfItems
-			= new TreeMap < String, DescriptionOfItem > () ;
-
-	private transient boolean alreadyRead = false ;
-
-	public ItemDescriptions ( )
-	{
-		if ( ItemDescriptions.theDescriptions != null )
-			throw new UnlikelyToHappenException( "constructing another instance of ItemDescriptions, why do you need it again?" ) ;
-
-		ItemDescriptions.theDescriptions = this ;
-	}
-
 	private static ItemDescriptions theDescriptions = null ;
 
 	public static ItemDescriptions descriptions ()
 	{
 		if ( ItemDescriptions.theDescriptions == null ) new ItemDescriptions() ;
 		return ItemDescriptions.theDescriptions ;
+	}
+
+	private static final boolean write_new_items_xml = true ;
+	private static final boolean parse_previous_format = true ;
+
+	/**
+	 * Item descriptions are stored here as one-to-one mapping of an item’s kind to a description
+	 */
+	private TreeMap < String, DescriptionOfItem > descriptionsOfItems
+			= new TreeMap < String, DescriptionOfItem > () ;
+
+	private transient boolean alreadyRead = false ;
+
+	private ItemDescriptions( )
+	{
+		if ( ItemDescriptions.theDescriptions != null )
+			throw new UnlikelyToHappenException( "instantiating ItemDescriptions via the no-argument constructor a second time, why?" );
+
+		ItemDescriptions.theDescriptions = this ;
+
+		readDescriptions ();
+	}
+
+	// useful for comparing item descriptions from different files
+	//
+	public ItemDescriptions( File descriptionsFile )
+	{
+		readDescriptionsFromFile( descriptionsFile );
 	}
 
 	public boolean equals( Object that )
@@ -134,6 +149,24 @@ public class ItemDescriptions
 		Element root = xml.getDocumentElement() ;
 		if ( root == null || root.getTagName() != "items" ) return false ;
 
+		java.io.PrintStream newItemsXml = null ;
+		if ( ItemDescriptions.write_new_items_xml ) {
+			File newItemsXmlFile = new File( Storage.getGameStorageInHome(), "new.items.xml" );
+			try {
+				if ( ( newItemsXmlFile.exists() || newItemsXmlFile.createNewFile() ) && newItemsXmlFile.canWrite() )
+					newItemsXml = new java.io.PrintStream( newItemsXmlFile );
+			} catch ( Exception xc ) {
+				System.err.println( xc.getClass().getName() + ": " + xc.getMessage() );
+			}
+		}
+
+		if ( ItemDescriptions.write_new_items_xml && newItemsXml != null ) {
+			newItemsXml.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
+			newItemsXml.println() ;
+			newItemsXml.println( "<items>" );
+			newItemsXml.println() ;
+		}
+
 		NodeList itemNodes = xml.getElementsByTagName( "item" );
 		for ( int i = 0 ; i < itemNodes.getLength() ; i ++ )
 		{
@@ -145,60 +178,80 @@ public class ItemDescriptions
 				DescriptionOfItem newDescription = new DescriptionOfItem ( kindOfItem );
 
 				// spatial dimensions
-				int itemWidthX = 0 ;
-				int itemWidthY = 0 ;
-				int itemHeight = 0 ;
+				int xWidth = 0 ;
+				int yWidth = 0 ;
+				int height = 0 ;
 
-				String widthX = itemElement.getElementsByTagName( "widthX" ).item( 0 ).getTextContent ();
-				try { // parseInt can throw NumberFormatException
-					itemWidthX = Integer.parseInt( widthX );
-				} catch ( NumberFormatException e ) { }
-				newDescription.setWidthX( itemWidthX );
+				Node xWidthNode = itemElement.getElementsByTagName( "width-x" ).item( 0 );
+				Node yWidthNode = itemElement.getElementsByTagName( "width-y" ).item( 0 );
+				Node heightNode = itemElement.getElementsByTagName( "height" ).item( 0 );
 
-				String widthY = itemElement.getElementsByTagName( "widthY" ).item( 0 ).getTextContent ();
-				try { // parseInt can throw NumberFormatException
-					itemWidthY = Integer.parseInt( widthY );
-				} catch ( NumberFormatException e ) { }
-				newDescription.setWidthY( itemWidthY );
+				if ( xWidthNode == null && ItemDescriptions.parse_previous_format )
+					xWidthNode = itemElement.getElementsByTagName( "widthX" ).item( 0 );
+				if ( yWidthNode == null && ItemDescriptions.parse_previous_format )
+					yWidthNode = itemElement.getElementsByTagName( "widthY" ).item( 0 );
 
-				String height = itemElement.getElementsByTagName( "height" ).item( 0 ).getTextContent ();
-				try { // parseInt can throw NumberFormatException
-					itemHeight = Integer.parseInt( height );
-				} catch ( NumberFormatException e ) { }
-				newDescription.setHeight( itemHeight );
+				if ( xWidthNode != null ) {
+					try { // parseInt can throw NumberFormatException
+						xWidth = Integer.parseInt( xWidthNode.getTextContent () );
+					} catch ( NumberFormatException e ) { }
+				}
+				if ( yWidthNode != null ) {
+					try { // parseInt can throw NumberFormatException
+						yWidth = Integer.parseInt( yWidthNode.getTextContent () );
+					} catch ( NumberFormatException e ) { }
+				}
+				if ( heightNode != null ) {
+					try { // parseInt can throw NumberFormatException
+						height = Integer.parseInt( heightNode.getTextContent () );
+					} catch ( NumberFormatException e ) { }
+				}
+
+				newDescription.setWidthX( xWidth );
+				newDescription.setWidthY( yWidth );
+				newDescription.setHeight( height );
 
 				readDescriptionFurther( itemElement, newDescription );
+
+				if ( ItemDescriptions.write_new_items_xml && newItemsXml != null ) {
+					newItemsXml.println( newDescription.toString() );
+					newItemsXml.println() ;
+				}
 
 				// and at last
 				this.descriptionsOfItems.put( kindOfItem, newDescription );
 			}
 		}
 
-		// and now the descriptions of doors
-		// for a door there are three parts, and thus three times three dimensions
+		// now make the descriptions of doors
 
-		NodeList doorNodes = xml.getElementsByTagName( "door" );
-		for ( int i = 0 ; i < doorNodes.getLength() ; i ++ )
-		{
-			Node doorNode = doorNodes.item( i );
-			if ( doorNode.getNodeType() == Node.ELEMENT_NODE ) {
-				Element doorElement = (Element) doorNode ;
+		String[] where = { "north", "east", "south", "west" } ;
+		String[] sceneries = { "jail", "blacktooth", "market", "moon",
+					"byblos", "egyptus", "penitentiary", "safari" } ;
 
-				String doorScenery = doorElement.getAttribute( "scenery" ) ;
-				String doorAt = doorElement.getAttribute( "at" ) ;
+		for ( String doorScenery : sceneries ) {
+			for ( String doorOn : where ) {
+				DescriptionOfDoor doorDescription = new DescriptionOfDoor( doorScenery, doorOn );
 
-				DescriptionOfDoor doorDescription = new DescriptionOfDoor ( doorScenery, doorAt );
+				/**** if ( ItemDescriptions.write_new_items_xml && newItemsXml != null ) {
+					newItemsXml.println( doorDescription.toString() );
+					newItemsXml.println() ;
+				} ****/
 
 				// the three parts of door
 				DescriptionOfItem lintel = doorDescription.getLintel () ;
 				DescriptionOfItem leftJamb = doorDescription.getLeftJamb ();
 				DescriptionOfItem rightJamb = doorDescription.getRightJamb ();
 
-				// and at last
 				this.descriptionsOfItems.put(  leftJamb.getKind(), leftJamb );
 				this.descriptionsOfItems.put( rightJamb.getKind(), rightJamb );
 				this.descriptionsOfItems.put(    lintel.getKind(), lintel );
 			}
+		}
+
+		if ( ItemDescriptions.write_new_items_xml && newItemsXml != null ) {
+			newItemsXml.println( "</items>" );
+			newItemsXml.close ();
 		}
 
 		this.alreadyRead = true ;
@@ -249,7 +302,11 @@ public class ItemDescriptions
 
 		// graphics for this item
 
-		NodeList graphicsNodes = element.getElementsByTagName( "picture" );
+		NodeList graphicsNodes = element.getElementsByTagName( "graphics" );
+		if ( graphicsNodes.getLength() == 0 && ItemDescriptions.parse_previous_format ) {
+			NodeList pictureNodes = element.getElementsByTagName( "picture" );
+			if ( pictureNodes.getLength() > 0 ) graphicsNodes = pictureNodes ;
+		}
 		if ( graphicsNodes.getLength () > 0
 				&& graphicsNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
 		{
@@ -259,13 +316,17 @@ public class ItemDescriptions
 			description.setNameOfFramesFile( graphics.getAttribute( "file" ) );
 
 			// the width and height in pixels of a single frame
-			Node widthNode = graphics.getElementsByTagName( "width" ).item( 0 );
+			Node widthNode = graphics.getElementsByTagName( "width-of-frame" ).item( 0 );
+			if ( widthNode == null && ItemDescriptions.parse_previous_format )
+				widthNode = graphics.getElementsByTagName( "width" ).item( 0 );
 			if ( widthNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setWidthOfFrame( Integer.parseInt( widthNode.getTextContent () ) );
 				} catch ( NumberFormatException e ) { }
 			}
-			Node heightNode = graphics.getElementsByTagName( "height" ).item( 0 );
+			Node heightNode = graphics.getElementsByTagName( "height-of-frame" ).item( 0 );
+			if ( heightNode == null && ItemDescriptions.parse_previous_format )
+				heightNode = graphics.getElementsByTagName( "height" ).item( 0 );
 			if ( heightNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setHeightOfFrame( Integer.parseInt( heightNode.getTextContent () ) );
@@ -282,21 +343,29 @@ public class ItemDescriptions
 		}
 
 		// delay, in milliseconds, between frames in the animation sequence
-		int itemDelayBetweenFrames = 0 ;
+		int delayBetweenFrames = 0 ;
 
-		NodeList betweenFramesNodes = element.getElementsByTagName( "betweenFrames" );
-		if ( betweenFramesNodes.getLength () > 0 ) {
-			String betweenFrames = betweenFramesNodes.item( 0 ).getTextContent ();
+		NodeList delayBetweenFramesNodes = element.getElementsByTagName( "delay-between-frames" );
+		if ( delayBetweenFramesNodes.getLength() == 0 && ItemDescriptions.parse_previous_format ) {
+			NodeList betweenFramesNodes = element.getElementsByTagName( "betweenFrames" );
+			if ( betweenFramesNodes.getLength() > 0 ) delayBetweenFramesNodes = betweenFramesNodes ;
+		}
+		if ( delayBetweenFramesNodes.getLength () > 0 ) {
+			String delayInMilliseconds = delayBetweenFramesNodes.item( 0 ).getTextContent ();
 			try { // parseInt can throw NumberFormatException
-				itemDelayBetweenFrames = Integer.parseInt( betweenFrames );
+				delayBetweenFrames = Integer.parseInt( delayInMilliseconds );
 			} catch ( NumberFormatException e ) { }
 		}
 
-		description.setDelayBetweenFrames( itemDelayBetweenFrames );
+		description.setDelayBetweenFrames( delayBetweenFrames );
 
 		// shadows for this item
 
-		NodeList shadowsNodes = element.getElementsByTagName( "shadow" );
+		NodeList shadowsNodes = element.getElementsByTagName( "shadows" );
+		if ( shadowsNodes.getLength() == 0 && ItemDescriptions.parse_previous_format ) {
+			NodeList shadowNodes_oldformat = element.getElementsByTagName( "shadow" );
+			if ( shadowNodes_oldformat.getLength() > 0 ) shadowsNodes = shadowNodes_oldformat ;
+		}
 		if ( shadowsNodes.getLength () > 0
 				&& shadowsNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
 		{
@@ -306,13 +375,17 @@ public class ItemDescriptions
 			description.setNameOfShadowsFile( shadows.getAttribute( "file" ) );
 
 			// the width and height in pixels of a single frame of the item’s shadow
-			Node widthNode = shadows.getElementsByTagName( "width" ).item( 0 );
+			Node widthNode = shadows.getElementsByTagName( "width-of-shadow" ).item( 0 );
+			if ( widthNode == null && ItemDescriptions.parse_previous_format )
+				widthNode = shadows.getElementsByTagName( "width" ).item( 0 );
 			if ( widthNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setWidthOfShadow( Integer.parseInt( widthNode.getTextContent () ) );
 				} catch ( NumberFormatException e ) { }
 			}
-			Node heightNode = shadows.getElementsByTagName( "height" ).item( 0 );
+			Node heightNode = shadows.getElementsByTagName( "height-of-shadow" ).item( 0 );
+			if ( heightNode == null && ItemDescriptions.parse_previous_format )
+				heightNode = shadows.getElementsByTagName( "height" ).item( 0 );
 			if ( heightNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setHeightOfShadow( Integer.parseInt( heightNode.getTextContent () ) );
@@ -349,30 +422,26 @@ public class ItemDescriptions
 			description.makeSequenceOFrames( 1 ) ; // then it’s static
 
 		// how many various orientations
-		byte variousOrientations = 0 ;
-
 		NodeList orientationsNodes = element.getElementsByTagName( "orientations" );
 		if ( orientationsNodes.getLength () > 0 ) {
 			String orientations = orientationsNodes.item( 0 ).getTextContent ();
 			try { // parseByte can throw NumberFormatException
-				variousOrientations = Byte.parseByte( orientations );
+				description.setHowManyOrientations( Byte.parseByte( orientations ) );
 			} catch ( NumberFormatException e ) { }
 		}
-
-		description.setHowManyOrientations( variousOrientations );
 
 		// how many extra frames, such as for jumping or blinking character
-		short extraFrames = 0 ;
-
-		NodeList extraFramesNodes = element.getElementsByTagName( "extraFrames" );
+		NodeList extraFramesNodes = element.getElementsByTagName( "extra-frames" );
+		if ( extraFramesNodes.getLength() == 0 && ItemDescriptions.parse_previous_format ) {
+			NodeList extraFramesNodes_oldformat = element.getElementsByTagName( "extraFrames" );
+			if ( extraFramesNodes_oldformat.getLength() > 0 ) extraFramesNodes = extraFramesNodes_oldformat ;
+		}
 		if ( extraFramesNodes.getLength () > 0 ) {
-			String extraFramesText = extraFramesNodes.item( 0 ).getTextContent ();
-			try { // parseShort can throw NumberFormatException
-				extraFrames = Short.parseShort( extraFramesText );
+			String extraFrames = extraFramesNodes.item( 0 ).getTextContent ();
+			try { // parseInt can throw NumberFormatException
+				description.setHowManyExtraFrames( Integer.parseInt( extraFrames ) );
 			} catch ( NumberFormatException e ) { }
 		}
-
-		description.setHowManyExtraFrames( extraFrames );
 	}
 
 }

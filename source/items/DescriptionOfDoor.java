@@ -11,12 +11,13 @@ package head.over.heels.items ;
 
 /**
  * The description of a door
+ *
+ * For a door, the item kind is %scenery%-door-%on% with the image file %scenery%-door-%on%.png
  */
 
 public class DescriptionOfDoor extends DescriptionOfItem
 {
 	// the three parts of door are the lintel, the left jamb and the right jamb
-
 	private DescriptionOfItem lintel ;
 	private DescriptionOfItem leftJamb ;
 	private DescriptionOfItem rightJamb ;
@@ -29,31 +30,31 @@ public class DescriptionOfDoor extends DescriptionOfItem
 
 	public String getScenery () {  return this.scenery ;  }
 
-	private final String doorAt ;
+	private final String doorOn ;
 
-	public String getWhereIsDoor () {  return this.doorAt ;  }
+	public String getWhereOn () {  return this.doorOn ;  }
 
 	public static final int  WIDTH_OF_DOOR_IMAGE = 82 ;
 	public static final int HEIGHT_OF_DOOR_IMAGE = 140 ;
 
 	public DescriptionOfDoor ( String sceneryOfDoor, String where )
 	{
-		super( /* item's kind is %scenery%-door-%at% */ sceneryOfDoor + "-door-" + where );
+		super( /* door item’s kind is %scenery%-door-%on% */ sceneryOfDoor + "-door-" + where );
 
 		this.scenery = sceneryOfDoor ;
-		this.doorAt = where ;
+		this.doorOn = where ;
 
 		super.setNameOfFramesFile( super.getKind() + ".png" );
 		super.setWidthOfFrame( DescriptionOfDoor.WIDTH_OF_DOOR_IMAGE );
 		super.setHeightOfFrame( DescriptionOfDoor.HEIGHT_OF_DOOR_IMAGE );
 		super.setHowManyOrientations( (byte) 1 );
 
-		this.lintel = this.cloneAsLintelOfDoor() ;
-		this.leftJamb = this.cloneAsLeftJambOfDoor() ;
-		this.rightJamb = this.cloneAsRightJambOfDoor() ;
+		this.lintel = this.cloneAsLintel() ;
+		this.leftJamb = this.cloneAsLeftJamb() ;
+		this.rightJamb = this.cloneAsRightJamb() ;
 	}
 
-	private DescriptionOfItem cloneAsLintelOfDoor()
+	private DescriptionOfItem cloneAsLintel()
 	{
 		DescriptionOfItem descriptionOfLintel = super.clone() ;
 		descriptionOfLintel.setKind( super.getKind () + "~lintel" );
@@ -61,11 +62,11 @@ public class DescriptionOfDoor extends DescriptionOfItem
 
 		final int lintelSmallerWidth = 9 ;
 		final int lintelBroaderWidth = 32 ;
-		if ( this.doorAt.equals( "north" ) || this.doorAt.equals( "south" ) ) {
+		if ( this.doorOn.equals( "north" ) || this.doorOn.equals( "south" ) ) {
 			descriptionOfLintel.setWidthX( lintelSmallerWidth );
 			descriptionOfLintel.setWidthY( lintelBroaderWidth );
 		} else
-		   if ( this.doorAt.equals( "west" ) || this.doorAt.equals( "east" ) ) {
+		   if ( this.doorOn.equals( "west" ) || this.doorOn.equals( "east" ) ) {
 			descriptionOfLintel.setWidthX( lintelBroaderWidth );
 			descriptionOfLintel.setWidthY( lintelSmallerWidth );
 		}
@@ -74,7 +75,7 @@ public class DescriptionOfDoor extends DescriptionOfItem
 		return descriptionOfLintel ;
 	}
 
-	private DescriptionOfItem cloneAsLeftJambOfDoor()
+	private DescriptionOfItem cloneAsLeftJamb()
 	{
 		DescriptionOfItem descriptionOfLeftJamb = super.clone() ;
 		descriptionOfLeftJamb.setKind( super.getKind () + "~leftjamb" );
@@ -87,7 +88,7 @@ public class DescriptionOfDoor extends DescriptionOfItem
 		return descriptionOfLeftJamb ;
 	}
 
-	private DescriptionOfItem cloneAsRightJambOfDoor()
+	private DescriptionOfItem cloneAsRightJamb()
 	{
 		DescriptionOfItem descriptionOfRightJamb = super.clone() ;
 		descriptionOfRightJamb.setKind( super.getKind () + "~rightjamb" );
@@ -102,14 +103,14 @@ public class DescriptionOfDoor extends DescriptionOfItem
 
 	public boolean equals( DescriptionOfDoor that )
 	{
-		return this.scenery.equals( that.scenery ) && this.doorAt.equals( that.doorAt ) ;
+		return this.scenery.equals( that.scenery ) && this.doorOn.equals( that.doorOn ) ;
 				/* && this.leftJamb.equals( that.leftJamb ) && this.rightJamb.equals( that.rightJamb )
 					&& this.lintel.equals( that.lintel ) ; */
 	}
 
 	public String toString ()
 	{
-		return "<door at=\"" + this.doorAt + "\" scenery=\"" + this.scenery + "\"/>" ;
+		return "<door on=\"" + this.doorOn + "\" scenery=\"" + this.scenery + "\"/>" ;
 	}
 
 }

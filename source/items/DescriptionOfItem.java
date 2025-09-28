@@ -164,10 +164,10 @@ public class DescriptionOfItem implements Cloneable
 	/**
 	 * Extra frames such as for jumping or blinking
 	 */
-	private short extraFrames = 0 ;
+	private int extraFrames = 0 ;
 
-	public short howManyExtraFrames () {  return this.extraFrames ;  }
-	public void setHowManyExtraFrames( short newExtraFrames ) {  this.extraFrames = newExtraFrames ;  }
+	public int howManyExtraFrames () {  return this.extraFrames ;  }
+	public void setHowManyExtraFrames( int newExtraFrames ) {  this.extraFrames = newExtraFrames ;  }
 
 	// used when a door is disassembled into three parts
 	private transient boolean partOfDoor = false ;
