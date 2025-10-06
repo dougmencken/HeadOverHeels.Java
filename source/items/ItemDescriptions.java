@@ -42,7 +42,6 @@ public class ItemDescriptions
 	}
 
 	private static final boolean write_new_items_xml = false ;
-	/////private static final boolean parse_previous_format = false ;
 
 	/**
 	 * Item descriptions are stored here as one-to-one mapping of an item’s kind to a description
@@ -183,11 +182,6 @@ public class ItemDescriptions
 				Node yWidthNode = itemElement.getElementsByTagName( "width-y" ).item( 0 );
 				Node heightNode = itemElement.getElementsByTagName( "height" ).item( 0 );
 
-				/////if ( xWidthNode == null && ItemDescriptions.parse_previous_format )
-				/////	xWidthNode = itemElement.getElementsByTagName( "widthX" ).item( 0 );
-				/////if ( yWidthNode == null && ItemDescriptions.parse_previous_format )
-				/////	yWidthNode = itemElement.getElementsByTagName( "widthY" ).item( 0 );
-
 				if ( xWidthNode != null ) {
 					try { // parseInt can throw NumberFormatException
 						newDescription.setWidthX( Integer.parseInt( xWidthNode.getTextContent () ) );
@@ -291,10 +285,6 @@ public class ItemDescriptions
 		// graphics for this item
 
 		NodeList graphicsNodes = element.getElementsByTagName( "graphics" );
-		/////if ( graphicsNodes.getLength() == 0 && ItemDescriptions.parse_previous_format ) {
-		/////	NodeList pictureNodes = element.getElementsByTagName( "picture" );
-		/////	if ( pictureNodes.getLength() > 0 ) graphicsNodes = pictureNodes ;
-		/////}
 		if ( graphicsNodes.getLength () > 0
 				&& graphicsNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
 		{
@@ -305,16 +295,12 @@ public class ItemDescriptions
 
 			// the width and height in pixels of a single frame
 			Node widthNode = graphics.getElementsByTagName( "frame-width" ).item( 0 );
-			/////if ( widthNode == null && ItemDescriptions.parse_previous_format )
-			/////	widthNode = graphics.getElementsByTagName( "width" ).item( 0 );
 			if ( widthNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setWidthOfFrame( Integer.parseInt( widthNode.getTextContent () ) );
 				} catch ( NumberFormatException e ) { }
 			}
 			Node heightNode = graphics.getElementsByTagName( "frame-height" ).item( 0 );
-			/////if ( heightNode == null && ItemDescriptions.parse_previous_format )
-			/////	heightNode = graphics.getElementsByTagName( "height" ).item( 0 );
 			if ( heightNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setHeightOfFrame( Integer.parseInt( heightNode.getTextContent () ) );
@@ -334,10 +320,6 @@ public class ItemDescriptions
 		int delayBetweenFrames = 0 ;
 
 		NodeList delayBetweenFramesNodes = element.getElementsByTagName( "delay-between-frames" );
-		/////if ( delayBetweenFramesNodes.getLength() == 0 && ItemDescriptions.parse_previous_format ) {
-		/////	NodeList betweenFramesNodes = element.getElementsByTagName( "betweenFrames" );
-		/////	if ( betweenFramesNodes.getLength() > 0 ) delayBetweenFramesNodes = betweenFramesNodes ;
-		/////}
 		if ( delayBetweenFramesNodes.getLength () > 0 ) {
 			String delayInMilliseconds = delayBetweenFramesNodes.item( 0 ).getTextContent ();
 			try { // parseInt can throw NumberFormatException
@@ -350,10 +332,6 @@ public class ItemDescriptions
 		// shadows for this item
 
 		NodeList shadowsNodes = element.getElementsByTagName( "shadows" );
-		/////if ( shadowsNodes.getLength() == 0 && ItemDescriptions.parse_previous_format ) {
-		/////	NodeList shadowNodes_oldformat = element.getElementsByTagName( "shadow" );
-		/////	if ( shadowNodes_oldformat.getLength() > 0 ) shadowsNodes = shadowNodes_oldformat ;
-		/////}
 		if ( shadowsNodes.getLength () > 0
 				&& shadowsNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
 		{
@@ -364,16 +342,12 @@ public class ItemDescriptions
 
 			// the width and height in pixels of a single frame of the item’s shadow
 			Node widthNode = shadows.getElementsByTagName( "width-of-shadow" ).item( 0 );
-			/////if ( widthNode == null && ItemDescriptions.parse_previous_format )
-			/////	widthNode = shadows.getElementsByTagName( "width" ).item( 0 );
 			if ( widthNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setWidthOfShadow( Integer.parseInt( widthNode.getTextContent () ) );
 				} catch ( NumberFormatException e ) { }
 			}
 			Node heightNode = shadows.getElementsByTagName( "height-of-shadow" ).item( 0 );
-			/////if ( heightNode == null && ItemDescriptions.parse_previous_format )
-			/////	heightNode = shadows.getElementsByTagName( "height" ).item( 0 );
 			if ( heightNode != null ) {
 				try { // parseInt can throw NumberFormatException
 					description.setHeightOfShadow( Integer.parseInt( heightNode.getTextContent () ) );
@@ -420,10 +394,6 @@ public class ItemDescriptions
 
 		// how many extra frames, such as for jumping or blinking character
 		NodeList extraFramesNodes = element.getElementsByTagName( "extra-frames" );
-		/////if ( extraFramesNodes.getLength() == 0 && ItemDescriptions.parse_previous_format ) {
-		/////	NodeList extraFramesNodes_oldformat = element.getElementsByTagName( "extraFrames" );
-		/////	if ( extraFramesNodes_oldformat.getLength() > 0 ) extraFramesNodes = extraFramesNodes_oldformat ;
-		/////}
 		if ( extraFramesNodes.getLength () > 0 ) {
 			String extraFrames = extraFramesNodes.item( 0 ).getTextContent ();
 			try { // parseInt can throw NumberFormatException

@@ -161,13 +161,6 @@ public final class main
 		}
 
 	/**/// temporary lines
-	/***** ItemDescriptions oldDescriptions = new ItemDescriptions( new java.io.File( Storage.getPathToGameData(), "old.items.xml" ) );
-	ItemDescriptions newDescriptions = new ItemDescriptions( new java.io.File( Storage.getPathToGameData(), "new.items.xml" ) );
-	if ( newDescriptions.equals( oldDescriptions ) )
-		System.out.println( "✔️ the descriptions in both old.items.xml and new.items.xml describe the same items alike" );
-	else
-		System.out.println( "❌ new.items.xml is not like old.items.xml" ); *****/
-
 	{
 	head.over.heels.items.FreeItem head = new head.over.heels.items.FreeItem( ItemDescriptions.descriptions().getDescriptionByKind( "head" ), 0, 0, 0, "south" );
 	NamedOffscreenImage imageOfHead = head.getCurrentRawImage() ;
