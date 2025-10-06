@@ -283,6 +283,8 @@ public class GameWindow extends JFrame
 		randomPixelFadeOut( Color.black );
 		finishPaintingContent ();
 		dispose ();
+
+		System.exit( 0 );
 	}
 
 	private void writePreferences ()

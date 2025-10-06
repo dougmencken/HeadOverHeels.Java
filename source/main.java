@@ -185,6 +185,9 @@ public final class main
 		window.setVisible( true );
 		window.randomPixelFadeIn( java.awt.Color.black );
 
+		head.over.heels.items.ListOfItemsWindow itemsWindow = new head.over.heels.items.ListOfItemsWindow() ;
+		itemsWindow.setVisible( true );
+
 	String musicFile = "music" + java.io.File.separator + "freedom.ogg" ;
 	SoundManager.getInstance().play( new java.io.File( Storage.getPathToGameData(), musicFile ), /* loop */ true );
 

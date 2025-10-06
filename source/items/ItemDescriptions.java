@@ -109,6 +109,17 @@ public class ItemDescriptions
 		return theDescription ;
 	}
 
+	public String[] getAllKindsOfItems ()
+	{
+		if ( this.descriptionsOfItems == null || this.descriptionsOfItems.size() == 0 ) return null ;
+
+		java.util.Vector< String > allKinds = new java.util.Vector< String >( this.descriptionsOfItems.size() );
+		for ( String kind : this.descriptionsOfItems.keySet() )
+			allKinds.add( kind );
+
+		return allKinds.toArray( new String[ allKinds.size() ] );
+	}
+
 	public static final File the_file_full_of_item_descriptions
 					= new File( Storage.getPathToGameData(), "items.xml" ) ;
 
