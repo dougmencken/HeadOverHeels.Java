@@ -295,11 +295,11 @@ public class DescriptionOfItem implements Cloneable
 			text.append( newline );
 
 			text.append( indent ); text.append( indent );
-			text.append( "<width-of-frame>" + getWidthOfFrame () + "</width-of-frame>" );
+			text.append( "<frame-width>" + getWidthOfFrame () + "</frame-width>" );
 			text.append( newline );
 
 			text.append( indent ); text.append( indent );
-			text.append( "<height-of-frame>" + getHeightOfFrame () + "</height-of-frame>" );
+			text.append( "<frame-height>" + getHeightOfFrame () + "</frame-height>" );
 			text.append( newline );
 
 			text.append( indent );
