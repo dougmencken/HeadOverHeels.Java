@@ -86,6 +86,13 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 
 	protected NamedOffscreenImage getNthShadowIn ( String sequence, int n ) throws NoSuchPictureException
 	{
+		if ( ! hasShadow() ) {
+			StringBuilder message = new StringBuilder() ;
+			message.append( StringUtilities.putInQuotes( getUniqueName() ) ).append( " has no shadows" ) ;
+			System.err.println( message );
+			throw new NoSuchPictureException( message );
+		}
+
 		for ( String key : this.shadows.keySet() ) {
 			Vector< NamedOffscreenImage > shadowsIn = this.shadows.get( key );
 			if ( key.equals( sequence ) && n < shadowsIn.size() )
