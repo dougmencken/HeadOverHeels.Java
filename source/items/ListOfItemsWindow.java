@@ -11,12 +11,12 @@ package head.over.heels.items ;
 import javax.swing.JFrame ;
 import javax.swing.JPanel ;
 
-import javax.swing.JButton ;
 import javax.swing.JCheckBox ;
 import javax.swing.JComboBox ;
 import javax.swing.JLabel ;
 
-import head.over.heels.Colours ;
+import head.over.heels.gui.CuteSwingButton ;
+
 import head.over.heels.StringUtilities ;
 
 
@@ -49,7 +49,7 @@ public class ListOfItemsWindow extends JFrame
 	private JLabel itemOrientations ;
 	private JLabel itemExtraFrames ;
 
-	private JButton graphicsButton ;
+	private CuteSwingButton graphicsButton ;
 
 	public ListOfItemsWindow ()
 	{
@@ -144,60 +144,12 @@ public class ListOfItemsWindow extends JFrame
 
 		panel.add( javax.swing.Box.createVerticalStrut( 10 ) );
 
-		this.graphicsButton = new JButton( "🖼 graphics" );
-		final int rounding_radius = 24 ;
-		this.graphicsButton.setBorder( new RoundedCornerBorder( rounding_radius, this.graphicsButton ) );
-		this.graphicsButton.setContentAreaFilled( false ); // don’t draw the default background for button
-		this.graphicsButton.setOpaque( true ); // draw background
-		this.graphicsButton.setBackground( Colours.white );
-		this.graphicsButton.setForeground( Colours.black );
-		this.graphicsButton.setAlignmentX( java.awt.Component.CENTER_ALIGNMENT );
+		this.graphicsButton = new CuteSwingButton( "🖼 graphics" );
 
-		this.graphicsButton.setUI( new javax.swing.plaf.basic.BasicButtonUI ()
+		this.graphicsButton.addActionListener( new java.awt.event.ActionListener ()
 		{
-			public void update( java.awt.Graphics g, javax.swing.JComponent c ) {
-				if ( c.isOpaque() ) {
-					java.awt.Graphics2D g2d = (java.awt.Graphics2D) g.create() ;
-					g2d.setRenderingHint( java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON );
-					g2d.setColor( c.getBackground() );
-					g2d.fillRoundRect( 0, 0, c.getWidth() - 1,c.getHeight() - 1, rounding_radius + 2, rounding_radius + 2 );
-					g2d.dispose() ;
-				}
-				super.paint( g, c );
-			}
-		} );
-
-		this.graphicsButton.addMouseListener( new java.awt.event.MouseAdapter ()
-		{
-			java.awt.Color foreColor = graphicsButton.getForeground() ;
-			java.awt.Color backColor = graphicsButton.getBackground() ;
-
-			private boolean pressed = false ;
-			private boolean exited = false ;
-
-			public void mousePressed( java.awt.event.MouseEvent me ) {
-				this.pressed = true ;
-				updateButtonColors ();
-			}
-			public void mouseReleased( java.awt.event.MouseEvent me ) {
-				if ( this.pressed && ! this.exited )
-					showItemGraphics() ;
-
-				this.pressed = false ;
-				updateButtonColors ();
-			}
-			public void mouseEntered( java.awt.event.MouseEvent me ) {
-				this.exited = false ;
-				updateButtonColors ();
-			}
-			public void mouseExited( java.awt.event.MouseEvent me ) {
-				this.exited = true ;
-				updateButtonColors ();
-			}
-			private void updateButtonColors ()
-			{
-				graphicsButton.setBackground( ( this.pressed && ! this.exited ) ? this.foreColor : this.backColor );
-				graphicsButton.setForeground( ( this.pressed && ! this.exited ) ? this.backColor : this.foreColor );
+			public void actionPerformed( java.awt.event.ActionEvent ae ) {
+				showItemGraphics() ;
 			}
 		} );
 
@@ -312,38 +264,5 @@ class ItemGraphicsWindow extends JFrame
 
 		super.setLocation( parentWindow.getLocation().x, parentWindow.getLocation().y + parentWindow.getHeight() + 10 );
 	}
-
-}
-
-
-class RoundedCornerBorder implements javax.swing.border.Border
-{
-
-	private int borderRadius ;
-	private JButton forButton ;
-
-	public RoundedCornerBorder( int radius, JButton button )
-	{
-		this.borderRadius = radius ;
-		this.forButton = button ;
-	}
-
-	public void paintBorder( java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height )
-	{
-		java.awt.Graphics2D g2d = (java.awt.Graphics2D) g.create() ;
-		g2d.setRenderingHint( java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON );
-		g2d.setStroke( new java.awt.BasicStroke( 2 ) ); // 2 pixels thick stroke
-		g2d.setColor( this.forButton.getForeground() );
-		g2d.draw( new java.awt.geom.RoundRectangle2D.Double( x, y, width - 1, height - 1, this.borderRadius, this.borderRadius ) );
-		g2d.dispose() ;
-	}
-
-	public java.awt.Insets getBorderInsets( java.awt.Component c )
-	{
-		final int gap = this.borderRadius >> 2 ;
-		return new java.awt.Insets( /* top */ gap, /* left */ gap << 1, /* bottom */ gap, /* right */ gap << 1 );
-	}
-
-	public boolean isBorderOpaque() {  return true ;  }
 
 }
