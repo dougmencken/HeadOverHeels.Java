@@ -145,7 +145,6 @@ public class ListOfItemsWindow extends JFrame
 		panel.add( javax.swing.Box.createVerticalStrut( 10 ) );
 
 		this.graphicsButton = new CuteSwingButton( "🖼 graphics" );
-
 		this.graphicsButton.addActionListener( new java.awt.event.ActionListener ()
 		{
 			public void actionPerformed( java.awt.event.ActionEvent ae ) {

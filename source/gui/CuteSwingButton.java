@@ -42,6 +42,8 @@ public class CuteSwingButton extends JButton implements MouseListener
 	{
 		super( label );
 
+		super.setModel( new CuteSwingButtonModel() );
+
 		super.setBorder( new RoundedCornerBorder( CuteSwingButton.rounding_radius, this ) );
 		super.setAlignmentX( java.awt.Component.CENTER_ALIGNMENT );
 
@@ -62,12 +64,7 @@ public class CuteSwingButton extends JButton implements MouseListener
 					g2d.dispose() ;
 				}
 
-				boolean wasDisabled = ! c.isEnabled() ;
-				if ( wasDisabled ) c.setEnabled( true ) ; // draw a disabled button as enabled
-
 				super.paint( g, c );
-
-				if ( wasDisabled ) c.setEnabled( false ) ;
 			}
 		} );
 
@@ -75,44 +72,77 @@ public class CuteSwingButton extends JButton implements MouseListener
 		super.addMouseListener( this );
 	}
 
-	private boolean mouseButtonPressed = false ;
-	private boolean mouseExited = false ;
-
-	public void mousePressed( MouseEvent me ) {
-		this.mouseButtonPressed = true ;
-		updateButtonColors ();
+	public void setEnabled ( boolean enabled ) {
+		if ( ! enabled )
+			throw new IllegalArgumentException( this.getClass().getName() + " cannot be set disabled" );
 	}
 
-	public void mouseReleased( MouseEvent me ) {
-		this.fireActionPerformed( new ActionEvent( this,  ActionEvent.ACTION_PERFORMED, super.getText() ) );
-
-		this.mouseButtonPressed = false ;
-		updateButtonColors ();
-	}
+	public boolean isEnabled () {  return true ;  }
 
 	public void mouseEntered( MouseEvent me ) {
-		this.mouseExited = false ;
+		getModel().setRollover( true );
 		updateButtonColors ();
 	}
 
 	public void mouseExited( MouseEvent me ) {
-		this.mouseExited = true ;
+		getModel().setRollover( false );
+		updateButtonColors ();
+	}
+
+	public void mousePressed( MouseEvent me ) {
+		getModel().setPressed( getModel().isRollover() );
+		updateButtonColors ();
+	}
+
+	public void mouseReleased( MouseEvent me ) {
+		if ( getModel().isRollover() )
+			super.fireActionPerformed( new ActionEvent( this,  ActionEvent.ACTION_PERFORMED, super.getText() ) );
+
+		getModel().setPressed( false );
 		updateButtonColors ();
 	}
 
 	private void updateButtonColors ()
 	{
-		super.setBackground( ( this.mouseButtonPressed && ! this.mouseExited ) ? this.foreColor : this.backColor );
-		super.setForeground( ( this.mouseButtonPressed && ! this.mouseExited ) ? this.backColor : this.foreColor );
+		super.setBackground( ( getModel().isPressed() && getModel().isRollover() ) ? this.foreColor : this.backColor );
+		super.setForeground( ( getModel().isPressed() && getModel().isRollover() ) ? this.backColor : this.foreColor );
 	}
 
 	public void mouseClicked( MouseEvent me ) {}
 
-	protected void fireActionPerformed( ActionEvent event )
-	{
-		if ( this.mouseButtonPressed && ! this.mouseExited )
-			super.fireActionPerformed( event );
-	}
+}
+
+
+class CuteSwingButtonModel extends javax.swing.DefaultButtonModel
+{
+
+	private boolean pushed = false ;
+	private boolean rollover = false ;
+
+	public CuteSwingButtonModel( ) {  super() ;  }
+
+	public void setRollover ( boolean over ) {  this.rollover = over ;  }
+	public boolean isRollover () {  return this.rollover ;  }
+
+	public void setPressed ( boolean pressed ) {  this.pushed = pressed ;  }
+	public boolean isPressed () {  return this.pushed ;  }
+
+	public void setSelected ( boolean selected ) {}
+	public boolean isSelected () {  return false ;  }
+
+	public void setArmed ( boolean armed ) {}
+	public boolean isArmed () {  return false ;  }
+
+	public void setEnabled ( boolean enabled ) {}
+	public boolean isEnabled () {  return true ;  } // always enabled
+
+	protected void fireStateChanged () {}
+	protected void fireItemStateChanged ( java.awt.event.ItemEvent e ) {}
+
+	public void addChangeListener ( javax.swing.event.ChangeListener l ) {}
+	public void removeChangeListener ( javax.swing.event.ChangeListener l ) {}
+	public void addItemListener ( java.awt.event.ItemListener l ) {}
+	public void removeItemListener ( java.awt.event.ItemListener l ) {}
 
 }
 

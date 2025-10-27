@@ -225,7 +225,7 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 		// split frames by orientations
 
 		int howManyOrientations = description.howManyOrientations() ;
-		Vector< String > orientations = whatOrientations() ;
+		String[] orientations = whatOrientations() ;
 
 		int howManyFramesWithoutExtra = rawFrames.size() - description.howManyExtraFrames() ;
 		if ( ( howManyFramesWithoutExtra % howManyOrientations != 0 ) || ( howManyOrientations > howManyFramesWithoutExtra ) )
@@ -241,9 +241,9 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 				NamedOffscreenImage frame = new NamedOffscreenImage( rawFrames.elementAt(( o * rawRow ) + description.getFrameAt( f )) );
 				frame.setName( description.getKind() + " "
 						+ StringUtilities.toStringWithOrdinalSuffix( f ) + " frame "
-						+ "in " + orientations.elementAt( o ) );
+						+ "in " + orientations[ o ] );
 
-				addFrameTo( orientations.elementAt( o ), frame );
+				addFrameTo( orientations[ o ], frame );
 			}
 		}
 
@@ -296,7 +296,7 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 		// split frames of shadow by orientations
 
 		int howManyOrientations = description.howManyOrientations() ;
-		Vector< String > orientations = whatOrientations() ;
+		String[] orientations = whatOrientations() ;
 
 		int howManyShadowsWithoutExtra = rawShadows.size() - description.howManyExtraFrames() ;
 		if ( ( howManyShadowsWithoutExtra % howManyOrientations != 0 ) || ( howManyOrientations > howManyShadowsWithoutExtra ) )
@@ -312,9 +312,9 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 				NamedOffscreenImage shadow = new NamedOffscreenImage( rawShadows.elementAt(( o * rawRow ) + description.getFrameAt( f )) );
 				shadow.setName( description.getKind() + " "
 						+ StringUtilities.toStringWithOrdinalSuffix( f ) + " shadow "
-						+ "in " + orientations.elementAt( o ) );
+						+ "in " + orientations[ o ] );
 
-				addShadowTo( orientations.elementAt( o ), shadow );
+				addShadowTo( orientations[ o ], shadow );
 			}
 		}
 
@@ -330,20 +330,20 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 
 	/** returns the various orientations of this item’s graphics
 	 */
-	private Vector< String > whatOrientations ()
+	private String[] whatOrientations ()
 	{
 		int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
-		Vector< String > orientations = new Vector< String >( howManyOrientations );
+		String[] orientations = new String[ howManyOrientations ];
 
 		if ( howManyOrientations > 0 ) {
-			orientations.add( "south" );
+			orientations[ 0 ] = "south" ;
 
 			if ( howManyOrientations > 1 ) /* south and west */ {
-				orientations.add( "west" );
+				orientations[ 1 ] = "west" ;
 
-				if ( howManyOrientations > 2 ) /* south, west, north, east */ {
-					orientations.add( "north" );
-					orientations.add( "east" );
+				if ( howManyOrientations == 4 ) /* south, west, north, east */ {
+					orientations[ 2 ] = "north" ;
+					orientations[ 3 ] = "east" ;
 				}
 			}
 		}
