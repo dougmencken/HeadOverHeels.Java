@@ -9,14 +9,17 @@
 package head.over.heels.gui ;
 
 import javax.swing.JButton ;
+import javax.swing.AbstractButton ;
 
 import java.awt.event.ActionEvent ;
+import java.awt.event.ActionListener ;
 import java.awt.event.MouseEvent ;
 import java.awt.event.MouseListener ;
 
 import java.awt.Color ;
-
 import head.over.heels.Colours ;
+
+import java.util.Vector ;
 
 
 public class CuteSwingButton extends JButton implements MouseListener
@@ -79,6 +82,12 @@ public class CuteSwingButton extends JButton implements MouseListener
 
 	public boolean isEnabled () {  return true ;  }
 
+	public void setActionCommand ( String command ) {  getModel().setActionCommand( command );  }
+	public String getActionCommand () {  return getModel().getActionCommand() ;  }
+
+	public void addActionListener ( ActionListener l ) {  getModel().addActionListener( l );  }
+	public void removeActionListener ( ActionListener l ) {  getModel().removeActionListener( l );  }
+
 	public void mouseEntered( MouseEvent me ) {
 		getModel().setRollover( true );
 		updateButtonColors ();
@@ -95,8 +104,18 @@ public class CuteSwingButton extends JButton implements MouseListener
 	}
 
 	public void mouseReleased( MouseEvent me ) {
-		if ( getModel().isRollover() )
-			super.fireActionPerformed( new ActionEvent( this,  ActionEvent.ACTION_PERFORMED, super.getText() ) );
+		if ( getModel().isRollover() ) {
+			ActionEvent newActionEvent = new ActionEvent(
+				this, ActionEvent.ACTION_PERFORMED,
+				getActionCommand(),
+				System.currentTimeMillis(), ///java.awt.EventQueue.getMostRecentEventTime(),
+				me.getModifiersEx()
+			);
+			if ( getModel() instanceof CuteSwingButtonModel )
+				( (CuteSwingButtonModel) getModel() ).fireActionPerformed( newActionEvent );
+			else
+				super.fireActionPerformed( newActionEvent );
+		}
 
 		getModel().setPressed( false );
 		updateButtonColors ();
@@ -113,13 +132,16 @@ public class CuteSwingButton extends JButton implements MouseListener
 }
 
 
-class CuteSwingButtonModel extends javax.swing.DefaultButtonModel
+class CuteSwingButtonModel implements javax.swing.ButtonModel
 {
 
 	private boolean pushed = false ;
 	private boolean rollover = false ;
 
-	public CuteSwingButtonModel( ) {  super() ;  }
+	private String actionCommand = null ;
+	private Vector< ActionListener > actionListeners = new Vector< ActionListener >() ;
+
+	CuteSwingButtonModel( ) {}
 
 	public void setRollover ( boolean over ) {  this.rollover = over ;  }
 	public boolean isRollover () {  return this.rollover ;  }
@@ -136,13 +158,32 @@ class CuteSwingButtonModel extends javax.swing.DefaultButtonModel
 	public void setEnabled ( boolean enabled ) {}
 	public boolean isEnabled () {  return true ;  } // always enabled
 
-	protected void fireStateChanged () {}
-	protected void fireItemStateChanged ( java.awt.event.ItemEvent e ) {}
+	public void setActionCommand ( String command ) {  this.actionCommand = command ;  }
+	public String getActionCommand () {  return this.actionCommand ;  }
+
+	public void addActionListener ( ActionListener l ) {  this.actionListeners.add( l );  }
+	public void removeActionListener ( ActionListener l ) {  this.actionListeners.remove( l );  }
+
+	void fireActionPerformed ( ActionEvent e ) {
+		for ( ActionListener l : this.actionListeners )
+			l.actionPerformed( e );
+	}
 
 	public void addChangeListener ( javax.swing.event.ChangeListener l ) {}
 	public void removeChangeListener ( javax.swing.event.ChangeListener l ) {}
+	///void fireStateChanged () {}
+
 	public void addItemListener ( java.awt.event.ItemListener l ) {}
 	public void removeItemListener ( java.awt.event.ItemListener l ) {}
+	///void fireItemStateChanged ( java.awt.event.ItemEvent e ) {}
+
+	public void setGroup ( javax.swing.ButtonGroup g ) {}
+	public javax.swing.ButtonGroup getGroup () {  return null ;  }
+
+	public void setMnemonic ( int mnemonic ) {}
+	public int getMnemonic () {  return 0 ;  }
+
+	public Object[] getSelectedObjects() {  return null ;  }
 
 }
 
@@ -151,9 +192,9 @@ class RoundedCornerBorder implements javax.swing.border.Border
 {
 
 	private int borderRadius ;
-	private JButton forButton ;
+	private AbstractButton forButton ;
 
-	public RoundedCornerBorder( int radius, JButton button )
+	RoundedCornerBorder( int radius, AbstractButton button )
 	{
 		this.borderRadius = radius ;
 		this.forButton = button ;
