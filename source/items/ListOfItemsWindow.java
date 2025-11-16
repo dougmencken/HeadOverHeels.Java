@@ -14,6 +14,7 @@ import javax.swing.JPanel ;
 import javax.swing.JCheckBox ;
 import javax.swing.JComboBox ;
 import javax.swing.JLabel ;
+import javax.swing.JTabbedPane ;
 
 import head.over.heels.gui.CuteSwingButton ;
 
@@ -224,7 +225,7 @@ public class ListOfItemsWindow extends JFrame
 class ItemGraphicsWindow extends JFrame
 {
 
-	public ItemGraphicsWindow ( String kindOfItem, JFrame parentWindow )
+	ItemGraphicsWindow ( String kindOfItem, JFrame parentWindow )
 	{
 		super( StringUtilities.putInQuotes( kindOfItem ) + " graphics" );
 		super.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
@@ -232,36 +233,98 @@ class ItemGraphicsWindow extends JFrame
 		FreeItem item = new FreeItem( ItemDescriptions.descriptions().getDescriptionByKind( kindOfItem ), 0, 0, 0, "south" );
 		int framesPerOrientation = item.getDescriptionOfItem().howManyFramesPerOrientation() ;
 
-		JPanel framesPanel = new JPanel() ;
-		framesPanel.setBorder( new javax.swing.border.EmptyBorder( 20, 20, 20, 20 ) ) ;
-		framesPanel.setLayout( new java.awt.GridLayout( /* rows */ 2, /* columns */ framesPerOrientation, /* h gap */ 10, /* v gap */ 0 ) );
+		JTabbedPane tabbedPane = new JTabbedPane( JTabbedPane.TOP );
 
-		String currentSequence = item.getCurrentFrameSequence() ;
-		for ( int n = 0 ; n < framesPerOrientation ; ++ n ) {
-			try {
-				JLabel imageLabel = new JLabel( new javax.swing.ImageIcon( item.getNthFrameIn( currentSequence, n ) ) );
-				framesPanel.add( imageLabel );
-			} catch ( head.over.heels.NoSuchPictureException x ) {
-				framesPanel.add( new JLabel(
-					"no " + StringUtilities.toStringWithOrdinalSuffix( n ) + " frame in " + StringUtilities.putInQuotes( currentSequence )
-				) );
+		String[] orientations = { "south", "west", "north", "east" } ;
+		for ( String sequence : orientations )
+		{
+			ItemFramesPanel framesPanel = new ItemFramesPanel( framesPerOrientation );
+
+			for ( int n = 0 ; n < framesPerOrientation ; ++ n ) {
+				try {
+					framesPanel.addImage( item.getNthFrameIn( sequence, n ) );
+				} catch ( head.over.heels.NoSuchPictureException x ) {
+					framesPanel.addText(
+						"no " + StringUtilities.toStringWithOrdinalSuffix( n ) + " frame in " + StringUtilities.putInQuotes( sequence )
+					);
+				}
 			}
-		}
-		for ( int n = 0 ; n < framesPerOrientation ; ++ n ) {
-			try {
-				JLabel imageLabel = new JLabel( new javax.swing.ImageIcon( item.getNthShadowIn( currentSequence, n ) ) );
-				framesPanel.add( imageLabel );
-			} catch ( head.over.heels.NoSuchPictureException x ) {
-				framesPanel.add( new JLabel(
-					"no " + StringUtilities.toStringWithOrdinalSuffix( n ) + " shadow in " + StringUtilities.putInQuotes( currentSequence )
-				) );
+			for ( int n = 0 ; n < framesPerOrientation ; ++ n ) {
+				try {
+					framesPanel.addImage( item.getNthShadowIn( sequence, n ) );
+				} catch ( head.over.heels.NoSuchPictureException x ) {
+					framesPanel.addText(
+						"no " + StringUtilities.toStringWithOrdinalSuffix( n ) + " shadow in " + StringUtilities.putInQuotes( sequence )
+					);
+				}
 			}
+
+			tabbedPane.addTab( sequence, framesPanel );
 		}
 
-		super.add( framesPanel );
+		int extraFrames = item.getDescriptionOfItem().howManyExtraFrames() ;
+		if ( extraFrames > 0 ) {
+			ItemFramesPanel extraFramesPanel = new ItemFramesPanel( extraFrames );
+
+			final String extraSequence = "extra" ;
+			for ( int n = 0 ; n < extraFrames ; ++ n ) {
+				try {
+					extraFramesPanel.addImage( item.getNthFrameIn( extraSequence, n ) );
+				} catch ( head.over.heels.NoSuchPictureException x ) {
+					extraFramesPanel.addText( "no " + StringUtilities.toStringWithOrdinalSuffix( n ) + " extra frame" );
+				}
+			}
+			for ( int n = 0 ; n < extraFrames ; ++ n ) {
+				try {
+					extraFramesPanel.addImage( item.getNthShadowIn( extraSequence, n ) );
+				} catch ( head.over.heels.NoSuchPictureException x ) {
+					extraFramesPanel.addText( "no " + StringUtilities.toStringWithOrdinalSuffix( n ) + " extra shadow" );
+				}
+			}
+
+			tabbedPane.addTab( extraSequence, extraFramesPanel );
+		}
+
+		super.add( tabbedPane );
 		super.pack() ;
-
 		super.setLocation( parentWindow.getLocation().x, parentWindow.getLocation().y + parentWindow.getHeight() + 10 );
+	}
+
+}
+
+
+class ItemFramesPanel extends JPanel
+{
+
+	private JPanel toAddTo ;
+
+	ItemFramesPanel( int columns )
+	{
+		super( );
+
+		this.toAddTo = new JPanel() ;
+		this.toAddTo.setLayout( new java.awt.GridLayout( /* rows */ 2, columns, /* h gap */ 10, /* v gap */ 0 ) );
+
+		super.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.CENTER ) );
+		super.setBorder( new javax.swing.border.EmptyBorder( 20, 20, 20, 20 ) ) ;
+		super.add( this.toAddTo );
+	}
+
+	/* @Override */
+	public java.awt.Component add( java.awt.Component what )
+	{
+		///throw new UnsupportedOperationException( "use addImage or addText" );
+		return this.toAddTo.add( what );
+	}
+
+	void addImage( java.awt.image.BufferedImage image )
+	{
+		this.toAddTo.add( new JLabel( new javax.swing.ImageIcon( image ) ) );
+	}
+
+	void addText( String text )
+	{
+		this.toAddTo.add( new JLabel( text ) );
 	}
 
 }

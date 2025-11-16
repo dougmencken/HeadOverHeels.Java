@@ -71,7 +71,6 @@ public class Font
 	}
 
 	/**
-	 * @param name the name of this font
 	 * @param color the color of letters
 	 * @param doubleHeight true for the double height stretching of letters
 	 * @param spaceTwitter or spaceX, the horizontal spacing between letters
