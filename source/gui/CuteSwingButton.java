@@ -47,7 +47,7 @@ public class CuteSwingButton extends JButton implements MouseListener
 
 		super.setModel( new CuteSwingButtonModel() );
 
-		super.setBorder( new RoundedCornerBorder( CuteSwingButton.rounding_radius, this ) );
+		super.setBorder( new RoundedCornerSwingBorder( CuteSwingButton.rounding_radius, this ) );
 		super.setAlignmentX( java.awt.Component.CENTER_ALIGNMENT );
 
 		super.setContentAreaFilled( false ); // don’t draw the default background for button
@@ -188,13 +188,13 @@ class CuteSwingButtonModel implements javax.swing.ButtonModel
 }
 
 
-class RoundedCornerBorder implements javax.swing.border.Border
+class RoundedCornerSwingBorder implements javax.swing.border.Border
 {
 
 	private int borderRadius ;
 	private AbstractButton forButton ;
 
-	RoundedCornerBorder( int radius, AbstractButton button )
+	RoundedCornerSwingBorder( int radius, AbstractButton button )
 	{
 		this.borderRadius = radius ;
 		this.forButton = button ;

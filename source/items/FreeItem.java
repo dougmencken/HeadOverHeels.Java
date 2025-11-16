@@ -69,7 +69,7 @@ public class FreeItem extends DescribedItem implements Drawable, Masky
 	{
 		if ( ! this.heading.equals( where ) ) {
 			this.heading = where ;
-			changeFrame( firstFrame() );
+			setCurrentFrameSequence( this.heading );
 		}
 	}
 

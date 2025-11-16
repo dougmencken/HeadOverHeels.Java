@@ -54,7 +54,7 @@ public abstract class TheMostAbstractItem extends Mediated
 		this.currentSequence = itemToCopy.getCurrentFrameSequence() ;
 		this.currentFrame = itemToCopy.getCurrentFrame() ;
 		this.backwardsMotion = itemToCopy.isAnimatedBackwards() ;
-		this.setupAnimation() ;
+		this.resetAnimation() ;
 	}
 
 	// the name of this item by which it can be distinguished from any other item
@@ -100,7 +100,7 @@ public abstract class TheMostAbstractItem extends Mediated
 	/**
 	 * The sequence of frames usually changes when the heading, aka angular orientation, changes
 	 */
-	protected void setCurrentFrameSequence ( String whatSequence ) {  this.currentSequence = whatSequence ; setupAnimation() ;  }
+	protected void setCurrentFrameSequence ( String whatSequence ) {  this.currentSequence = whatSequence ; resetAnimation() ;  }
 
 	public int howManyFramesIn ( String sequence )
 	{
@@ -163,11 +163,12 @@ public abstract class TheMostAbstractItem extends Mediated
 	public NamedOffscreenImage getCurrentRawImage () {  return getCurrentRawImageIn( getCurrentFrameSequence() ) ;  }
 
 	/**
-	 * Changes the current frame. Frames usually change when looping in the sequence of animation.
-	 * However there’re some cases when frames are changed manually. As example, in the behavior
-	 * of a spring stool the one frame is for resting and the other is for being fold
+	 * Changes the shown frame (in the current sequence). Frames usually change when looping in
+	 * the sequence of animation. However there’re some cases when frames are changed manually.
+	 * As example, in the behavior of a spring stool the one frame is for rest and the other is
+	 * for being fold
 	 */
-	public void changeFrame ( int newFrame )
+	public void changeFrameInTheCurrentSequence ( int newFrame )
 	{
 		if ( this.currentFrame == newFrame ) return ;
 
@@ -197,10 +198,10 @@ public abstract class TheMostAbstractItem extends Mediated
 	/**
 	 * Animate from the first to the last frame, which is by default
 	 */
-	public void doForthMotion ()
+	public void doForwardsMotion ()
 	{
 		this.backwardsMotion = false ;
-		changeFrame( firstFrame() );
+		changeFrameInTheCurrentSequence( firstFrame() );
 	}
 
 	/**
@@ -209,12 +210,12 @@ public abstract class TheMostAbstractItem extends Mediated
 	public void doBackwardsMotion ()
 	{
 		this.backwardsMotion = true ;
-		changeFrame( lastFrame() );
+		changeFrameInTheCurrentSequence( lastFrame() );
 	}
 
-	protected void setupAnimation ()
+	protected void resetAnimation ()
 	{
-		changeFrame( isAnimatedBackwards() ? lastFrame() : firstFrame() );
+		changeFrameInTheCurrentSequence( isAnimatedBackwards() ? lastFrame() : firstFrame() );
 	}
 
 	public String toString ()
