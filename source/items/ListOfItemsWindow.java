@@ -11,7 +11,6 @@ package head.over.heels.items ;
 import javax.swing.JFrame ;
 import javax.swing.JPanel ;
 
-import javax.swing.JCheckBox ;
 import javax.swing.JComboBox ;
 import javax.swing.JLabel ;
 import javax.swing.JTabbedPane ;
@@ -319,12 +318,12 @@ class ItemFramesPanel extends JPanel
 
 	void addImage( java.awt.image.BufferedImage image )
 	{
-		this.toAddTo.add( new JLabel( new javax.swing.ImageIcon( image ) ) );
+		this.toAddTo.add( new JLabel( new javax.swing.ImageIcon( image ), JLabel.CENTER ) );
 	}
 
 	void addText( String text )
 	{
-		this.toAddTo.add( new JLabel( text ) );
+		this.toAddTo.add( new JLabel( text, JLabel.CENTER ) );
 	}
 
 }
