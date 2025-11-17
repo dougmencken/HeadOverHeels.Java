@@ -79,6 +79,26 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 
 	public String getOriginalKind () {  return this.originalKind ;  }
 
+	protected String sequenceBySymmetry ( String sequence )
+	{
+		int howManyOrientations = getDescriptionOfItem().howManyOrientations() ;
+
+		if ( howManyOrientations == 2 ) {
+			if ( sequence.equals( "north" ) ) return "south" ;
+			if ( sequence.equals( "east" ) ) return "west" ;
+		}
+		else if ( howManyOrientations == 1 )
+			if ( sequence.equals( "west" ) || sequence.equals( "north" ) || sequence.equals( "east" ) )
+				return "south" ;
+
+		return sequence ;
+	}
+
+	protected NamedOffscreenImage getNthFrameIn ( String sequence, int n ) throws NoSuchPictureException
+	{
+		return super.getNthFrameIn( sequenceBySymmetry( sequence ), n );
+	}
+
 	// the sequences of pictures of item’s shadow
 	private Map< String, Vector< NamedOffscreenImage > > shadows = null ;
 
@@ -94,6 +114,7 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 		}
 
 		Vector< NamedOffscreenImage > shadowsIn = this.shadows.get( sequence );
+		if ( shadowsIn == null ) shadowsIn = this.shadows.get( sequenceBySymmetry( sequence ) );
 		if ( shadowsIn != null && n < shadowsIn.size() )
 			return shadowsIn.elementAt( n );
 
