@@ -93,11 +93,9 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 			throw new NoSuchPictureException( message );
 		}
 
-		for ( String key : this.shadows.keySet() ) {
-			Vector< NamedOffscreenImage > shadowsIn = this.shadows.get( key );
-			if ( key.equals( sequence ) && n < shadowsIn.size() )
-				return shadowsIn.elementAt( n );
-		}
+		Vector< NamedOffscreenImage > shadowsIn = this.shadows.get( sequence );
+		if ( shadowsIn != null && n < shadowsIn.size() )
+			return shadowsIn.elementAt( n );
 
 		StringBuilder message = new StringBuilder() ;
 		message.append( "there’s no " ).append( StringUtilities.toStringWithOrdinalSuffix( n ) ).append( " shadow in " )

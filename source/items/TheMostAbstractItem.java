@@ -137,11 +137,9 @@ public abstract class TheMostAbstractItem extends Mediated
 
 	protected NamedOffscreenImage getNthFrameIn ( String sequence, int n ) throws NoSuchPictureException
 	{
-		for ( String key : this.frames.keySet() ) {
-			Vector< NamedOffscreenImage > framesIn = this.frames.get( key );
-			if ( key.equals( sequence ) && n < framesIn.size() )
-				return framesIn.elementAt( n );
-		}
+		Vector< NamedOffscreenImage > framesIn = this.frames.get( sequence );
+		if ( framesIn != null && n < framesIn.size() )
+			return framesIn.elementAt( n );
 
 		StringBuilder message = new StringBuilder() ;
 		message.append( "there’s no " ).append( StringUtilities.toStringWithOrdinalSuffix( n ) ).append( " frame in " )
