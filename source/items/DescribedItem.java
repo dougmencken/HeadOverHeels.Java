@@ -23,7 +23,7 @@ import java.util.Vector ;
 import java.awt.image.BufferedImage ;
 
 
-public abstract class DescribedItem extends TheMostAbstractItem implements Shady
+public abstract class DescribedItem extends AnimatedItem implements Shady
 {
 
 	// creates an item by description
@@ -37,6 +37,8 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 		this.originalKind = description.getKind() ;
 
 		super.setUniqueName( this.originalKind + "." + StringUtilities.makeRandomString( 12 ) );
+
+		super.setDelayBetweenFrames( description.getDelayBetweenFrames() );
 
 		this.readGraphicsOfItem() ;
 	}
@@ -78,6 +80,35 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 	private String originalKind ;
 
 	public String getOriginalKind () {  return this.originalKind ;  }
+
+	@Override
+	public boolean isAnimated ()
+	{
+		// an item with more than one frame per orientation is animated
+		return getDescriptionOfItem().howManyFramesPerOrientation() > 1 ;
+	}
+
+	@Override
+	protected int firstFrame ()
+	{
+		return isAtExtraFrame() ? getCurrentFrame() : super.firstFrame() ;
+	}
+
+	@Override
+	protected int lastFrame ()
+	{
+		return isAtExtraFrame() ? getCurrentFrame() : super.lastFrame() ;
+	}
+
+	@Override
+	public boolean isAnimationFinished ()
+	{
+		return isAtExtraFrame() ? true : super.isAnimationFinished() ;
+	}
+
+	public static final String extra_frames = "extra" ;
+
+	private boolean isAtExtraFrame () {  return getCurrentFrameSequence().equals( DescribedItem.extra_frames );  }
 
 	protected String sequenceBySymmetry ( String sequence )
 	{
@@ -272,7 +303,7 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 			NamedOffscreenImage extraFrame = new NamedOffscreenImage( rawFrames.elementAt( extra + ( rawRow * howManyOrientations ) ) );
 			extraFrame.setName( description.getKind () + " " + StringUtilities.toStringWithOrdinalSuffix( extra ) + " extra frame" );
 
-			addFrameTo( "extra", extraFrame );
+			addFrameTo( DescribedItem.extra_frames, extraFrame );
 		}
 	}
 
@@ -343,7 +374,7 @@ public abstract class DescribedItem extends TheMostAbstractItem implements Shady
 			NamedOffscreenImage extraShadow = new NamedOffscreenImage( rawShadows.elementAt( extra + ( rawRow * howManyOrientations ) ) );
 			extraShadow.setName( description.getKind () + " " + StringUtilities.toStringWithOrdinalSuffix( extra ) + " extra shadow" );
 
-			addShadowTo( "extra", extraShadow );
+			addShadowTo( DescribedItem.extra_frames, extraShadow );
 		}
 	}
 

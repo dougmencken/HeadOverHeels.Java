@@ -17,7 +17,7 @@ import javax.swing.JComponent ;
 import java.awt.Color ;
 
 
-class ContentOfGameWindow extends JComponent
+class DrawnInTheGameWindow extends JComponent
 {
 
 	/**
@@ -56,7 +56,7 @@ class ContentOfGameWindow extends JComponent
 	private ImageTransition transition ;
 
 
-	ContentOfGameWindow ( int width, int height )
+	DrawnInTheGameWindow ( int width, int height )
 	{
 		setBackground( Colours.reducedRed );
 		setSize( width, height );
@@ -194,7 +194,7 @@ class ContentOfGameWindow extends JComponent
 public class GameWindow extends JFrame
 {
 
-	private ContentOfGameWindow contentPane ;
+	private DrawnInTheGameWindow pane ;
 
 	private GamePreferences preferences ;
 
@@ -267,8 +267,8 @@ public class GameWindow extends JFrame
 		setLocationRelativeTo( null ); // to center this JFrame on the screen
 		setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
 
-		this.contentPane = new ContentOfGameWindow( getWidth(), getHeight() );
-		setContentPane( this.contentPane );
+		this.pane = new DrawnInTheGameWindow( getWidth(), getHeight() );
+		setContentPane( this.pane );
 	}
 
 	public GameWindow ()
@@ -296,10 +296,10 @@ public class GameWindow extends JFrame
 	private void finishPaintingContent ()
 	{
 		// if there's any unfinished transition, wait for it to complete
-		while ( ! this.contentPane.isTransitionFinished () )
-			this.contentPane.waitForTransitionToFinish ();
+		while ( ! this.pane.isTransitionFinished () )
+			this.pane.waitForTransitionToFinish ();
 
-		this.contentPane.stopRepaintTimer ();
+		this.pane.stopRepaintTimer ();
 	}
 
 	public void dispose ()
@@ -311,12 +311,12 @@ public class GameWindow extends JFrame
 
 	public void randomPixelFadeIn( Color fromColor )
 	{
-		this.contentPane.randomPixelFade( true, fromColor ) ;
+		this.pane.randomPixelFade( true, fromColor ) ;
 	}
 
 	public void randomPixelFadeOut( Color toColor )
 	{
-		this.contentPane.randomPixelFade( false, toColor ) ;
+		this.pane.randomPixelFade( false, toColor ) ;
 	}
 
 }

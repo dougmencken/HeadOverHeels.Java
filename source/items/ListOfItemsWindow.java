@@ -265,23 +265,22 @@ class ItemGraphicsWindow extends JFrame
 		if ( extraFrames > 0 ) {
 			ItemFramesPanel extraFramesPanel = new ItemFramesPanel( extraFrames );
 
-			final String extraSequence = "extra" ;
 			for ( int n = 0 ; n < extraFrames ; ++ n ) {
 				try {
-					extraFramesPanel.addImage( item.getNthFrameIn( extraSequence, n ) );
+					extraFramesPanel.addImage( item.getNthFrameIn( DescribedItem.extra_frames, n ) );
 				} catch ( head.over.heels.NoSuchPictureException x ) {
 					extraFramesPanel.addText( "no " + StringUtilities.toStringWithOrdinalSuffix( n ) + " extra frame" );
 				}
 			}
 			for ( int n = 0 ; n < extraFrames ; ++ n ) {
 				try {
-					extraFramesPanel.addImage( item.getNthShadowIn( extraSequence, n ) );
+					extraFramesPanel.addImage( item.getNthShadowIn( DescribedItem.extra_frames, n ) );
 				} catch ( head.over.heels.NoSuchPictureException x ) {
 					extraFramesPanel.addText( "no " + StringUtilities.toStringWithOrdinalSuffix( n ) + " extra shadow" );
 				}
 			}
 
-			tabbedPane.addTab( extraSequence, extraFramesPanel );
+			tabbedPane.addTab( DescribedItem.extra_frames, extraFramesPanel );
 		}
 
 		super.add( tabbedPane );

@@ -33,8 +33,7 @@ public abstract class TheMostAbstractItem extends Mediated
 		this.uniqueName = StringUtilities.makeRandomString( 22 );
 		this.behavior = null ;
 		this.currentSequence = "" ;
-		this.currentFrame = firstFrame() ;
-		this.backwardsMotion = false ;
+		this.currentFrame = 0 ;
 	}
 
 	// the copy constructor
@@ -53,8 +52,6 @@ public abstract class TheMostAbstractItem extends Mediated
 
 		this.currentSequence = itemToCopy.getCurrentFrameSequence() ;
 		this.currentFrame = itemToCopy.getCurrentFrame() ;
-		this.backwardsMotion = itemToCopy.isAnimatedBackwards() ;
-		this.resetAnimation() ;
 	}
 
 	// the name of this item by which it can be distinguished from any other item
@@ -100,7 +97,7 @@ public abstract class TheMostAbstractItem extends Mediated
 	/**
 	 * The sequence of frames usually changes when the heading, aka angular orientation, changes
 	 */
-	protected void setCurrentFrameSequence ( String whatSequence ) {  this.currentSequence = whatSequence ; resetAnimation() ;  }
+	protected void setCurrentFrameSequence ( String whatSequence ) {  this.currentSequence = whatSequence ;  }
 
 	public int howManyFramesIn ( String sequence )
 	{
@@ -127,13 +124,10 @@ public abstract class TheMostAbstractItem extends Mediated
 
 	protected int getCurrentFrame () {  return this.currentFrame ;  }
 
-	protected int firstFrame () {  return 0 ;  }
-
-	protected int lastFrame ()
-	{
-		int howMany = howManyFramesInTheCurrentSequence() ;
-		return ( howMany > 0 ) ? howMany - 1 : 0 ;
-	}
+	/**
+	 * Override this method to tell is the item animated or not
+	 */
+	public abstract boolean isAnimated () ;
 
 	protected NamedOffscreenImage getNthFrameIn ( String sequence, int n ) throws NoSuchPictureException
 	{
@@ -186,34 +180,6 @@ public abstract class TheMostAbstractItem extends Mediated
 		this.frames.get( sequence ).add( frame );
 
 		if ( getCurrentFrameSequence().isEmpty() ) setCurrentFrameSequence( sequence );
-	}
-
-	// true to reverse the animation sequence
-	private boolean backwardsMotion = false ;
-
-	public boolean isAnimatedBackwards () {  return this.backwardsMotion ;  }
-
-	/**
-	 * Animate from the first to the last frame, which is by default
-	 */
-	public void doForwardsMotion ()
-	{
-		this.backwardsMotion = false ;
-		changeFrameInTheCurrentSequence( firstFrame() );
-	}
-
-	/**
-	 * Animate from the last to the first frame, backwards
-	 */
-	public void doBackwardsMotion ()
-	{
-		this.backwardsMotion = true ;
-		changeFrameInTheCurrentSequence( lastFrame() );
-	}
-
-	protected void resetAnimation ()
-	{
-		changeFrameInTheCurrentSequence( isAnimatedBackwards() ? lastFrame() : firstFrame() );
 	}
 
 	public String toString ()
