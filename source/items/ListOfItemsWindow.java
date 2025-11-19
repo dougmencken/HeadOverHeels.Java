@@ -23,31 +23,30 @@ import head.over.heels.StringUtilities ;
 public class ListOfItemsWindow extends JFrame
 {
 
-	private JComboBox< String > theList = null ;
+	private JComboBox< String > theList ;
 
-	private JLabel itemWidthX ;
-	private JLabel itemWidthY ;
-	private JLabel itemHeight ;
+	private JLabel itemWidthX = new JLabel() ;
+	private JLabel itemWidthY = new JLabel() ;
+	private JLabel itemHeight = new JLabel() ;
 
-	private JLabel itemWeight ;
-	private JLabel itemSpeed ;
+	private JLabel itemWeight = new JLabel() ;
+	private JLabel itemSpeed = new JLabel() ;
 
-	private JLabel itemMortal ;
+	private JLabel itemIsMortal = new JLabel() ;
 
-	private JLabel itemFramesFile ;
-	private JLabel itemFrameWidth ;
-	private JLabel itemFrameHeight ;
+	private JLabel itemFramesFile = new JLabel() ;
+	private JLabel itemFrameWidth = new JLabel() ;
+	private JLabel itemFrameHeight = new JLabel() ;
 
-	private JLabel itemDelayBetweenFrames ;
+	private JLabel itemDelayBetweenFrames = new JLabel() ;
 
-	private JLabel itemShadowsFile ;
-	private JLabel itemWidthOfShadow ;
-	private JLabel itemHeightOfShadow ;
+	private JLabel itemShadowsFile = new JLabel() ;
+	private JLabel itemWidthOfShadow = new JLabel() ;
+	private JLabel itemHeightOfShadow = new JLabel() ;
 
-	private JLabel itemSequenceOFrames ;
-
-	private JLabel itemOrientations ;
-	private JLabel itemExtraFrames ;
+	private JLabel itemSequenceOFrames = new JLabel() ;
+	private JLabel itemOrientations = new JLabel() ;
+	private JLabel itemExtraFrames = new JLabel() ;
 
 	private CuteSwingButton graphicsButton ;
 
@@ -69,76 +68,40 @@ public class ListOfItemsWindow extends JFrame
 		this.theList.addActionListener( new java.awt.event.ActionListener( )
 		{
 			public void actionPerformed( java.awt.event.ActionEvent e ) {
-				updateComponents ();
+				updateLabels ();
+				pack() ;
 			}
 		} );
 
 		panel.add( this.theList );
-
 		panel.add( javax.swing.Box.createVerticalStrut( 10 ) );
 
-		JPanel infoPanel = new JPanel() ;
-		infoPanel.setLayout( new java.awt.GridLayout( /* rows */ 16, /* columns */ 2, /* h gap */ 20, /* v gap */ 5 ) );
+		this.resetLabels() ;
+
+		ItemDescriptionPanel infoPanel = new ItemDescriptionPanel() ;
 		{
-			this.itemWidthX = new JLabel( "(width-x)" );
-			this.itemWidthY = new JLabel( "(width-y)" );
-			this.itemHeight = new JLabel( "(height)" );
-			this.itemWeight = new JLabel( "(weight)" );
-			this.itemSpeed = new JLabel( "(speed)" );
+			infoPanel.addTwoLabels( new JLabel( "width x" ), this.itemWidthX );
+			infoPanel.addTwoLabels( new JLabel( "width y" ), this.itemWidthY );
+			infoPanel.addTwoLabels( new JLabel( "height" ), this.itemHeight );
 
-			infoPanel.add( new JLabel( "width x" ) );
-			infoPanel.add( this.itemWidthX );
-			infoPanel.add( new JLabel( "width y" ) );
-			infoPanel.add( this.itemWidthY );
-			infoPanel.add( new JLabel( "height" ) );
-			infoPanel.add( this.itemHeight );
+			infoPanel.addTwoLabels( new JLabel( "weight" ), this.itemWeight );
+			infoPanel.addTwoLabels( new JLabel( "speed" ), this.itemSpeed );
 
-			infoPanel.add( new JLabel( "weight" ) );
-			infoPanel.add( this.itemWeight );
-			infoPanel.add( new JLabel( "speed" ) );
-			infoPanel.add( this.itemSpeed );
+			infoPanel.addTwoLabels( new JLabel( "is mortal?" ), this.itemIsMortal );
 
-			this.itemMortal = new JLabel( "(mortal?)" );
-			infoPanel.add( new JLabel( "mortal" ) );
-			infoPanel.add( this.itemMortal );
+			infoPanel.addTwoLabels( new JLabel( "frames file" ), this.itemFramesFile );
+			infoPanel.addTwoLabels( new JLabel( "frame width" ), this.itemFrameWidth );
+			infoPanel.addTwoLabels( new JLabel( "frame height" ), this.itemFrameHeight );
 
-			this.itemFramesFile = new JLabel( "(frames-file)" );
-			this.itemFrameWidth = new JLabel( "(frame-width)" );
-			this.itemFrameHeight = new JLabel( "(frame-height)" );
+			infoPanel.addTwoLabels( new JLabel( "delay between frames" ), this.itemDelayBetweenFrames );
 
-			infoPanel.add( new JLabel( "frames file" ) );
-			infoPanel.add( this.itemFramesFile );
-			infoPanel.add( new JLabel( "frame width" ) );
-			infoPanel.add( this.itemFrameWidth );
-			infoPanel.add( new JLabel( "frame height" ) );
-			infoPanel.add( this.itemFrameHeight );
+			infoPanel.addTwoLabels( new JLabel( "shadows file" ), this.itemShadowsFile );
+			infoPanel.addTwoLabels( new JLabel( "width of shadow" ), this.itemWidthOfShadow );
+			infoPanel.addTwoLabels( new JLabel( "height of shadow" ), this.itemHeightOfShadow );
 
-			this.itemDelayBetweenFrames = new JLabel( "(delay-between-frames)" );
-			infoPanel.add( new JLabel( "delay between frames" ) );
-			infoPanel.add( this.itemDelayBetweenFrames );
-
-			this.itemShadowsFile = new JLabel( "(shadows-file)" );
-			this.itemWidthOfShadow = new JLabel( "(width-of-shadow)" );
-			this.itemHeightOfShadow = new JLabel( "(height-of-shadow)" );
-
-			infoPanel.add( new JLabel( "shadows file" ) );
-			infoPanel.add( this.itemShadowsFile );
-			infoPanel.add( new JLabel( "width of shadow" ) );
-			infoPanel.add( this.itemWidthOfShadow );
-			infoPanel.add( new JLabel( "height of shadow" ) );
-			infoPanel.add( this.itemHeightOfShadow );
-
-			this.itemSequenceOFrames = new JLabel( "(sequence-of-frames)" );
-			infoPanel.add( new JLabel( "sequence o’ frames" ) );
-			infoPanel.add( this.itemSequenceOFrames );
-
-			this.itemOrientations = new JLabel( "(orientations)" );
-			infoPanel.add( new JLabel( "orientations" ) );
-			infoPanel.add( this.itemOrientations );
-
-			this.itemExtraFrames = new JLabel( "(extra-frames)" );
-			infoPanel.add( new JLabel( "extra frames" ) );
-			infoPanel.add( this.itemExtraFrames );
+			infoPanel.addTwoLabels( new JLabel( "sequence o’ frames" ), this.itemSequenceOFrames );
+			infoPanel.addTwoLabels( new JLabel( "orientations" ), this.itemOrientations );
+			infoPanel.addTwoLabels( new JLabel( "extra frames" ), this.itemExtraFrames );
 		}
 		panel.add( infoPanel );
 
@@ -154,14 +117,15 @@ public class ListOfItemsWindow extends JFrame
 
 		panel.add( this.graphicsButton );
 
-		this.updateComponents() ;
+		this.updateLabels() ;
+		super.pack() ;
 
 		java.awt.GraphicsConfiguration gconfig = super.getGraphicsConfiguration() ;
 		java.awt.Rectangle bounds = gconfig.getBounds() ;
 		super.setLocation( ( bounds.width << 1 ) / 3, bounds.height >> 2 );
 	}
 
-	public void updateComponents ()
+	public void updateLabels ()
 	{
 		Object chosenItem = this.theList.getSelectedItem() ;
 		if ( chosenItem != null ) {
@@ -175,7 +139,7 @@ public class ListOfItemsWindow extends JFrame
 			this.itemWeight.setText(String.valueOf( description.getWeight() ));
 			this.itemSpeed.setText(String.valueOf( description.getSpeed() ));
 
-			this.itemMortal.setText( description.isMortal() ? "✔ yes" : "no" );
+			this.itemIsMortal.setText( description.isMortal() ? "✔ yes" : "no" );
 
 			this.itemFramesFile.setText(StringUtilities.putInQuotes( description.getNameOfFramesFile() ));
 			this.itemFrameWidth.setText(String.valueOf( description.getWidthOfFrame() ));
@@ -203,9 +167,35 @@ public class ListOfItemsWindow extends JFrame
 
 			this.itemOrientations.setText(String.valueOf( description.howManyOrientations() ));
 			this.itemExtraFrames.setText(String.valueOf( description.howManyExtraFrames() ));
-
-			super.pack() ;
 		}
+		else
+			this.resetLabels() ;
+	}
+
+	public void resetLabels ()
+	{
+		this.itemWidthX.setText( "𝔀𝓲𝓭𝓽𝓱-𝔁" );
+		this.itemWidthY.setText( "𝔀𝓲𝓭𝓽𝓱-𝔂" );
+		this.itemHeight.setText( "𝓱𝓮𝓲𝓰𝓱𝓽" );
+
+		this.itemWeight.setText( "𝔀𝓮𝓲𝓰𝓱𝓽" );
+		this.itemSpeed.setText( "𝓼𝓹𝓮𝓮𝓭" );
+
+		this.itemIsMortal.setText( "𝓲𝓼-𝓶𝓸𝓻𝓽𝓪𝓵" );
+
+		this.itemFramesFile.setText( "𝓯𝓻𝓪𝓶𝓮𝓼-𝓯𝓲𝓵𝓮" );
+		this.itemFrameWidth.setText( "𝓯𝓻𝓪𝓶𝓮-𝔀𝓲𝓭𝓽𝓱" );
+		this.itemFrameHeight.setText( "𝓯𝓻𝓪𝓶𝓮-𝓱𝓮𝓲𝓰𝓱𝓽" );
+
+		this.itemDelayBetweenFrames.setText( "𝓭𝓮𝓵𝓪𝔂-𝓫𝓮𝓽𝔀𝓮𝓮𝓷-𝓯𝓻𝓪𝓶𝓮𝓼" );
+
+		this.itemShadowsFile.setText( "𝓼𝓱𝓪𝓭𝓸𝔀𝓼-𝓯𝓲𝓵𝓮" );
+		this.itemWidthOfShadow.setText( "𝔀𝓲𝓭𝓽𝓱-𝓸𝓯-𝓼𝓱𝓪𝓭𝓸𝔀" );
+		this.itemHeightOfShadow.setText( "𝓱𝓮𝓲𝓰𝓱𝓽-𝓸𝓯-𝓼𝓱𝓪𝓭𝓸𝔀" );
+
+		this.itemSequenceOFrames.setText( "𝓼𝓮𝓺𝓾𝓮𝓷𝓬𝓮-𝓸𝓯-𝓯𝓻𝓪𝓶𝓮𝓼" );
+		this.itemOrientations.setText( "𝓸𝓻𝓲𝓮𝓷𝓽𝓪𝓽𝓲𝓸𝓷𝓼" );
+		this.itemExtraFrames.setText( "𝓮𝔁𝓽𝓻𝓪-𝓯𝓻𝓪𝓶𝓮𝓼" );
 	}
 
 	public void showItemGraphics ()
@@ -216,6 +206,27 @@ public class ListOfItemsWindow extends JFrame
 			ItemGraphicsWindow graphicsWindow = new ItemGraphicsWindow( kind, this );
 			graphicsWindow.setVisible( true );
 		}
+	}
+
+}
+
+
+class ItemDescriptionPanel extends JPanel
+{
+
+	ItemDescriptionPanel( )
+	{
+		super() ;
+		super.setLayout( new java.awt.GridLayout( /* rows */ 16, /* columns */ 2, /* h gap */ 20, /* v gap */ 5 ) );
+	}
+
+	void addTwoLabels( JLabel first, JLabel second )
+	{
+		if ( first == null ) first = new JLabel( "➡️ 1st label is null ⬅️" );
+		if ( second == null ) second = new JLabel( "➡️ 2nd label is null ⬅️" );
+
+		super.add( first );
+		super.add( second );
 	}
 
 }
