@@ -303,23 +303,24 @@ public class Pictures
 
 	private static boolean listColorModelIfIndexed ( BufferedImage picture )
 	{
-		java.awt.image.ColorModel colors = picture.getColorModel ();
-		if ( colors instanceof java.awt.image.IndexColorModel ) {
-			dumpIndexColorModelTo( (java.awt.image.IndexColorModel) colors, System.out );
+		java.awt.image.ColorModel colours = picture.getColorModel ();
+		if ( colours instanceof java.awt.image.IndexColorModel ) {
+			dumpIndexColorModelTo( (java.awt.image.IndexColorModel) colours, System.out );
 			return true ;
 		}
 
+		System.out.println( "image’s color model is not indexed" );
 		return false ;
 	}
 
-	private static void dumpIndexColorModelTo ( java.awt.image.IndexColorModel indexedColors, java.io.PrintStream out )
+	private static void dumpIndexColorModelTo ( java.awt.image.IndexColorModel indexedColours, java.io.PrintStream out )
 	{
-		int [] colorMapRGBs = new int[ indexedColors.getMapSize() ];
-		indexedColors.getRGBs( colorMapRGBs );
+		int [] colorMapRGBs = new int[ indexedColours.getMapSize() ];
+		indexedColours.getRGBs( colorMapRGBs );
 
 		for ( int i = 0 ; i < colorMapRGBs.length ; ++ i ) {
 			out.print( "indexed colors [ " + i + " ] = " + String.format( "0x%08x", colorMapRGBs[ i ] ) );
-			if ( i == indexedColors.getTransparentPixel () ) out.print( " *transparent*" );
+			if ( i == indexedColours.getTransparentPixel () ) out.print( " *transparent*" );
 			out.println() ;
 		}
 	}
@@ -338,7 +339,8 @@ public class Pictures
 			while ( the0th.startsWith( "-" ) )
 				the0th = the0th.substring( 1 );
 
-			     if ( the0th.equals( "tg" ) || the0th.equals( "transparent-gray" ) ) what2do = "transparent gray" ;
+			     if ( the0th.equals( "lc" ) || the0th.equals( "list-colours" ) || the0th.equals( "list-colors" ) ) what2do = "list colours" ;
+			else if ( the0th.equals( "tg" ) || the0th.equals( "transparent-gray" ) ) what2do = "transparent gray" ;
 			else if ( the0th.equals( "tm" ) || the0th.equals( "transparent-magenta" ) ) what2do = "transparent magenta" ;
 			else if ( the0th.equals( "btw" ) || the0th.equals( "black-on-transparent-white" ) ) what2do = "black on transparent white" ;
 			else if ( the0th.equals( "diff" ) || the0th.equals( "difference" ) ) what2do = "difference" ;
@@ -375,7 +377,30 @@ public class Pictures
 
 		int howManyFileNames = arguments.length - firstFileName ;
 
-		if ( what2do.equals( "transparent gray" ) || what2do.equals( "transparent magenta" )
+		if ( what2do.equals( "list colours" ) )
+		{
+			if ( howManyFileNames < 1 ) {
+				out.println( "image files are expected as arguments" );
+				return ;
+			}
+
+			for ( int a = firstFileName ; a < arguments.length ; ++ a ) {
+				String nameOFile = arguments[ a ];
+
+				BufferedImage image = Pictures.readFromFile( new java.io.File( Storage.getPathToGameData(), nameOFile ) );
+				if ( image == null ) {
+					image = Pictures.readFromFile( new java.io.File( nameOFile ) );
+					if ( image == null ) {
+						out.println( "☹️ oops, can’t read an image from " + StringUtilities.putInQuotes( nameOFile ) );
+						continue ;
+					}
+				}
+
+				out.println( "🖼 image " + StringUtilities.putInQuotes( nameOFile ) );
+				Pictures.listColorModelIfIndexed( image );
+			}
+		}
+		else if ( what2do.equals( "transparent gray" ) || what2do.equals( "transparent magenta" )
 				|| what2do.equals( "black on transparent white" ) )
 		{
 			if ( howManyFileNames < 1 ) {
@@ -422,7 +447,7 @@ public class Pictures
 				// if can’t convert to indexed colors, it fails like "29671 various colors is more than 256"
 				catch ( TooManyColoursException e ) {  out.println( e.getMessage() );  }
 
-				// list the colors
+				// list the colours
 				Pictures.listColorModelIfIndexed( newImage );
 
 				int lastSeparatorAt = nameOFile.lastIndexOf( java.io.File.separatorChar );
@@ -493,6 +518,8 @@ public class Pictures
 				.append( "<what2do>" ).append( " " ).append( "[--suffix=<string>]" ).append( " " ).append( "<filenames>" ).append( newline )
 			.append( newline )
 			.append( "<what2do> is one of" ).append( newline )
+				.append( indent ).append( "✔ " ).append( "lc" ).append( " or " ).append( "list-colo(u)rs" )
+					.append( " - to " ).append( "list the colours of an indexed palette" ).append( newline )
 				.append( indent ).append( "✔ " ).append( "tg" ).append( " or " ).append( "transparent-gray" )
 					.append( " - to " ).append( "replace the opaque magenta background with transparent 50% gray" ).append( newline )
 				.append( indent ).append( "✔ " ).append( "tm" ).append( " or " ).append( "transparent-magenta" )

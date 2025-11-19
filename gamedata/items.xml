@@ -723,19 +723,19 @@
     <orientations>1</orientations>
 </item>
 
-<item kind="bighead-robot">
+<item kind="bigheaded-dalek">
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
     <mortal>yes</mortal>
-    <graphics file="big-head-robot.png">
+    <graphics file="bigheaded-dalek.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
     </graphics>
     <delay-between-frames>150</delay-between-frames>
-    <shadows file="big-head-robot-shadows.png">
+    <shadows file="bigheaded-dalek-shadows.png">
         <width-of-shadow>48</width-of-shadow>
         <height-of-shadow>25</height-of-shadow>
     </shadows>
@@ -799,19 +799,19 @@
     <orientations>4</orientations>
 </item>
 
-<item kind="bubble-robot">
+<item kind="bubbles-dalek">
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
     <mortal>yes</mortal>
-    <graphics file="bubble-robot.png">
+    <graphics file="bubbles-dalek.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
     </graphics>
     <delay-between-frames>100</delay-between-frames>
-    <shadows file="bubble-robot-shadows.png">
+    <shadows file="bubbles-dalek-shadows.png">
         <width-of-shadow>48</width-of-shadow>
         <height-of-shadow>25</height-of-shadow>
     </shadows>
@@ -838,18 +838,18 @@
     <orientations>4</orientations>
 </item>
 
-<item kind="charles-robot">
+<item kind="charles-dalek">
     <width-x>12</width-x>
     <width-y>12</width-y>
     <height>48</height>
     <weight>10</weight>
     <speed>40</speed>
-    <graphics file="charles-robot.png">
+    <graphics file="charles-dalek.png">
         <frame-width>48</frame-width>
         <frame-height>80</frame-height>
     </graphics>
     <delay-between-frames>150</delay-between-frames>
-    <shadows file="charles-robot-shadows.png">
+    <shadows file="charles-dalek-shadows.png">
         <width-of-shadow>48</width-of-shadow>
         <height-of-shadow>25</height-of-shadow>
     </shadows>
