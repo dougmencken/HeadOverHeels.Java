@@ -6,11 +6,13 @@ rm -v -f head/over/heels/rooms/*.class
 rm -v -f head/over/heels/behaviors/*.class
 rm -v -f head/over/heels/gui/*.class
 rm -v -f head/over/heels/gui/transitions/*.class
+rm -v -f head/over/heels/gui/swing/*.class
 
 [ -d head/over/heels/items ] && rmdir head/over/heels/items
 [ -d head/over/heels/rooms ] && rmdir head/over/heels/rooms
 [ -d head/over/heels/behaviors ] && rmdir head/over/heels/behaviors
 
+[ -d head/over/heels/gui/swing ] && rmdir head/over/heels/gui/swing
 [ -d head/over/heels/gui/transitions ] && rmdir head/over/heels/gui/transitions
 [ -d head/over/heels/gui ] && rmdir head/over/heels/gui
 

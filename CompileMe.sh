@@ -8,4 +8,5 @@ javac -g -d . \
 	source/rooms/*.java \
 	source/behaviors/*.java \
 	source/gui/*.java \
-	source/gui/transitions/*.java
+	source/gui/transitions/*.java \
+	source/gui/swing/*.java

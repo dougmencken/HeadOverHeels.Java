@@ -15,7 +15,8 @@ import javax.swing.JComboBox ;
 import javax.swing.JLabel ;
 import javax.swing.JTabbedPane ;
 
-import head.over.heels.gui.CuteSwingButton ;
+import head.over.heels.gui.swing.CuteSwingButton ;
+import head.over.heels.gui.swing.TabbedPaneWithTabsInOneRow ;
 
 import head.over.heels.StringUtilities ;
 
@@ -243,7 +244,7 @@ class ItemGraphicsWindow extends JFrame
 		FreeItem item = new FreeItem( ItemDescriptions.descriptions().getDescriptionByKind( kindOfItem ), 0, 0, 0, "south" );
 		int framesPerOrientation = item.getDescriptionOfItem().howManyFramesPerOrientation() ;
 
-		JTabbedPane tabbedPane = new JTabbedPane( JTabbedPane.TOP );
+		TabbedPaneWithTabsInOneRow tabbedPane = new TabbedPaneWithTabsInOneRow( );
 
 		String[] orientations = { "south", "west", "north", "east" } ;
 		for ( String sequence : orientations )
@@ -295,8 +296,15 @@ class ItemGraphicsWindow extends JFrame
 		}
 
 		super.add( tabbedPane );
-		super.pack() ;
+		this.pack() ;
 		super.setLocation( parentWindow.getLocation().x, parentWindow.getLocation().y + parentWindow.getHeight() + 10 );
+	}
+
+	public void pack ()
+	{
+		// yep, do it twice
+		super.pack() ;
+		super.pack() ;
 	}
 
 }
