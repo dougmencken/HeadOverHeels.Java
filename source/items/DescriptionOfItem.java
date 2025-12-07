@@ -285,7 +285,7 @@ public class DescriptionOfItem implements Cloneable
 
 		if ( isMortal () ) {
 			text.append( indent );
-			text.append( "<mortal>yes</mortal>" );
+			text.append( "<is-mortal>yes</is-mortal>" );
 			text.append( newline );
 		}
 

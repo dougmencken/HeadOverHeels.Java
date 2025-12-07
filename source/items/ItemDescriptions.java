@@ -41,7 +41,7 @@ public class ItemDescriptions
 		return ItemDescriptions.theDescriptions ;
 	}
 
-	private static final boolean write_new_items_xml = false ;
+	private static final boolean write_new_items_xml = false /* true */ ;
 
 	/**
 	 * Item descriptions are stored here as one-to-one mapping of an item’s kind to a description
@@ -284,10 +284,9 @@ public class ItemDescriptions
 		// mortal or harmless
 		boolean isMortal = false ;
 
-		NodeList mortalNodes = element.getElementsByTagName( "mortal" );
-		if ( mortalNodes.getLength () > 0 ) {
-			String mortal = mortalNodes.item( 0 ).getTextContent ();
-			if ( mortal.equals( "yes" ) )
+		NodeList mortalityNodes = element.getElementsByTagName( "is-mortal" );
+		if ( mortalityNodes.getLength() > 0 ) {
+			if ( mortalityNodes.item( 0 ).getTextContent().equals( "yes" ) )
 				isMortal = true ;
 		}
 
