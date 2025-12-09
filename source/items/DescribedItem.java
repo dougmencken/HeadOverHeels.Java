@@ -81,6 +81,26 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 
 	public String getOriginalKind () {  return this.originalKind ;  }
 
+	/**
+	 * Metamorph into another kind of item, such as into bubbles when a character teleports
+	 */
+	public void metamorphInto ( String newKind )
+	{
+		DescriptionOfItem newDescription = ItemDescriptions.descriptions().getDescriptionByKind( newKind );
+		if ( newDescription == null ) {
+			System.err.println( "item " + StringUtilities.putInQuotes( getUniqueName() )
+						+ " can’t metamorph into a non-existent kind " + StringUtilities.putInQuotes( newKind ) );
+			return ;
+		}
+
+		this.descriptionOfItem = newDescription ;
+
+		readGraphicsOfItem ();
+		resetAnimation () ;
+	}
+
+	public boolean isMetamorphed () {  return ! getKind().equals( getOriginalKind() ) ;  }
+
 	@Override
 	public boolean isAnimated ()
 	{
@@ -108,7 +128,7 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 
 	public static final String extra_frames = "extra" ;
 
-	private boolean isAtExtraFrame () {  return getCurrentFrameSequence().equals( DescribedItem.extra_frames );  }
+	protected boolean isAtExtraFrame () {  return getCurrentFrameSequence().equals( DescribedItem.extra_frames );  }
 
 	protected String sequenceBySymmetry ( String sequence )
 	{

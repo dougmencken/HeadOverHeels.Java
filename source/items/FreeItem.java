@@ -73,6 +73,17 @@ public class FreeItem extends DescribedItem implements Drawable, Masky
 		}
 	}
 
+	public void toTheHeadingFrameSequence () {  setCurrentFrameSequence( getHeading() );  }
+
+	@Override
+	public void metamorphInto ( String newKind )
+	{
+		// the new kind may not have extra frames, like for blinking
+		if ( isAtExtraFrame() ) toTheHeadingFrameSequence() ;
+
+		super.metamorphInto( newKind );
+	}
+
 	// redo the mask or not
 	private TriBool wantMask ;
 
