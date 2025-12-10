@@ -157,7 +157,7 @@ public class ItemDescriptions
 		if ( xml == null ) return false ;
 
 		Element root = xml.getDocumentElement() ;
-		if ( root == null || root.getTagName() != "items" ) return false ;
+		if ( root == null || ! root.getTagName().equals( "items" ) ) return false ;
 
 		java.io.PrintStream newItemsXml = null ;
 		if ( ItemDescriptions.write_new_items_xml ) {

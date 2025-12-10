@@ -60,22 +60,13 @@ public class AvatarItem extends FreeItem
 		return getMediator().getActiveCharacter().getUniqueName().equals( getUniqueName() );
 	}
 
-	@Override
+	/* @Override */
 	public void metamorphInto ( String newKind )
 	{
 		// when the composite character morphs into bubbles, it’s actually double bubbles
-		boolean doubleBubbles = ( isHeadOverHeels() && newKind == "bubbles" );
+		boolean doubleBubbles = isHeadOverHeels() && newKind.equals( "bubbles" ) ;
 		super.metamorphInto( doubleBubbles ? "double-bubbles" : newKind );
 	}
-
-	///// with ‘caused by’ for debugging
-	///public void metamorphInto ( String newKind, String causedBy )
-	///{
-	///	System.out.println( "metamorphosis of " + StringUtilities.putInQuotes( getUniqueName() )
-	///				+ " into " + StringUtilities.putInQuotes( newKind )
-	///				+ " caused by " + StringUtilities.putInSingleQuotes( initiatedBy ) );
-	///	this.metamorphInto( newKind );
-	///}
 
 	/**
 	 * When a character takes some item, the description of that item is stored here

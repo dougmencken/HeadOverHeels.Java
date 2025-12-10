@@ -45,8 +45,8 @@ public class ConnectedRooms
 
 	public void setConnectedRoomAt ( String where, String room )
 	{
-		     if ( where ==  "teleport" ) where = "via teleport" ;
-		else if ( where == "teleport2" ) where = "via second teleport" ;
+		     if ( where.equals( "teleport"  ) ) where = "via teleport" ;
+		else if ( where.equals( "teleport2" ) ) where = "via second teleport" ;
 
 		this.connections.put( where, room );
 	}

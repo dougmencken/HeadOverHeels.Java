@@ -69,7 +69,7 @@ public class GameMap
 		if ( xml == null ) return false ;
 
 		Element root = xml.getDocumentElement() ;
-		if ( root == null || root.getTagName() != "map" ) return false ;
+		if ( root == null || ! root.getTagName().equals( "map" ) ) return false ;
 
 		this.linksBetweenRooms = new HashMap< String, ConnectedRooms > () ;
 

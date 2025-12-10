@@ -106,7 +106,7 @@ public class GamePreferences
 		if ( preferences == null ) return false ;
 
 		Element root = preferences.getDocumentElement() ;
-		if ( root == null || root.getTagName() != "preferences" ) return false ;
+		if ( root == null || ! root.getTagName().equals( "preferences" ) ) return false ;
 
 		Node videoNode = preferences.getElementsByTagName( "video" ).item( 0 );
 		if ( videoNode != null && videoNode.getNodeType() == Node.ELEMENT_NODE ) {
