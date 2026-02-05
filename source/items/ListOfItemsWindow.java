@@ -249,7 +249,7 @@ class ItemGraphicsWindow extends JFrame
 		String[] orientations = { "south", "west", "north", "east" } ;
 		for ( String sequence : orientations )
 		{
-			ItemFramesPanel framesPanel = new ItemFramesPanel( framesPerOrientation );
+			ItemFramesAndAnimationPanel framesPanel = new ItemFramesAndAnimationPanel( framesPerOrientation );
 
 			for ( int n = 0 ; n < framesPerOrientation ; ++ n ) {
 				try {
@@ -275,7 +275,7 @@ class ItemGraphicsWindow extends JFrame
 
 		int extraFrames = item.getDescriptionOfItem().howManyExtraFrames() ;
 		if ( extraFrames > 0 ) {
-			ItemFramesPanel extraFramesPanel = new ItemFramesPanel( extraFrames );
+			ItemFramesAndAnimationPanel extraFramesPanel = new ItemFramesAndAnimationPanel( extraFrames, /* animated */ false );
 
 			for ( int n = 0 ; n < extraFrames ; ++ n ) {
 				try {
@@ -310,38 +310,156 @@ class ItemGraphicsWindow extends JFrame
 }
 
 
-class ItemFramesPanel extends JPanel
+class ItemFramesAndAnimationPanel extends JPanel implements java.awt.event.MouseListener
 {
 
-	private JPanel toAddTo ;
+	private boolean animated ;
 
-	ItemFramesPanel( int columns )
+	private JPanel panelWithFrames ;
+
+	private JPanel panelForAnimation ;
+	private JLabel animationFrameLabel ;
+	private JLabel animationShadowLabel ;
+
+	private javax.swing.Timer animationTimer ;
+
+	ItemFramesAndAnimationPanel( int columns ) {  this( columns, columns > 1 );  }
+
+	ItemFramesAndAnimationPanel( int columns, boolean animated )
 	{
 		super( );
 
-		this.toAddTo = new JPanel() ;
-		this.toAddTo.setLayout( new java.awt.GridLayout( /* rows */ 2, columns, /* h gap */ 10, /* v gap */ 0 ) );
+		if ( columns < 1 )
+			throw new IllegalArgumentException( "the number of columns (" + columns + ") is less than 1" );
+
+		this.animated = animated ;
+
+		this.panelWithFrames = new JPanel() ;
+		this.panelWithFrames.setLayout( new java.awt.GridLayout( /* rows */ 2, columns, /* h gap */ 10, /* v gap */ 0 ) );
+
+		this.panelForAnimation = new JPanel() ;
+		this.panelForAnimation.setLayout( new java.awt.GridLayout( /* rows */ 2, /* columns */ 1, /* h gap */ 10, /* v gap */ 0 ) );
+
+		this.animationFrameLabel = null ;
+		this.animationShadowLabel = null ;
+		this.animationTimer = null ;
 
 		super.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.CENTER ) );
 		super.setBorder( new javax.swing.border.EmptyBorder( 20, 20, 20, 20 ) ) ;
-		super.add( this.toAddTo );
+		super.add( this.panelWithFrames );
+
+		super.addMouseListener( this );
 	}
 
 	/* @Override */
 	public java.awt.Component add( java.awt.Component what )
 	{
 		///throw new UnsupportedOperationException( "use addImage or addText" );
-		return this.toAddTo.add( what );
+		return this.panelWithFrames.add( what );
 	}
 
-	void addImage( java.awt.image.BufferedImage image )
+	JLabel addImage( java.awt.image.BufferedImage image )
 	{
-		this.toAddTo.add( new JLabel( new javax.swing.ImageIcon( image ), JLabel.CENTER ) );
+		return (JLabel) this.panelWithFrames.add( new JLabel( new javax.swing.ImageIcon( image ), JLabel.CENTER ) );
 	}
 
-	void addText( String text )
+	JLabel addText( String text )
 	{
-		this.toAddTo.add( new JLabel( text, JLabel.CENTER ) );
+		return (JLabel) this.panelWithFrames.add( new JLabel( text, JLabel.CENTER ) );
+	}
+
+	public void mouseEntered( java.awt.event.MouseEvent e ) {}
+	public void mouseExited( java.awt.event.MouseEvent e ) {}
+
+	public void mousePressed( java.awt.event.MouseEvent e ) {}
+	public void mouseReleased( java.awt.event.MouseEvent e ) {}
+
+	/* it is invoked when a mouse button is pressed and then released
+	   at the same coordinates within the same component
+	*/
+	public void mouseClicked( java.awt.event.MouseEvent me )
+	{
+		if ( this.animated ) this.toggleFramesAndAnimation() ;
+	}
+
+	private boolean showingAnimation = false ;
+
+	boolean isShowingAnimation () {  return this.showingAnimation ;  }
+
+	void toggleFramesAndAnimation ()
+	{
+		this.showingAnimation = ! this.showingAnimation ;
+
+		if ( this.showingAnimation ) {
+			super.remove( this.panelWithFrames );
+			if ( this.animationFrameLabel == null ||
+					this.animationShadowLabel == null ||
+						this.animationTimer == null )
+			{
+				java.awt.Image[] frames = ItemFramesAndAnimationPanel.getImagesFromLabels( this.panelWithFrames.getComponents() );
+
+				int howManyFrames = frames.length ;
+				if ( ( howManyFrames >> 1 ) << 1 != howManyFrames )
+					throw new head.over.heels.UnlikelyToHappenException( "odd number of frames + shadows" );
+
+				javax.swing.ImageIcon[] icons = new javax.swing.ImageIcon[ howManyFrames ];
+				for ( int n = 0 ; n < howManyFrames ; ++ n )
+					icons[ n ] = new javax.swing.ImageIcon( frames[ n ] );
+
+				this.animationFrameLabel = new JLabel( icons[ 0 ], JLabel.CENTER );
+				this.panelForAnimation.add( this.animationFrameLabel );
+
+				int shadowsBeginAt = howManyFrames >> 1 ;
+				this.animationShadowLabel = new JLabel( icons[ shadowsBeginAt ], JLabel.CENTER );
+				this.panelForAnimation.add( this.animationShadowLabel );
+
+				this.animationTimer
+					= new javax.swing.Timer(
+						/* delay */ 100,
+						new java.awt.event.ActionListener ()
+						{
+							private int currentFrame = 0 ;
+
+							public void actionPerformed( java.awt.event.ActionEvent e ) {
+								if ( ! panelForAnimation.isShowing() ) return ;
+
+								this.currentFrame ++ ;
+								if ( this.currentFrame == shadowsBeginAt ) currentFrame = 0 ;
+
+								animationFrameLabel.setIcon( icons[ this.currentFrame ] );
+								animationShadowLabel.setIcon( icons[ this.currentFrame + shadowsBeginAt ] );
+							}
+						} );
+				this.animationTimer.start() ;
+			}
+			super.add( this.panelForAnimation );
+		}
+		else {
+			super.remove( this.panelForAnimation );
+			super.add( this.panelWithFrames );
+		}
+
+		super.revalidate() ;
+		super.repaint() ;
+	}
+
+	private static final java.awt.Image[] getImagesFromLabels( java.awt.Component[] components )
+	{
+		if ( components == null ) return null ;
+
+		java.util.Vector< java.awt.Image > images = new java.util.Vector< java.awt.Image >( components.length );
+
+		for ( java.awt.Component component : components ) {
+			if ( component instanceof JLabel ) {
+				javax.swing.Icon labelIcon = ( (JLabel) component ).getIcon() ;
+				if ( labelIcon instanceof javax.swing.ImageIcon ) {
+					java.awt.Image image = ( (javax.swing.ImageIcon) labelIcon ).getImage() ;
+					images.add( image );
+				}
+			}
+		}
+
+		return images.toArray( new java.awt.Image[ images.size() ] );
 	}
 
 }
