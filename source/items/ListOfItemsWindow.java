@@ -249,7 +249,7 @@ class ItemGraphicsWindow extends JFrame
 		String[] orientations = { "south", "west", "north", "east" } ;
 		for ( String sequence : orientations )
 		{
-			ItemFramesAndAnimationPanel framesPanel = new ItemFramesAndAnimationPanel( framesPerOrientation );
+			ItemFramesAndAnimationPanel framesPanel = new ItemFramesAndAnimationPanel( framesPerOrientation, item.getDelayBetweenFrames() );
 
 			for ( int n = 0 ; n < framesPerOrientation ; ++ n ) {
 				try {
@@ -275,7 +275,7 @@ class ItemGraphicsWindow extends JFrame
 
 		int extraFrames = item.getDescriptionOfItem().howManyExtraFrames() ;
 		if ( extraFrames > 0 ) {
-			ItemFramesAndAnimationPanel extraFramesPanel = new ItemFramesAndAnimationPanel( extraFrames, /* animated */ false );
+			ItemFramesAndAnimationPanel extraFramesPanel = new ItemFramesAndAnimationPanel( extraFrames, /* not animated */ 0 );
 
 			for ( int n = 0 ; n < extraFrames ; ++ n ) {
 				try {
@@ -313,35 +313,33 @@ class ItemGraphicsWindow extends JFrame
 class ItemFramesAndAnimationPanel extends JPanel implements java.awt.event.MouseListener
 {
 
-	private boolean animated ;
+	// 0 here makes the frame sequence not animated
+	private int delayBetweenFrames ;
+
+	ItemFramesAndAnimationPanel( int frames ) {  this( frames, AnimatedItem.default_delay_between_frames );  }
 
 	private JPanel panelWithFrames ;
-
 	private JPanel panelForAnimation ;
-	private JLabel animationFrameLabel ;
-	private JLabel animationShadowLabel ;
 
 	private javax.swing.Timer animationTimer ;
 
-	ItemFramesAndAnimationPanel( int columns ) {  this( columns, columns > 1 );  }
-
-	ItemFramesAndAnimationPanel( int columns, boolean animated )
+	ItemFramesAndAnimationPanel( int frames, int delay )
 	{
 		super( );
 
-		if ( columns < 1 )
-			throw new IllegalArgumentException( "the number of columns (" + columns + ") is less than 1" );
+		if ( frames < 1 )
+			throw new IllegalArgumentException( "the number of frames (" + frames + ") is less than 1" );
 
-		this.animated = animated ;
+		this.delayBetweenFrames = ( frames > 1 && delay > 0 ) ? delay : /* not animated */ 0 ;
 
 		this.panelWithFrames = new JPanel() ;
-		this.panelWithFrames.setLayout( new java.awt.GridLayout( /* rows */ 2, columns, /* h gap */ 10, /* v gap */ 0 ) );
+		this.panelWithFrames.setLayout( new java.awt.GridLayout( /* rows */ 2, /* columns */ frames, /* h gap */ 10, /* v gap */ 0 ) );
 
-		this.panelForAnimation = new JPanel() ;
-		this.panelForAnimation.setLayout( new java.awt.GridLayout( /* rows */ 2, /* columns */ 1, /* h gap */ 10, /* v gap */ 0 ) );
+		if ( this.delayBetweenFrames > 0 ) {
+			this.panelForAnimation = new JPanel() ;
+			this.panelForAnimation.setLayout( new java.awt.GridLayout( /* rows */ 2, /* columns */ 1, /* h gap */ 10, /* v gap */ 0 ) );
+		}
 
-		this.animationFrameLabel = null ;
-		this.animationShadowLabel = null ;
 		this.animationTimer = null ;
 
 		super.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.CENTER ) );
@@ -379,7 +377,7 @@ class ItemFramesAndAnimationPanel extends JPanel implements java.awt.event.Mouse
 	*/
 	public void mouseClicked( java.awt.event.MouseEvent me )
 	{
-		if ( this.animated ) this.toggleFramesAndAnimation() ;
+		this.toggleFramesAndAnimation() ;
 	}
 
 	private boolean showingAnimation = false ;
@@ -388,13 +386,13 @@ class ItemFramesAndAnimationPanel extends JPanel implements java.awt.event.Mouse
 
 	void toggleFramesAndAnimation ()
 	{
+		if ( this.delayBetweenFrames == 0 ) return ;
+
 		this.showingAnimation = ! this.showingAnimation ;
 
 		if ( this.showingAnimation ) {
 			super.remove( this.panelWithFrames );
-			if ( this.animationFrameLabel == null ||
-					this.animationShadowLabel == null ||
-						this.animationTimer == null )
+			if ( this.animationTimer == null )
 			{
 				java.awt.Image[] frames = ItemFramesAndAnimationPanel.getImagesFromLabels( this.panelWithFrames.getComponents() );
 
@@ -406,16 +404,16 @@ class ItemFramesAndAnimationPanel extends JPanel implements java.awt.event.Mouse
 				for ( int n = 0 ; n < howManyFrames ; ++ n )
 					icons[ n ] = new javax.swing.ImageIcon( frames[ n ] );
 
-				this.animationFrameLabel = new JLabel( icons[ 0 ], JLabel.CENTER );
-				this.panelForAnimation.add( this.animationFrameLabel );
+				JLabel animationFrameLabel = new JLabel( icons[ 0 ], JLabel.CENTER );
+				this.panelForAnimation.add( animationFrameLabel );
 
 				int shadowsBeginAt = howManyFrames >> 1 ;
-				this.animationShadowLabel = new JLabel( icons[ shadowsBeginAt ], JLabel.CENTER );
-				this.panelForAnimation.add( this.animationShadowLabel );
+				JLabel animationShadowLabel = new JLabel( icons[ shadowsBeginAt ], JLabel.CENTER );
+				this.panelForAnimation.add( animationShadowLabel );
 
 				this.animationTimer
 					= new javax.swing.Timer(
-						/* delay */ 100,
+						delayBetweenFrames,
 						new java.awt.event.ActionListener ()
 						{
 							private int currentFrame = 0 ;

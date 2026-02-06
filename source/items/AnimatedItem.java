@@ -14,15 +14,17 @@ import head.over.heels.Timer ;
 public abstract class AnimatedItem extends TheMostAbstractItem
 {
 
-	protected AnimatedItem( long delay )
+	protected AnimatedItem( int delay )
 	{
 		super( );
 		this.backwardsMotion = false ;
-		this.delayBetweenFrames = delay ;
+		this.delayBetweenFrames = ( delay > 0 ) ? delay : 0 ;
 		this.resetAnimation() ;
 	}
 
-	protected AnimatedItem( ) {  this( /* the default delay between frames */ 20 );  }
+	public static final int default_delay_between_frames = 20 /* milliseconds */ ;
+
+	protected AnimatedItem( ) {  this( AnimatedItem.default_delay_between_frames );  }
 
 	// the copy constructor
 	protected AnimatedItem( AnimatedItem thatItem )
@@ -115,10 +117,10 @@ public abstract class AnimatedItem extends TheMostAbstractItem
 		this.animationTimer.go() ; // reset the timer
 	}
 
-	private long delayBetweenFrames ; // in milliseconds
+	private int delayBetweenFrames ; // in milliseconds
 
-	public long getDelayBetweenFrames () {  return this.delayBetweenFrames ;  }
-	public void setDelayBetweenFrames ( long delay ) {  this.delayBetweenFrames = delay ;  }
+	public int getDelayBetweenFrames () {  return this.delayBetweenFrames ;  }
+	public void setDelayBetweenFrames ( int delay ) {  this.delayBetweenFrames = delay ;  }
 
 	private Timer animationTimer = new Timer() ;
 
