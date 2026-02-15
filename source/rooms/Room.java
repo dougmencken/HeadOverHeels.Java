@@ -33,11 +33,11 @@ public class Room extends Mediated implements Drawable
 	public String getNameOfRoomDescriptionFile () {  return this.nameOfRoomDescriptionFile ;  }
 
 	// how big is this room in tiles
-	private final short howManyTilesOnX ;
-	private final short howManyTilesOnY ;
+	private final short howManyTilesAlongX ;
+	private final short howManyTilesAlongY ;
 
-	public short getTilesOnX () {  return this.howManyTilesOnX ;  }
-	public short getTilesOnY () {  return this.howManyTilesOnY ;  }
+	public short getTilesAlongX () {  return this.howManyTilesAlongX ;  }
+	public short getTilesAlongY () {  return this.howManyTilesAlongY ;  }
 
 	/**
 	 * The length of a single tile’s side
@@ -100,32 +100,34 @@ public class Room extends Mediated implements Drawable
 
 	/**
 	 * @param nameOfRoomFile the name of file with the description of this room
-	 * @param xTiles the length along X, in tiles
-	 * @param yTiles the length along Y, in tiles
+	 * @param xTiles the length along north–south, in tiles
+	 * @param yTiles the length along east–west, in tiles
 	 * @param roomScenery the scenery such as moon or safari
 	 * @param whichFloor the kind of floor
 	 */
 	public Room ( String nameOfRoomFile, short xTiles, short yTiles, String roomScenery, String whichFloor )
 	{
 		this.nameOfRoomDescriptionFile = nameOfRoomFile ;
-		this.howManyTilesOnX = xTiles ;
-		this.howManyTilesOnY = yTiles ;
-		this.scenery = roomScenery ;
-		this.floorKind = whichFloor ;
+		this.howManyTilesAlongX = xTiles ;
+		this.howManyTilesAlongY = yTiles ;
+		this.scenery = ( roomScenery != null ) ? roomScenery : "" ;
+		this.floorKind = ( whichFloor != null ) ? whichFloor : "plain" /* ??? */ ;
 	}
 
+	/****************
 	public Room ( String nameOfRoomFile )
 	{
 		RoomMaker maker = new RoomMaker( nameOfRoomFile, this );
 
 		this.nameOfRoomDescriptionFile = maker.getRoomFile().getName() ;
-		this.howManyTilesOnX = maker.getXSizeInTiles() ;
-		this.howManyTilesOnY = maker.getYSizeInTiles ();
+		this.howManyTilesAlongX = maker.getXSizeInTiles() ;
+		this.howManyTilesAlongY = maker.getYSizeInTiles ();
 		this.scenery = maker.whichScenery ();
 		this.floorKind = maker.whichKindOfFloor() ;
 
 		maker.makeRoom () ;
 	}
+	****************/
 
 	public void draw ( java.awt.Graphics2D g )
 	{

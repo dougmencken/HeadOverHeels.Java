@@ -45,7 +45,7 @@ public class Miniature implements Drawable
 
 	public IntegerPoint2D getOriginOfRoom ()
 	{
-		return new IntegerPoint2D( getRoom().getTilesOnY() * ( getSizeOfTile() << 1 ), 0 ) ;
+		return new IntegerPoint2D( getRoom().getTilesAlongY() * ( getSizeOfTile() << 1 ), 0 ) ;
 	}
 
 	private byte sizeOfTile ; // 2 .. 16
@@ -79,8 +79,8 @@ public class Miniature implements Drawable
 
 	protected IntegerDimensions2D calculateSize ()
 	{
-		int tilesX = getRoom().getTilesOnX ();
-		int tilesY = getRoom().getTilesOnY ();
+		int tilesX = getRoom().getTilesAlongX ();
+		int tilesY = getRoom().getTilesAlongY ();
 
 		int height = ( tilesX + tilesY ) * getSizeOfTile() ;
 		int width = height << 1 ;
@@ -96,8 +96,8 @@ public class Miniature implements Drawable
 						+ " with " + getSizeOfTile() + " pixel long tiles" );
 		}
 
-		int tilesX = getRoom().getTilesOnX ();
-		int tilesY = getRoom().getTilesOnY ();
+		int tilesX = getRoom().getTilesAlongX ();
+		int tilesY = getRoom().getTilesAlongY ();
 
 		int firstTileX = 0 ;
 		int firstTileY = 0 ;
