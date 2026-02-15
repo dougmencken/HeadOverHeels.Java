@@ -55,6 +55,11 @@ public class PoolOfPictures
 				try {
 					picture = new NamedOffscreenImage( itemsFolder, name );
 				} catch ( NoSuchPictureException ex ) {  picture = null ;  }
+
+				if ( picture != null ) {
+					picture.setName( name );
+					this.putPicture( name, picture ); // add the read image to the pool
+				}
 			}
 		}
 
