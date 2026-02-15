@@ -47,6 +47,9 @@ public class Room extends Mediated implements Drawable
 	// override in a subclass for other sizes but 16
 	public short getSizeOfOneTile () {  return Room.single_tile_size ;  }
 
+	/**
+	 * The scenery that defines the room’s graphics
+	 */
 	private final String scenery ;
 
 	/**
@@ -61,6 +64,7 @@ public class Room extends Mediated implements Drawable
 
 	public boolean hasFloor () {  return ! this.floorKind.equals( "absent" );  }
 
+	// the color of room in the original ZX Specturm game
 	private String roomColor = "white" ;
 
 	public String getColour () {  return this.roomColor ;  }
@@ -134,7 +138,7 @@ public class Room extends Mediated implements Drawable
 			FreeItem foundFreeItem = null ;
 
 			for ( FreeItem item : this.freeItems )
-				if ( item != null && item.isNamed() && item.getUniqueName().equals( whatName ) ) {
+				if ( item != null && whatName.equals( item.getUniqueName() ) ) {
 					foundFreeItem = item ;
 					break ;
 				}
@@ -159,7 +163,7 @@ public class Room extends Mediated implements Drawable
 
 			for ( int column = 0 ; column < this.gridItems.size() ; ++ column )
 				for ( GridItem item : this.gridItems.elementAt( column ) )
-					if ( item != null && item.isNamed() && item.getUniqueName().equals( whatName ) ) {
+					if ( item != null && whatName.equals( item.getUniqueName() ) ) {
 						foundGridItem = item ;
 						inColumn = column ;
 						break ;

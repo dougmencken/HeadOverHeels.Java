@@ -55,12 +55,12 @@ public abstract class TheMostAbstractItem extends Mediated
 	}
 
 	// the name of this item by which it can be distinguished from any other item
-	private String uniqueName = null ;
+	private String uniqueName ;
 
 	public String getUniqueName () {  return this.uniqueName ;  }
 	public void setUniqueName ( String name ) {  this.uniqueName = name ;  }
 
-	public boolean isNamed () {  return this.uniqueName != null ;  }
+	/////public boolean isNamed () {  return this.uniqueName != null ;  } // ( is always named using makeRandomString )
 
 	// the behaviour of item
 	private Behaviour behavior = null ;
@@ -189,22 +189,25 @@ public abstract class TheMostAbstractItem extends Mediated
 
 	public String whichClassOfItem ()
 	{
-		String nameOfClass = getClass().getName() ;
-
-		if ( nameOfClass.endsWith( "AvatarItem" ) )
+		if ( this instanceof AvatarItem )
 			return "avatar item" ;
 		else
-		if ( nameOfClass.endsWith( "FreeItem" ) )
+		if ( this instanceof FreeItem )
 			return "free item" ;
 		else
-		if ( nameOfClass.endsWith( "GridItem" ) )
+		if ( this instanceof GridItem )
 			return "grid item" ;
 		else
-		if ( nameOfClass.endsWith( "DescribedItem" ) )
+		if ( this instanceof DescribedItem )
 			return "described item" ;
 		else
-		/* if ( nameOfClass.endsWith( "TheMostAbstractItem" ) ) */
+		if ( this instanceof AnimatedItem )
+			return "animated item" ;
+		else
+		if ( this instanceof TheMostAbstractItem )
 			return "abstract item" ;
+		else
+			return "java.lang.Object" ;
 	}
 
 }

@@ -36,6 +36,7 @@ public class Mediator
 
 	public Mediator ( Room room )
 	{
+		if ( room == null ) throw new IllegalArgumentException( "can’t mediate a null room" );
 		this.mediatedRoom = room ;
 	}
 
@@ -47,14 +48,14 @@ public class Mediator
 		// first look for a free item
 		Vector< FreeItem > allFreeItems = this.mediatedRoom.getFreeItems ();
 		for ( FreeItem item : allFreeItems )
-			if ( item != null && item.isNamed() && item.getUniqueName().equals( whatName ) )
+			if ( item != null && whatName.equals( item.getUniqueName() ) )
 				return item ;
 
 		// then for a grid item
 		Vector< Vector< GridItem > > allGridItems = this.mediatedRoom.getGridItems ();
 		for ( int column = 0 ; column < allGridItems.size() ; ++ column )
 			for ( GridItem item : allGridItems.elementAt( column ) )
-				if ( item != null && item.isNamed() && item.getUniqueName().equals( whatName ) )
+				if ( item != null && whatName.equals( item.getUniqueName() ) )
 					return item ;
 
 		return null ; // not found
@@ -146,7 +147,7 @@ public class Mediator
 
 		for ( FreeItem freeItem : allFreeItems )
 			if ( freeItem != null && freeItem.isNotIgnoringCollisions()
-					&& freeItem.isNamed() && freeItem.getUniqueName() != uniqueNameOfItem )
+						&& ! uniqueNameOfItem.equals( freeItem.getUniqueName() ) )
 				if ( freeItem.overlapsWith( thatItem ) )
 					collisions.add( freeItem.getUniqueName() );
 
