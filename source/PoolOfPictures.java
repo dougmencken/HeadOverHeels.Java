@@ -40,7 +40,11 @@ public class PoolOfPictures
 
 	public void putPicture( String name, NamedOffscreenImage image )
 	{
-		this.pictures.put( PoolOfPictures.keyByFileName( name ), image );
+		if ( image != null ) {
+			this.pictures.put( PoolOfPictures.keyByFileName( name ), image );
+			System.out.println( "image " + StringUtilities.putInQuotes( image.getName() ) + " added to the pool" );
+		} else
+			this.forgetPicture( name ); // putPicture( name, null ) is the same as forgetPicture( name )
 	}
 
 	public NamedOffscreenImage getPicture( String name )
@@ -57,7 +61,7 @@ public class PoolOfPictures
 				} catch ( NoSuchPictureException ex ) {  picture = null ;  }
 
 				if ( picture != null ) {
-					picture.setName( name );
+					///picture.setName( name ); // name is already set by the constructor
 					this.putPicture( name, picture ); // add the read image to the pool
 				}
 			}
@@ -66,9 +70,19 @@ public class PoolOfPictures
 		return picture ;
 	}
 
+	/**
+	 * @return the image associated with ‘name’ before it is forgotten, or null
+	 */
+	public NamedOffscreenImage forgetPicture( String name )
+	{
+		System.out.println( "removing " + StringUtilities.putInQuotes( name ) + " from the image pool" );
+		return this.pictures.remove( PoolOfPictures.keyByFileName( name ) );
+	}
+
 	public boolean hasPicture( String name )
 	{
 		return this.pictures.get( PoolOfPictures.keyByFileName( name ) ) != null ;
+		//  or this.pictures.containsKey( keyByFileName( name ) )
 	}
 
 	public void clear () {  this.pictures.clear() ;  }
