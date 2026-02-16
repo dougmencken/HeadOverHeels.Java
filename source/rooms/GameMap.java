@@ -17,7 +17,6 @@ import java.util.TreeSet ;
 
 import javax.xml.parsers.DocumentBuilderFactory ;
 import javax.xml.parsers.DocumentBuilder ;
-import javax.xml.parsers.ParserConfigurationException ;
 
 import org.w3c.dom.Document ;
 import org.w3c.dom.Element ;
@@ -55,7 +54,7 @@ public class GameMap
 		DocumentBuilder builder = null ;
 		try {
 			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder() ;
-		} catch ( ParserConfigurationException ex ) {
+		} catch ( javax.xml.parsers.ParserConfigurationException ex ) {
 			return false ;
 		}
 		if ( builder == null ) return false ;
@@ -73,7 +72,7 @@ public class GameMap
 
 		this.linksBetweenRooms = new HashMap< String, ConnectedRooms > () ;
 
-		NodeList roomNodes = xml.getElementsByTagName( "room" );
+		NodeList roomNodes = root.getElementsByTagName( "room" );
 		int howManyRooms = roomNodes.getLength() ;
 
 		System.out.print( "reading the game map" );

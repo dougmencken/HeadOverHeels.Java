@@ -177,7 +177,7 @@ public class ItemDescriptions
 			newItemsXml.println() ;
 		}
 
-		NodeList itemNodes = xml.getElementsByTagName( "item" );
+		NodeList itemNodes = root.getElementsByTagName( "item" );
 		for ( int i = 0 ; i < itemNodes.getLength() ; i ++ )
 		{
 			Node itemNode = itemNodes.item( i );
