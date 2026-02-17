@@ -39,6 +39,16 @@ public class Room extends Mediated implements Drawable
 	public short getTilesAlongX () {  return this.howManyTilesAlongX ;  }
 	public short getTilesAlongY () {  return this.howManyTilesAlongY ;  }
 
+	// a room larger than this number of tiles isn’t “single”
+	public static final int max_single_room_size = 10 ;
+
+	public boolean isSingleRoom () {  return getTilesAlongX() <= max_single_room_size && getTilesAlongY() <= max_single_room_size ;  }
+
+	public boolean isTripleRoom () {  return getTilesAlongX() > max_single_room_size && getTilesAlongY() > max_single_room_size ;  }
+
+	public boolean isDoubleRoomAlongX () {  return getTilesAlongX() > max_single_room_size && getTilesAlongY() <= max_single_room_size ;  }
+	public boolean isDoubleRoomAlongY () {  return getTilesAlongX() <= max_single_room_size && getTilesAlongY() > max_single_room_size ;  }
+
 	/**
 	 * The length of a single tile’s side
 	 */
