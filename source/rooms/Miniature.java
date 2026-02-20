@@ -95,13 +95,12 @@ public class Miniature implements Drawable
 						+ " with " + getSquareSize() + "-pixel squares" );
 		}
 
-		int cellsX = getRoom().getCellsAlongX ();
-		int cellsY = getRoom().getCellsAlongY ();
+		IntegerSize2D roomCells = getRoom().getSizeInCells() ;
 
 		int firstCellX = 0 ;
 		int firstCellY = 0 ;
-		int lastCellX = cellsX - 1 ;
-		int lastCellY = cellsY - 1 ;
+		int lastCellX = roomCells.getWidthX() - 1 ;
+		int lastCellY = roomCells.getWidthY() - 1 ;
 
 		Map< String, Door > doors = new java.util.HashMap< String, Door >() ;
 

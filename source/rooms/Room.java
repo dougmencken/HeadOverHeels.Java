@@ -18,6 +18,7 @@ import head.over.heels.items.WallPiece ;
 import head.over.heels.items.FloorTile ;
 
 import head.over.heels.IntegerPoint2D ;
+import head.over.heels.IntegerSize2D ;
 
 import java.util.Vector ;
 import java.util.Map ;
@@ -35,11 +36,12 @@ public class Room extends Mediated implements Drawable
 	public String getNameOfRoomDescriptionFile () {  return this.nameOfRoomDescriptionFile ;  }
 
 	// how big is this room in cells
-	private final short howManyCellsAlongX ;
-	private final short howManyCellsAlongY ;
+	private final IntegerSize2D sizeInCells ;
 
-	public short getCellsAlongX () {  return this.howManyCellsAlongX ;  }
-	public short getCellsAlongY () {  return this.howManyCellsAlongY ;  }
+	public IntegerSize2D getSizeInCells () {  return this.sizeInCells ;  }
+
+	public int getCellsAlongX () {  return this.sizeInCells.getLengthX() ;  }
+	public int getCellsAlongY () {  return this.sizeInCells.getLengthY() ;  }
 
 	// a room larger than this number of cells isn’t “single”
 	public static final int max_single_room_size = 10 ;
@@ -117,11 +119,10 @@ public class Room extends Mediated implements Drawable
 	 * @param roomScenery the scenery such as moon or safari
 	 * @param whichFloor the kind of floor
 	 */
-	public Room ( String nameOfRoomFile, short xCells, short yCells, String roomScenery, String whichFloor )
+	public Room ( String nameOfRoomFile, int cellsX, int cellsY, String roomScenery, String whichFloor )
 	{
 		this.nameOfRoomDescriptionFile = nameOfRoomFile ;
-		this.howManyCellsAlongX = xCells ;
-		this.howManyCellsAlongY = yCells ;
+		this.sizeInCells = new IntegerSize2D( cellsX, cellsY );
 		this.scenery = ( roomScenery != null ) ? roomScenery : "" ;
 		this.floorKind = ( whichFloor != null ) ? whichFloor : "plain" /* ??? */ ;
 	}

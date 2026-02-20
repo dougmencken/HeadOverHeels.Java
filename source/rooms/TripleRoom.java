@@ -23,9 +23,9 @@ public class TripleRoom extends Room
 	public java.util.Set< IntegerPoint2D > getCellsWithoutFloor () {  return this.cellsWithoutFloor ;  }
 	public void setCellsWithoutFloor ( java.util.Set< IntegerPoint2D > floorlessCells ) {  this.cellsWithoutFloor = floorlessCells ;  }
 
-	public TripleRoom ( String roomFile, short xCells, short yCells, String roomScenery, String whichFloor )
+	public TripleRoom ( String roomFile, int cellsX, int cellsY, String roomScenery, String whichFloor )
 	{
-		super( roomFile, xCells, yCells, roomScenery, whichFloor );
+		super( roomFile, cellsX, cellsY, roomScenery, whichFloor );
 
 		if ( ! super.isTripleRoom() )
 			throw new RoomIsNotTripleException( roomFile + " isn’t a triple room" ) ;
