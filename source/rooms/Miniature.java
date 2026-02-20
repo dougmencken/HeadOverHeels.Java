@@ -15,7 +15,7 @@ import java.util.Map ;
 import head.over.heels.Colours ;
 import head.over.heels.Drawable ;
 import head.over.heels.IntegerPoint2D ;
-import head.over.heels.IntegerDimensions2D ;
+import head.over.heels.IntegerSize2D ;
 import head.over.heels.NamedOffscreenImage ;
 
 import head.over.heels.items.Door ;
@@ -79,12 +79,12 @@ public class Miniature implements Drawable
 	private IntegerPoint2D southDoorEasternCorner = null ;
 	private IntegerPoint2D westDoorNorthernCorner = null ;
 
-	protected IntegerDimensions2D calculateSize ()
+	protected IntegerSize2D calculateSize ()
 	{
 		int height = ( getRoom().getCellsAlongX() + getRoom().getCellsAlongY() ) * getSquareSize() ;
 		int width = height << 1 ;
 
-		return new IntegerDimensions2D( width, height ) ;
+		return new IntegerSize2D( width, height ) ;
 	}
 
 	protected void composeImage ()

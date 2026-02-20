@@ -25,22 +25,20 @@ import head.over.heels.rooms.Room ;
 public class WallPiece extends Mediated implements Drawable
 {
 	// if true, then this piece is a segment of the wall along X, otherwise along Y
-	private boolean alongX ;
+	private final boolean alongX ;
 
 	public boolean isAlongX () {  return   this.alongX ;  }
 	public boolean isAlongY () {  return ! this.alongX ;  }
 
 	// the position of this piece, the smaller the closer to the room’s origin
-	private int position ;
+	private final int position ;
 
 	public int getPosition () {  return this.position ;  }
 
-	// the name of the image file for this part of the wall
-	private final String nameOfImageFile ;
+	// the image of this wall segment
+	private final NamedOffscreenImage wallPieceImage ;
 
-	public String getNameOfImageFile () {  return this.nameOfImageFile ;  }
-
-	private NamedOffscreenImage wallPieceImage ;
+	public String getNameOfImageFile () {  return ( this.wallPieceImage != null ) ? this.wallPieceImage.getName() : null ;  }
 
 	// the offset of this wall piece’s graphics within the room image
 	private IntegerPoint2D offset ;
@@ -54,7 +52,7 @@ public class WallPiece extends Mediated implements Drawable
 	{
 		this.alongX = trueXfalseY ;
 		this.position = index ;
-		this.nameOfImageFile = imageFile ;
+		this.wallPieceImage = PoolOfPictures.getRecentPool().getPicture( imageFile );
 		this.offset = new IntegerPoint2D( 0, 0 );
 	}
 
@@ -82,9 +80,8 @@ public class WallPiece extends Mediated implements Drawable
 	 */
 	public void draw ( java.awt.Graphics2D g )
 	{
-		NamedOffscreenImage image = PoolOfPictures.getRecentPool().getPicture( this.nameOfImageFile );
-		if ( image != null )
-			g.drawImage( image, this.offset.getX(), this.offset.getY(), null );
+		if ( this.wallPieceImage != null )
+			g.drawImage( this.wallPieceImage, this.offset.getX(), this.offset.getY(), null );
 	}
 
 }

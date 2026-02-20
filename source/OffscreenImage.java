@@ -26,7 +26,7 @@ public class OffscreenImage extends BufferedImage
 		super( width, height, BufferedImage.TYPE_INT_ARGB );
 	}
 
-	public OffscreenImage( IntegerDimensions2D size )
+	public OffscreenImage( IntegerSize2D size )
 	{
 		super( size.getWidth(), size.getHeight(), BufferedImage.TYPE_INT_ARGB );
 	}
@@ -50,7 +50,7 @@ public class OffscreenImage extends BufferedImage
 								+ " in " + path.getAbsolutePath() );
 	}
 
-	public IntegerDimensions2D getSize () {  return new IntegerDimensions2D( getWidth(), getHeight() ) ;  }
+	public IntegerSize2D getSize () {  return new IntegerSize2D( getWidth(), getHeight() ) ;  }
 
 	public void fillWithColor ( java.awt.Color color )
 	{

@@ -21,7 +21,7 @@ public class NamedOffscreenImage extends OffscreenImage
 
 	public NamedOffscreenImage( int width, int height ) {  super( width, height );  }
 
-	public NamedOffscreenImage( IntegerDimensions2D size ) {  super( size );  }
+	public NamedOffscreenImage( IntegerSize2D size ) {  super( size );  }
 
 	public NamedOffscreenImage( java.io.File path, String fileName ) throws NoSuchPictureException
 	{
