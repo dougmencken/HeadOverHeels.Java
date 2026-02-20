@@ -61,7 +61,7 @@ public class PoolOfPictures
 				} catch ( NoSuchPictureException ex ) {  picture = null ;  }
 
 				if ( picture != null ) {
-					///picture.setName( name ); // name is already set by the constructor
+					///picture.setName( name ); // (redundant) name is already set by the constructor
 					this.putPicture( name, picture ); // add the read image to the pool
 				}
 			}

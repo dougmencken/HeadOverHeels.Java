@@ -29,12 +29,13 @@ public class Miniature implements Drawable
 {
 
 	public Miniature( Room roomForMiniature )
-		{  this( roomForMiniature, Miniature.the_default_size_of_tile ) ;  }
+		{  this( roomForMiniature, Miniature.the_default_square_size ) ;  }
 
-	public Miniature( Room roomForMiniature, byte singleTileSize )
+	public Miniature( Room roomForMiniature, byte sizeOfSquare )
 	{
 		this.theRoom = roomForMiniature ;
-		setSizeOfTile( singleTileSize );
+		setSquareSize( sizeOfSquare );
+		setDrawingOffset( 0, 0 );
 	}
 
 	private NamedOffscreenImage theImage = null ;
@@ -45,22 +46,23 @@ public class Miniature implements Drawable
 
 	public IntegerPoint2D getOriginOfRoom ()
 	{
-		return new IntegerPoint2D( getRoom().getTilesAlongY() * ( getSizeOfTile() << 1 ), 0 ) ;
+		return new IntegerPoint2D( getRoom().getCellsAlongY() * ( getSquareSize() << 1 ), 0 ) ;
 	}
 
-	private byte sizeOfTile ; // 2 .. 16
+	// the size of a single square, in pixels
+	private byte squareSize ; // 2 .. 16
 
-	public static final byte the_default_size_of_tile = 3 ;
+	public static final byte the_default_square_size = 3 ;
 
-	public byte getSizeOfTile () {  return this.sizeOfTile ;  }
+	public byte getSquareSize () {  return this.squareSize ;  }
 
-	public void setSizeOfTile ( byte newSize )
+	public void setSquareSize ( byte newSize )
 	{
 		     if ( newSize < 2 ) newSize = 2 ;
 		else if ( newSize > 16 ) newSize = 16 ;
 
-		if ( newSize != this.sizeOfTile ) {
-			this.sizeOfTile = newSize ;
+		if ( newSize != this.squareSize ) {
+			this.squareSize = newSize ;
 			binTheImage() ;
 		}
 	}
@@ -79,10 +81,7 @@ public class Miniature implements Drawable
 
 	protected IntegerDimensions2D calculateSize ()
 	{
-		int tilesX = getRoom().getTilesAlongX ();
-		int tilesY = getRoom().getTilesAlongY ();
-
-		int height = ( tilesX + tilesY ) * getSizeOfTile() ;
+		int height = ( getRoom().getCellsAlongX() + getRoom().getCellsAlongY() ) * getSquareSize() ;
 		int width = height << 1 ;
 
 		return new IntegerDimensions2D( width, height ) ;
@@ -93,16 +92,16 @@ public class Miniature implements Drawable
 		if ( this.theImage == null ) {
 			this.theImage = new NamedOffscreenImage( calculateSize() );
 			this.theImage.setName( "Miniature of room " + getRoom().getNameOfRoomDescriptionFile()
-						+ " with " + getSizeOfTile() + " pixel long tiles" );
+						+ " with " + getSquareSize() + "-pixel squares" );
 		}
 
-		int tilesX = getRoom().getTilesAlongX ();
-		int tilesY = getRoom().getTilesAlongY ();
+		int cellsX = getRoom().getCellsAlongX ();
+		int cellsY = getRoom().getCellsAlongY ();
 
-		int firstTileX = 0 ;
-		int firstTileY = 0 ;
-		int lastTileX = tilesX - 1 ;
-		int lastTileY = tilesY - 1 ;
+		int firstCellX = 0 ;
+		int firstCellY = 0 ;
+		int lastCellX = cellsX - 1 ;
+		int lastCellY = cellsY - 1 ;
 
 		Map< String, Door > doors = new java.util.HashMap< String, Door >() ;
 
@@ -116,19 +115,19 @@ public class Miniature implements Drawable
 			doors.put( side, getRoom().getDoorOn( side ) );
 
 		if ( doors.get( "north" ) != null || doors.get( "northeast" ) != null || doors.get( "northwest" ) != null )
-			firstTileX ++ ;
+			firstCellX ++ ;
 
 		if ( doors.get( "east" ) != null || doors.get( "eastnorth" ) != null || doors.get( "eastsouth" ) != null )
-			firstTileY ++ ;
+			firstCellY ++ ;
 
 		if ( doors.get( "south" ) != null || doors.get( "southeast" ) != null || doors.get( "southwest" ) != null )
-			-- lastTileX ;
+			-- lastCellX ;
 
 		if ( doors.get( "west" ) != null || doors.get( "westnorth" ) != null || doors.get( "westsouth" ) != null )
-			-- lastTileY ;
+			-- lastCellY ;
 
-		boolean narrowRoomAlongX = ( lastTileY == firstTileY + 1 ) ;
-		boolean narrowRoomAlongY = ( lastTileX == firstTileX + 1 ) ;
+		boolean narrowRoomAlongX = ( lastCellY == firstCellY + 1 ) ;
+		boolean narrowRoomAlongY = ( lastCellX == firstCellX + 1 ) ;
 
 		final Color roomColor = Colours.byName( getRoom().getColour () );
 

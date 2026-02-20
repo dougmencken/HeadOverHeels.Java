@@ -17,15 +17,15 @@ import head.over.heels.IntegerPoint2D ;
 
 public class TripleRoom extends Room
 {
-	// floorless tiles make this a triple room, not quadruple
-	private java.util.Set< IntegerPoint2D > tilesWithoutFloor ;
+	// floorless cells make this a triple room, not quadruple
+	private java.util.Set< IntegerPoint2D > cellsWithoutFloor ;
 
-	public java.util.Set< IntegerPoint2D > getTilesWithoutFloor () {  return this.tilesWithoutFloor ;  }
-	public void setTilesWithoutFloor ( java.util.Set< IntegerPoint2D > floorlessTiles ) {  this.tilesWithoutFloor = floorlessTiles ;  }
+	public java.util.Set< IntegerPoint2D > getCellsWithoutFloor () {  return this.cellsWithoutFloor ;  }
+	public void setCellsWithoutFloor ( java.util.Set< IntegerPoint2D > floorlessCells ) {  this.cellsWithoutFloor = floorlessCells ;  }
 
-	public TripleRoom ( String roomFile, short xTiles, short yTiles, String roomScenery, String whichFloor )
+	public TripleRoom ( String roomFile, short xCells, short yCells, String roomScenery, String whichFloor )
 	{
-		super( roomFile, xTiles, yTiles, roomScenery, whichFloor );
+		super( roomFile, xCells, yCells, roomScenery, whichFloor );
 
 		if ( ! super.isTripleRoom() )
 			throw new RoomIsNotTripleException( roomFile + " isn’t a triple room" ) ;

@@ -50,6 +50,8 @@ public class OffscreenImage extends BufferedImage
 								+ " in " + path.getAbsolutePath() );
 	}
 
+	public IntegerDimensions2D getSize () {  return new IntegerDimensions2D( getWidth(), getHeight() ) ;  }
+
 	public void fillWithColor ( java.awt.Color color )
 	{
 		Graphics2D g = super.createGraphics ();

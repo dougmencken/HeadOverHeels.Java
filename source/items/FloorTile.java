@@ -9,8 +9,10 @@
 package head.over.heels.items ;
 
 import head.over.heels.Drawable ;
-import head.over.heels.OffscreenImage ;
 import head.over.heels.ShadyMediated ;
+
+import head.over.heels.IntegerPoint2D ;
+import head.over.heels.NamedOffscreenImage ;
 
 
 /**
@@ -19,27 +21,52 @@ import head.over.heels.ShadyMediated ;
 
 public class FloorTile extends ShadyMediated implements Drawable
 {
-	// the room’s grid cell where this tile is located
-	private int cellX ;
-	private int cellY ;
-
-	// picture of the tile
-	private final OffscreenImage rawImage ;
-
-	// picture of the shaded tile
-	private OffscreenImage shadyImage ;
-
 	/**
-	 * @param cx the X of the grid cell where the tile is
-	 * @param cy the Y of the grid cell where the tile is
+	 * @param cell the grid cell where where the tile is
 	 * @param graphicsOfTile the picture of the tile
 	 */
-	public FloorTile( int cx, int cy, OffscreenImage graphicsOfTile )
+	public FloorTile( IntegerPoint2D cell, NamedOffscreenImage graphicsOfTile )
 	{
-		this.cellX = cx ;
-		this.cellY = cy ;
+		this.cell = cell ;
+
+		if ( graphicsOfTile == null ) throw new IllegalArgumentException( "null floor tile graphics" );
 		this.rawImage = graphicsOfTile ;
-		this.shadyImage = new OffscreenImage( graphicsOfTile ); // copy the graphics
+
+		this.refreshShadedImage() ;
+	}
+
+	// the room’s grid cell where this tile is located
+	private final IntegerPoint2D cell ;
+
+	public IntegerPoint2D getCell () {  return this.cell ;  }
+
+	///private int getCellX () {  return this.cell.getX() ;  }
+	///private int getCellY () {  return this.cell.getY() ;  }
+
+	// picture of the tile
+	private final NamedOffscreenImage rawImage ;
+
+	// picture of the shaded tile
+	private NamedOffscreenImage shadedImage ;
+
+	public NamedOffscreenImage getShadedImage () {  return this.shadedImage ;  }
+
+	public void setShadedImage ( NamedOffscreenImage shaded ) {
+		super.setWantShadow( false );
+
+		this.shadedImage = shaded ; // just ‘=’ without copying the graphics via shadedImage.replicateImage( shaded )
+		this.shadedImage.setName( "shaded " + this.rawImage.getName() );
+	}
+
+	public void refreshShadedImage () {
+		if ( this.shadedImage == null )
+			this.shadedImage = new NamedOffscreenImage( this.rawImage.getSize() );
+
+		if ( super.getWantShadow() || this.shadedImage.getName().startsWith( "fresh copy" ) )
+			return ; // is fresh already or is in the process of shading
+
+		this.shadedImage.replicateImage( this.rawImage ); // copy the graphics
+		this.shadedImage.setName( "fresh copy of " + this.rawImage.getName() );
 
 		super.setWantShadow( true );
 	}

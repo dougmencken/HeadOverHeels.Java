@@ -17,6 +17,8 @@ import head.over.heels.items.Door ;
 import head.over.heels.items.WallPiece ;
 import head.over.heels.items.FloorTile ;
 
+import head.over.heels.IntegerPoint2D ;
+
 import java.util.Vector ;
 import java.util.Map ;
 
@@ -32,30 +34,30 @@ public class Room extends Mediated implements Drawable
 
 	public String getNameOfRoomDescriptionFile () {  return this.nameOfRoomDescriptionFile ;  }
 
-	// how big is this room in tiles
-	private final short howManyTilesAlongX ;
-	private final short howManyTilesAlongY ;
+	// how big is this room in cells
+	private final short howManyCellsAlongX ;
+	private final short howManyCellsAlongY ;
 
-	public short getTilesAlongX () {  return this.howManyTilesAlongX ;  }
-	public short getTilesAlongY () {  return this.howManyTilesAlongY ;  }
+	public short getCellsAlongX () {  return this.howManyCellsAlongX ;  }
+	public short getCellsAlongY () {  return this.howManyCellsAlongY ;  }
 
-	// a room larger than this number of tiles isn’t “single”
+	// a room larger than this number of cells isn’t “single”
 	public static final int max_single_room_size = 10 ;
 
-	public boolean isSingleRoom () {  return getTilesAlongX() <= max_single_room_size && getTilesAlongY() <= max_single_room_size ;  }
+	public boolean isSingleRoom () {  return getCellsAlongX() <= max_single_room_size && getCellsAlongY() <= max_single_room_size ;  }
 
-	public boolean isTripleRoom () {  return getTilesAlongX() > max_single_room_size && getTilesAlongY() > max_single_room_size ;  }
+	public boolean isTripleRoom () {  return getCellsAlongX() > max_single_room_size && getCellsAlongY() > max_single_room_size ;  }
 
-	public boolean isDoubleRoomAlongX () {  return getTilesAlongX() > max_single_room_size && getTilesAlongY() <= max_single_room_size ;  }
-	public boolean isDoubleRoomAlongY () {  return getTilesAlongX() <= max_single_room_size && getTilesAlongY() > max_single_room_size ;  }
+	public boolean isDoubleRoomAlongX () {  return getCellsAlongX() > max_single_room_size && getCellsAlongY() <= max_single_room_size ;  }
+	public boolean isDoubleRoomAlongY () {  return getCellsAlongX() <= max_single_room_size && getCellsAlongY() > max_single_room_size ;  }
 
 	/**
-	 * The length of a single tile’s side
+	 * The length of a single cell’s side
 	 */
-	public static final int single_tile_size = 16 ;
+	public static final int single_cell_size = 16 ;
 
 	// override in a subclass for other sizes but 16
-	public short getSizeOfOneTile () {  return Room.single_tile_size ;  }
+	public int getSizeOfOneCell () {  return Room.single_cell_size ;  }
 
 	/**
 	 * The scenery that defines the room’s graphics
@@ -102,46 +104,57 @@ public class Room extends Mediated implements Drawable
 	public Door getDoorOn ( String side ) {  return this.doors.get( side ) ;  }
 	public boolean hasDoorOn ( String side ) {  return getDoorOn( side ) != null ;  }
 
-	// the pieces of wall
-	private Vector < WallPiece > wallPieces = new Vector< WallPiece > ();
+	// the wall segments
+	private Vector< WallPiece > wallSegments = new Vector< WallPiece > () ;
 
-	// the tiles of floor
-	private Vector < FloorTile > floorTiles = new Vector< FloorTile > ();
+	// the tiles o’ floor
+	private Map< IntegerPoint2D, FloorTile > floorTiles = new java.util.TreeMap< IntegerPoint2D, FloorTile > () ;
 
 	/**
 	 * @param nameOfRoomFile the name of file with the description of this room
-	 * @param xTiles the length along north–south, in tiles
-	 * @param yTiles the length along east–west, in tiles
+	 * @param xCells the length along north–south, in cells
+	 * @param yCells the length along east–west, in cells
 	 * @param roomScenery the scenery such as moon or safari
 	 * @param whichFloor the kind of floor
 	 */
-	public Room ( String nameOfRoomFile, short xTiles, short yTiles, String roomScenery, String whichFloor )
+	public Room ( String nameOfRoomFile, short xCells, short yCells, String roomScenery, String whichFloor )
 	{
 		this.nameOfRoomDescriptionFile = nameOfRoomFile ;
-		this.howManyTilesAlongX = xTiles ;
-		this.howManyTilesAlongY = yTiles ;
+		this.howManyCellsAlongX = xCells ;
+		this.howManyCellsAlongY = yCells ;
 		this.scenery = ( roomScenery != null ) ? roomScenery : "" ;
 		this.floorKind = ( whichFloor != null ) ? whichFloor : "plain" /* ??? */ ;
 	}
 
-	/****************
-	public Room ( String nameOfRoomFile )
-	{
-		RoomMaker maker = new RoomMaker( nameOfRoomFile, this );
-
-		this.nameOfRoomDescriptionFile = maker.getRoomFile().getName() ;
-		this.howManyTilesAlongX = maker.getXSizeInTiles() ;
-		this.howManyTilesAlongY = maker.getYSizeInTiles ();
-		this.scenery = maker.whichScenery ();
-		this.floorKind = maker.whichKindOfFloor() ;
-
-		maker.makeRoom () ;
-	}
-	****************/
-
 	public void draw ( java.awt.Graphics2D g )
 	{
 		/* ....... */
+	}
+
+	public void addFloorTile ( FloorTile tile )
+	{
+		if ( tile == null ) return ;
+
+		tile.setMediator( getMediator() );
+
+		///this.floorTiles.remove( tile.getCell() ); // (redundant) bin an old tile, if any
+		this.floorTiles.put( tile.getCell(), tile ); // if there’s an old tile at the same cell, it is replaced
+	}
+
+	public void addWallSegment ( WallPiece piece )
+	{
+		if ( piece == null ) return ;
+
+		piece.setMediator( getMediator() );
+		// ....
+	}
+
+	public void addDoor ( Door door )
+	{
+		if ( door == null ) return ;
+
+		door.setMediator( getMediator() );
+		// ....
 	}
 
 	public void removeFreeItemByUniqueName ( String whatName )

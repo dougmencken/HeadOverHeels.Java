@@ -276,7 +276,7 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 		{
 			int framesAtAll = ( description.howManyFramesPerOrientation() * description.howManyOrientations() ) + description.howManyExtraFrames() ;
 
-			// make a fresh image filled with the transparency grid
+			// make a new image filled with the transparency grid
 			allTheFrames = new NamedOffscreenImage( frameWidth * framesAtAll, frameHeight );
 			allTheFrames.fillWithTransparencyGrid() ;
 			allTheFrames.setName( "transparency grid for absent image " + framesFile );
@@ -347,7 +347,7 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 		{
 			int framesAtAll = ( description.howManyFramesPerOrientation() * description.howManyOrientations() ) + description.howManyExtraFrames() ;
 
-			// make a fresh image filled with the transparency grid
+			// make a new image filled with the transparency grid
 			allTheShadows = new NamedOffscreenImage( shadowWidth * framesAtAll, shadowHeight );
 			allTheShadows.fillWithTransparencyGrid() ;
 			allTheShadows.setName( "transparency grid for absent image " + shadowsFile );

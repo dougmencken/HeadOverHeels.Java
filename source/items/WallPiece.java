@@ -10,11 +10,21 @@ package head.over.heels.items ;
 
 import head.over.heels.Drawable ;
 import head.over.heels.Mediated ;
+import head.over.heels.IntegerPoint2D ;
+import head.over.heels.NamedOffscreenImage ;
+import head.over.heels.PoolOfPictures ;
 
+import head.over.heels.rooms.Mediator ;
+import head.over.heels.rooms.Room ;
+
+
+/**
+ * A segment of the room’s wall
+ */
 
 public class WallPiece extends Mediated implements Drawable
 {
-	// if true, then this piece is part of the wall along X, otherwise along Y
+	// if true, then this piece is a segment of the wall along X, otherwise along Y
 	private boolean alongX ;
 
 	public boolean isAlongX () {  return   this.alongX ;  }
@@ -30,6 +40,11 @@ public class WallPiece extends Mediated implements Drawable
 
 	public String getNameOfImageFile () {  return this.nameOfImageFile ;  }
 
+	private NamedOffscreenImage wallPieceImage ;
+
+	// the offset of this wall piece’s graphics within the room image
+	private IntegerPoint2D offset ;
+
 	/**
 	 * @param trueXfalseY is this a piece of the wall along X or not
 	 * @param index where’s this piece on the wall, the number from zero onwards
@@ -40,6 +55,26 @@ public class WallPiece extends Mediated implements Drawable
 		this.alongX = trueXfalseY ;
 		this.position = index ;
 		this.nameOfImageFile = imageFile ;
+		this.offset = new IntegerPoint2D( 0, 0 );
+	}
+
+	/* @Override */
+	public void setMediator( Mediator mediator ) {
+		super.setMediator( mediator );
+		this.calculateOffset() ;
+	}
+
+	/**
+	 * Calculates the offset of this wall piece’s graphics
+	 */
+	private void calculateOffset ()
+	{
+		if ( super.getMediator() == null ) return ;
+
+		Room room = super.getMediator().getRoom() ;
+		int oneCell = room.getSizeOfOneCell() ;
+
+		// ....
 	}
 
 	/**
@@ -47,7 +82,9 @@ public class WallPiece extends Mediated implements Drawable
 	 */
 	public void draw ( java.awt.Graphics2D g )
 	{
-		// ...
+		NamedOffscreenImage image = PoolOfPictures.getRecentPool().getPicture( this.nameOfImageFile );
+		if ( image != null )
+			g.drawImage( image, this.offset.getX(), this.offset.getY(), null );
 	}
 
 }

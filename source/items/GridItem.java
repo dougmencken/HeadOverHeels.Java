@@ -9,12 +9,12 @@
 package head.over.heels.items ;
 
 import head.over.heels.Drawable ;
-import head.over.heels.rooms.Room ;
+import head.over.heels.IntegerPoint2D ;
 
 
 /**
  * The grid items are those which are placed in a single grid cell. They have the same
- * widths as the grid cells have. Grid items are mostly static. Only the Z coordinate
+ * widths as the room grid cells have. Grid items are mostly static. Only the Z coordinate
  * of a grid item can be changed, but not the position along X and Y
  */
 
@@ -22,61 +22,47 @@ public class GridItem extends DescribedItem implements Drawable
 {
 	/**
 	 * @param description the description of this item
-	 * @param cx the X of the grid cell where to place the item
-	 * @param cy the Y of the grid cell where to place the item
+	 * @param cell the cell where to place the item
 	 * @param z the position on Z, or how far is the floor, in free units
-	 * @param where the angular orientation
+	 * @param towards the angular orientation
 	 */
-	public GridItem( DescriptionOfItem description, short cx, short cy, int z, String where )
+	public GridItem( DescriptionOfItem description, IntegerPoint2D cell, int z, String towards )
 	{
 		super( description );
 
-		this.cellX = cx ;
-		this.cellY = cy ;
+		this.cell = cell ;
 		this.theZ = z ;
 
-		this.orientation = where ;
+		this.orientation = towards ;
 	}
 
 	// the copy constructor
 	public GridItem( GridItem that )
 	{
 		super( that );
-		this.cellX = that.cellX ;
-		this.cellY = that.cellY ;
+		this.cell = new IntegerPoint2D( that.cell );
 		this.theZ = that.theZ ;
 		this.orientation = that.orientation ;
 	}
 
-	// the room’s grid cell where this item is placed
-	private short cellX ;
-	private short cellY ;
+	// the room’s cell
+	private IntegerPoint2D cell ;
 
 	/**
-	 * Position along X of the room’s grid cell
+	 * @return the room’s cell where this item is placed
 	 */
-	public short getCellX () {  return this.cellX ;  }
+	public IntegerPoint2D getCell () {  return this.cell ;  }
 
-	/**
-	 * Position along Y of the room’s grid cell
-	 */
-	public short getCellY () {  return this.cellY ;  }
-
-	/**
-	 * The length of the side of one room’s tile (cell)
-	 */
-	public short oneTileLong ()
-	{
-		return ( getMediator() != null ) ? getMediator().getRoom().getSizeOfOneTile() : Room.single_tile_size ;
-	}
+	private int getCellX () {  return this.cell.getX() ;  }
+	private int getCellY () {  return this.cell.getY() ;  }
 
 	// the position along Z, or how far is the floor, in free units
 	private int theZ ;
 
 	// gives the position in 3-dimensional space in free units
 	public int getZ () {  return this.theZ ;  }
-	public int getX () {  return getCellX() * getWidthX() ;  } // the widths of a grid item are equal to the size of a single room’s tile
-	public int getY () {  return ( getCellY() + 1 ) * getWidthY() - 1 ;  }
+	public int getX () {  return getCellX() * getWidthX() ;  } // the widths of a grid item are equal...
+	public int getY () {  return ( getCellY() + 1 ) * getWidthY() - 1 ;  } // ...to the size of a single room’s cell
 
 	/**
 	 * Sets the position along Z (how far is the floor) in free units
