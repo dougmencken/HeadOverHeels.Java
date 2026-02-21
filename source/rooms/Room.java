@@ -21,6 +21,7 @@ import head.over.heels.IntegerPoint2D ;
 import head.over.heels.IntegerSize2D ;
 
 import java.util.Vector ;
+import java.util.Set ;
 import java.util.Map ;
 
 
@@ -110,7 +111,7 @@ public class Room extends Mediated implements Drawable
 	private Vector< WallPiece > wallSegments = new Vector< WallPiece > () ;
 
 	// the tiles o’ floor
-	private Map< IntegerPoint2D, FloorTile > floorTiles = new java.util.TreeMap< IntegerPoint2D, FloorTile > () ;
+	private Set< FloorTile > floorTiles = new java.util.TreeSet< FloorTile > () ;
 
 	/**
 	 * @param nameOfRoomFile the name of file with the description of this room
@@ -132,14 +133,14 @@ public class Room extends Mediated implements Drawable
 		/* ....... */
 	}
 
-	public void addFloorTile ( FloorTile tile )
+	public boolean addFloorTile ( FloorTile tile )
 	{
-		if ( tile == null ) return ;
+		if ( tile == null ) return false ;
 
+		/* <<< FIXME >>> */ if ( getMediator() == null ) System.out.println( "room’s mediator is null @ Room.addFloorTile" ) ;
 		tile.setMediator( getMediator() );
 
-		///this.floorTiles.remove( tile.getCell() ); // (redundant) bin an old tile, if any
-		this.floorTiles.put( tile.getCell(), tile ); // if there’s an old tile at the same cell, it is replaced
+		return this.floorTiles.add( tile ); // true if added, false if already contains
 	}
 
 	public void addWallSegment ( WallPiece piece )
@@ -147,6 +148,7 @@ public class Room extends Mediated implements Drawable
 		if ( piece == null ) return ;
 
 		piece.setMediator( getMediator() );
+
 		// ....
 	}
 
@@ -155,6 +157,7 @@ public class Room extends Mediated implements Drawable
 		if ( door == null ) return ;
 
 		door.setMediator( getMediator() );
+
 		// ....
 	}
 

@@ -34,4 +34,11 @@ public class IntegerPoint2D
 		this.y = that.getY ();
 	}
 
+	public boolean equals( Object that ) {
+		return ( that instanceof IntegerPoint2D ) ? this.equals( (IntegerPoint2D) that ) : false ;
+	}
+	public boolean equals( IntegerPoint2D that ) {
+		return ( this.getX() == that.getX() ) && ( this.getY() == that.getY() ) ;
+	}
+
 }

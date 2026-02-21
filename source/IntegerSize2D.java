@@ -48,4 +48,11 @@ public class IntegerSize2D
 		this.widthY = that.getWidthY ();
 	}
 
+	public boolean equals( Object that ) {
+		return ( that instanceof IntegerSize2D ) ? this.equals( (IntegerSize2D) that ) : false ;
+	}
+	public boolean equals( IntegerSize2D that ) {
+		return ( this.getFirst() == that.getFirst() ) && ( this.getSecond() == that.getSecond() ) ;
+	}
+
 }

@@ -19,7 +19,7 @@ import head.over.heels.NamedOffscreenImage ;
  * A set of such tiles forms the floor of the room
  */
 
-public class FloorTile extends ShadyMediated implements Drawable
+public class FloorTile extends ShadyMediated implements Drawable, Comparable
 {
 	/**
 	 * @param cell the grid cell where where the tile is
@@ -40,8 +40,27 @@ public class FloorTile extends ShadyMediated implements Drawable
 
 	public IntegerPoint2D getCell () {  return this.cell ;  }
 
-	///private int getCellX () {  return this.cell.getX() ;  }
-	///private int getCellY () {  return this.cell.getY() ;  }
+	/* @Override */
+	public boolean equals ( Object that ) {
+		return ( that instanceof FloorTile ) ? this.equals( (FloorTile) that ) : false ;
+	}
+	public boolean equals ( FloorTile that ) {
+		return this.getCell().equals( that.getCell() );
+	}
+
+	// implementing Comparable
+	public int compareTo ( Object that ) {
+		if ( that instanceof FloorTile )
+			return this.compareTo( (FloorTile) that );
+		else
+			throw new ClassCastException( "can’t compare " + this.getClass().getName() + " with " + that.getClass().getName() );
+	}
+	public int compareTo ( FloorTile that )
+	{
+		int y2y = Integer.compare( this.getCell().getY(), that.getCell().getY() );
+		if ( y2y != 0 ) return y2y ;
+		return Integer.compare( this.getCell().getX(), that.getCell().getX() );
+	}
 
 	// picture of the tile
 	private final NamedOffscreenImage rawImage ;

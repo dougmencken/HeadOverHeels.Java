@@ -54,10 +54,10 @@ public class PoolOfPictures
 		if ( picture == null ) {
 		// try to read it from file
 			File gfxFolder = new File( PoolOfPictures.gfx_in_gamedata, PoolOfPictures.whichGraphicsSet() );
-			File itemsFolder = new File( gfxFolder, "items" );
-			if ( itemsFolder.exists() && itemsFolder.isDirectory() ) {
+			File graphicsFile = FileUtilities.findFirstFileByNameRecursively( gfxFolder, name );
+			if ( graphicsFile != null ) {
 				try {
-					picture = new NamedOffscreenImage( itemsFolder, name );
+					picture = new NamedOffscreenImage( graphicsFile.getParentFile(), graphicsFile.getName() );
 				} catch ( NoSuchPictureException ex ) {  picture = null ;  }
 
 				if ( picture != null ) {
