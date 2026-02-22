@@ -40,9 +40,6 @@ public class WallPiece extends Mediated implements Drawable
 
 	public String getNameOfImageFile () {  return ( this.wallPieceImage != null ) ? this.wallPieceImage.getName() : null ;  }
 
-	// the offset of this wall piece’s graphics within the room image
-	private IntegerPoint2D offset ;
-
 	/**
 	 * @param trueXfalseY is this a piece of the wall along X or not
 	 * @param index where’s this piece on the wall, the number from zero onwards
@@ -53,7 +50,6 @@ public class WallPiece extends Mediated implements Drawable
 		this.alongX = trueXfalseY ;
 		this.position = index ;
 		this.wallPieceImage = PoolOfPictures.getRecentPool().getPicture( imageFile );
-		this.offset = new IntegerPoint2D( 0, 0 );
 	}
 
 	/* @Override */
@@ -61,6 +57,9 @@ public class WallPiece extends Mediated implements Drawable
 		super.setMediator( mediator );
 		this.calculateOffset() ;
 	}
+
+	// the offset of this wall piece’s graphics within the room image
+	private IntegerPoint2D offset = null ;
 
 	/**
 	 * Calculates the offset of this wall piece’s graphics
@@ -80,7 +79,7 @@ public class WallPiece extends Mediated implements Drawable
 	 */
 	public void draw ( java.awt.Graphics2D g )
 	{
-		if ( this.wallPieceImage != null )
+		if ( this.wallPieceImage != null && this.offset != null )
 			g.drawImage( this.wallPieceImage, this.offset.getX(), this.offset.getY(), null );
 	}
 

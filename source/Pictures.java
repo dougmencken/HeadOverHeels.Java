@@ -27,11 +27,6 @@ public class Pictures
 		return new BufferedImage( colorModel, picture.copyData( null ), colorModel.isAlphaPremultiplied (), null );
 	}
 
-	public static boolean saveAsPNG ( BufferedImage picture, String where )
-	{
-		return saveAsPNG( picture, new java.io.File( where ) );
-	}
-
 	public static boolean saveAsPNG ( BufferedImage picture, java.io.File file )
 	{
 		try {

@@ -19,6 +19,7 @@ import head.over.heels.items.FloorTile ;
 
 import head.over.heels.IntegerPoint2D ;
 import head.over.heels.IntegerSize2D ;
+import head.over.heels.Colours ;
 
 import java.util.Vector ;
 import java.util.Set ;
@@ -61,6 +62,35 @@ public class Room extends Mediated implements Drawable
 
 	// override in a subclass for other sizes but 16
 	public int getSizeOfOneCell () {  return Room.single_cell_size ;  }
+
+	// the room’s origin point
+	private final IntegerPoint2D origin ;
+
+	public IntegerPoint2D getOrigin () {  return this.origin ;  }
+
+	/**
+	 * The height of a layer in pixels. An item on layer n is n × layer_height pixels above the floor
+	 */
+	public static final int layer_height = 24 ;
+
+	/**
+	 * How many layers a room has. The height of a room is room_layers × layer_height
+	 */
+	public static final int room_layers = 10 ;
+
+	/**
+	 * @return the size of image large enough to draw the whole room
+	 */
+	public IntegerSize2D getSizeOfRoomImage ()
+	{
+		// the height of the room plane
+		int planeHeight = ( getCellsAlongX() + getCellsAlongY() ) * getSizeOfOneCell() ;
+
+		int width = planeHeight << 1 ; // ×2
+		int height = planeHeight + /* the floor height */ 8 + /* the room’s own height */ getOrigin().getY() ;
+
+		return new IntegerSize2D( width, height );
+	}
 
 	/**
 	 * The scenery that defines the room’s graphics
@@ -124,20 +154,52 @@ public class Room extends Mediated implements Drawable
 	{
 		this.nameOfRoomDescriptionFile = nameOfRoomFile ;
 		this.sizeInCells = new IntegerSize2D( cellsX, cellsY );
+		this.origin = new IntegerPoint2D( getCellsAlongY() * ( getSizeOfOneCell() << 1 ), ( Room.room_layers + 2 ) * Room.layer_height );
 		this.scenery = ( roomScenery != null ) ? roomScenery : "" ;
 		this.floorKind = ( whichFloor != null ) ? whichFloor : "plain" /* ??? */ ;
+
+		super.setMediator( new Mediator( this ) );
 	}
 
 	public void draw ( java.awt.Graphics2D g )
 	{
-		/* ....... */
+		// draw the floor
+		for ( FloorTile tile : this.floorTiles )
+			tile.draw( g );
+
+		// draw the walls
+		for ( WallPiece segment : this.wallSegments )
+			segment.draw( g );
+
+		// draw the grid items
+		/* .... */
+
+		// draw the free items
+		/* .... */
+
+		// draw the point of the room’s origin
+
+		int x0 = this.getOrigin().getX() ;
+		int y0 = this.getOrigin().getY() ;
+		int radius = 3 ;
+		int wh = ( radius << 1 ) + 1 ;
+
+		g.setColor( Colours.red );
+		g.drawLine( x0 - 1, y0 + 2,  x0 + 1, y0 + 2 );
+		g.drawLine( x0 - 2, y0 + 1,  x0 + 2, y0 + 1 );
+		g.drawLine( x0 - 2, y0,      x0 + 2, y0 );
+		g.drawLine( x0 - 2, y0 - 1,  x0 + 2, y0 - 1 );
+		g.drawLine( x0 - 1, y0 - 2,  x0 + 1, y0 - 2 );
+
+		g.setColor( Colours.white );
+		g.drawLine( x0 - 1, y0, x0 + 1, y0 );
+		g.drawLine( x0, y0 - 1, x0, y0 + 1 );
 	}
 
 	public boolean addFloorTile ( FloorTile tile )
 	{
 		if ( tile == null ) return false ;
 
-		/* <<< FIXME >>> */ if ( getMediator() == null ) System.out.println( "room’s mediator is null @ Room.addFloorTile" ) ;
 		tile.setMediator( getMediator() );
 
 		return this.floorTiles.add( tile ); // true if added, false if already contains

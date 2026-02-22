@@ -14,6 +14,9 @@ import head.over.heels.ShadyMediated ;
 import head.over.heels.IntegerPoint2D ;
 import head.over.heels.NamedOffscreenImage ;
 
+import head.over.heels.rooms.Mediator ;
+import head.over.heels.rooms.Room ;
+
 
 /**
  * A set of such tiles forms the floor of the room
@@ -90,12 +93,34 @@ public class FloorTile extends ShadyMediated implements Drawable, Comparable
 		super.setWantShadow( true );
 	}
 
+	/* @Override */
+	public void setMediator( Mediator mediator ) {
+		super.setMediator( mediator );
+		this.calculateOffset() ;
+	}
+
+	// the offset of this floor tile’s graphics within the room image
+	private IntegerPoint2D offset = null ;
+
+	private void calculateOffset ()
+	{
+		if ( super.getMediator() == null ) return ;
+
+		Room room = super.getMediator().getRoom() ;
+		int oneCell = room.getSizeOfOneCell() ;
+
+		int offsetX = ( ( oneCell * ( getCell().getX() - getCell().getY() - 1 ) ) << 1 ) + 1 ;
+		int offsetY = oneCell * ( getCell().getX() + getCell().getY() ) ;
+		this.offset = new IntegerPoint2D( room.getOrigin().getX() + offsetX, room.getOrigin().getY() + offsetY );
+	}
+
 	/**
-	 * Draw this tile of floor
+	 * Draw this tile o’ floor
 	 */
 	public void draw ( java.awt.Graphics2D g )
 	{
-		// ...
+		if ( this.shadedImage != null && this.offset != null )
+			g.drawImage( this.shadedImage, this.offset.getX(), this.offset.getY(), null );
 	}
 
 }

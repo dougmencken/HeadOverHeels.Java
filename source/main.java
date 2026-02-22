@@ -171,6 +171,13 @@ public final class main
 		System.out.println("   scenery " + StringUtilities.putInQuotes( madeRoom.getScenery() ));
 		System.out.println("   " + madeRoom.getCellsAlongX() + " cells along north–south" + " × " + madeRoom.getCellsAlongY() + " cells along east–west");
 		System.out.println("   floor is " + madeRoom.getKindOfFloor());
+
+		NamedOffscreenImage roomImage = new NamedOffscreenImage( madeRoom.getSizeOfRoomImage() );
+		roomImage.setName( madeRoom.getNameOfRoomDescriptionFile() + " image" );
+		java.awt.Graphics2D g2d = roomImage.createGraphics() ;
+		madeRoom.draw( g2d );
+		g2d.dispose() ;
+		Pictures.saveAsPNG( roomImage, new java.io.File( Storage.getGameStorageInHome(), roomImage.getName() + ".png" ) );
 		}
 	}
 	}
