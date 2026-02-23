@@ -35,4 +35,12 @@ public class FileUtilities
 		return null ;
 	}
 
+	public static String fileNameWithoutDotSuffix( String name )
+	{
+		int lastSeparatorAt = name.lastIndexOf( File.separatorChar );
+		if ( lastSeparatorAt >= 0 ) name = name.substring( lastSeparatorAt + 1 );
+		int lastDotAt = name.lastIndexOf( '.' );
+		return ( lastDotAt > 0 ) ? name.substring( 0, lastDotAt ) : name ;
+	}
+
 }

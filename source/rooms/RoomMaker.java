@@ -150,20 +150,6 @@ public class RoomMaker
 		if ( room == null ) throw new IllegalArgumentException( "null room in RoomMaker.makeFloor" );
 		if ( rootElement == null ) throw new IllegalArgumentException( "null rootElement in RoomMaker.makeFloor" );
 
-		Door eastDoor = room.getDoorOn( "east" );
-		Door southDoor = room.getDoorOn( "south" );
-		Door northDoor = room.getDoorOn( "north" );
-		Door westDoor = room.getDoorOn( "west" );
-
-		Door eastnorthDoor = room.getDoorOn( "eastnorth" );
-		Door eastsouthDoor = room.getDoorOn( "eastsouth" );
-		Door southeastDoor = room.getDoorOn( "southeast" );
-		Door southwestDoor = room.getDoorOn( "southwest" );
-		Door northeastDoor = room.getDoorOn( "northeast" );
-		Door northwestDoor = room.getDoorOn( "northwest" );
-		Door westnorthDoor = room.getDoorOn( "westnorth" );
-		Door westsouthDoor = room.getDoorOn( "westsouth" );
-
 		// read the list of floorless cells (for a triple room)
 		if ( room instanceof TripleRoom ) {
 			java.util.Set< IntegerPoint2D > floorlessCells = new java.util.HashSet< IntegerPoint2D >() ;
@@ -192,16 +178,56 @@ public class RoomMaker
 		if ( ! room.getScenery().isEmpty() ) {
 			// make the floor by its kind (plain or mortal) and the room’s scenery, without listing every tile
 
-			String sceneryPrefix = room.getScenery() + "-" ;
+			///Door eastDoor = room.getDoorOn( "east" );
+			///Door southDoor = room.getDoorOn( "south" );
+			///Door northDoor = room.getDoorOn( "north" );
+			///Door westDoor = room.getDoorOn( "west" );
+
+			///Door eastnorthDoor = room.getDoorOn( "eastnorth" );
+			///Door eastsouthDoor = room.getDoorOn( "eastsouth" );
+			///Door southeastDoor = room.getDoorOn( "southeast" );
+			///Door southwestDoor = room.getDoorOn( "southwest" );
+			///Door northeastDoor = room.getDoorOn( "northeast" );
+			///Door northwestDoor = room.getDoorOn( "northwest" );
+			///Door westnorthDoor = room.getDoorOn( "westnorth" );
+			///Door westsouthDoor = room.getDoorOn( "westsouth" );
+
+			StringBuilder tileFilename = new StringBuilder( room.getScenery() ) ;
+			tileFilename.append( '-' );
+
+			if ( ! room.hasFloor() )
+				tileFilename.append( "nofloor" );
+			else
+			if ( room.isFloorMortal() )
+				tileFilename.append( "mortalfloor" );
+			else
+				tileFilename.append( "floor" );
+
+			tileFilename.append( ".png" );
 
 			int lastCellX = room.getCellsAlongX() - 1 ;
 			int lastCellY = room.getCellsAlongY() - 1 ;
 
-			// .....
+			for ( int x = 0 ; x <= lastCellX ; ++ x ) {
+				for ( int y = 0 ; y <= lastCellY ; ++ y )
+				{
+					IntegerPoint2D cell = new IntegerPoint2D( x, y );
 
-			PoolOfPictures imagePool = PoolOfPictures.getRecentPool() ;
+					boolean addTile = true ;
 
-			// ....
+					if ( room instanceof TripleRoom )
+						if ( ( (TripleRoom) room ).getCellsWithoutFloor().contains( cell ) )
+							addTile = false ;
+
+					if ( addTile ) {
+						NamedOffscreenImage tileImage = PoolOfPictures.getRecentPool().getPicture( tileFilename.toString() );
+						if ( tileImage != null )
+							room.addFloorTile( new FloorTile( cell, tileImage ) );
+						else
+							System.out.println( "can’t get image " + tileFilename.toString() );
+					}
+				}
+			}
 		}
 		else {
 			// for each floor tile its position (x,y) and image file name are listed
@@ -222,12 +248,12 @@ public class RoomMaker
 
 						if ( xNode != null && yNode != null && pictureNode != null ) {
 							try { // Integer.parseInt can throw NumberFormatException
-								int tileX = Integer.parseInt( xNode.getTextContent() );
-								int tileY = Integer.parseInt( yNode.getTextContent() );
+								int x = Integer.parseInt( xNode.getTextContent() );
+								int y = Integer.parseInt( yNode.getTextContent() );
 
 								NamedOffscreenImage tileImage = PoolOfPictures.getRecentPool().getPicture( pictureNode.getTextContent() );
 								if ( tileImage != null )
-									room.addFloorTile( new FloorTile( new IntegerPoint2D( tileX, tileY ), tileImage ) );
+									room.addFloorTile( new FloorTile( new IntegerPoint2D( x, y ), tileImage ) );
 							}
 							catch ( NumberFormatException e ) {}
 						}

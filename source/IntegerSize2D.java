@@ -48,11 +48,17 @@ public class IntegerSize2D
 		this.widthY = that.getWidthY ();
 	}
 
+	// is that object logically equal to this object
 	public boolean equals( Object that ) {
 		return ( that instanceof IntegerSize2D ) ? this.equals( (IntegerSize2D) that ) : false ;
 	}
 	public boolean equals( IntegerSize2D that ) {
 		return ( this.getFirst() == that.getFirst() ) && ( this.getSecond() == that.getSecond() ) ;
+	}
+
+	// ensure that logically equal objects give the same hash code
+	public int hashCode () {
+		return ( this.getFirst() << 5 ) - this.getFirst() + this.getSecond() ; // hash = 31w + h
 	}
 
 }

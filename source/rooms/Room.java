@@ -109,6 +109,8 @@ public class Room extends Mediated implements Drawable
 
 	public boolean hasFloor () {  return ! this.floorKind.equals( "absent" );  }
 
+	public boolean isFloorMortal () {  return this.floorKind.equals( "mortal" );  }
+
 	// the color of room in the original ZX Specturm game
 	private String roomColor = "white" ;
 
@@ -178,11 +180,9 @@ public class Room extends Mediated implements Drawable
 		/* .... */
 
 		// draw the point of the room’s origin
-
+		/***
 		int x0 = this.getOrigin().getX() ;
 		int y0 = this.getOrigin().getY() ;
-		int radius = 3 ;
-		int wh = ( radius << 1 ) + 1 ;
 
 		g.setColor( Colours.red );
 		g.drawLine( x0 - 1, y0 + 2,  x0 + 1, y0 + 2 );
@@ -194,6 +194,7 @@ public class Room extends Mediated implements Drawable
 		g.setColor( Colours.white );
 		g.drawLine( x0 - 1, y0, x0 + 1, y0 );
 		g.drawLine( x0, y0 - 1, x0, y0 + 1 );
+		***/
 	}
 
 	public boolean addFloorTile ( FloorTile tile )

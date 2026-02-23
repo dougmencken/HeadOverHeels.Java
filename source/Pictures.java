@@ -445,12 +445,9 @@ public class Pictures
 				// list the colours
 				Pictures.listColorModelIfIndexed( newImage );
 
-				int lastSeparatorAt = nameOFile.lastIndexOf( java.io.File.separatorChar );
-				if ( lastSeparatorAt > 0 ) nameOFile = nameOFile.substring( lastSeparatorAt );
-				int lastDotAt = nameOFile.lastIndexOf( '.' );
-				String withoutSuffix = ( lastDotAt > 0 ) ? nameOFile.substring( 0, lastDotAt ) : nameOFile ;
+				String withoutSuffix = FileUtilities.fileNameWithoutDotSuffix( nameOFile );
+				java.io.File newImageFile = new java.io.File( Storage.getGameStorageInHome(), withoutSuffix + extraSuffix + ".png" );
 
-				java.io.File newImageFile = new java.io.File( Storage.getGameStorageInHome (), withoutSuffix + extraSuffix + ".png" );
 				if ( Pictures.saveAsPNG( newImage, newImageFile ) )
 					out.println( "saved as PNG file " + StringUtilities.putInQuotes( newImageFile.getPath() ) );
 			}

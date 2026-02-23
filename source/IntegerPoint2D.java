@@ -34,11 +34,17 @@ public class IntegerPoint2D
 		this.y = that.getY ();
 	}
 
+	// is that object logically equal to this object
 	public boolean equals( Object that ) {
 		return ( that instanceof IntegerPoint2D ) ? this.equals( (IntegerPoint2D) that ) : false ;
 	}
 	public boolean equals( IntegerPoint2D that ) {
 		return ( this.getX() == that.getX() ) && ( this.getY() == that.getY() ) ;
+	}
+
+	// ensure that logically equal objects give the same hash code
+	public int hashCode () {
+		return ( this.getX() << 5 ) - this.getX() + this.getY() ; // hash = 31x + y
 	}
 
 }

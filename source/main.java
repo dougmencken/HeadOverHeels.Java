@@ -12,8 +12,6 @@ package head.over.heels ;
 import java.util.Vector ;
 import java.util.HashMap ;
 
-import head.over.heels.items.ItemDescriptions ; /**/// temporary line
-
 
 class KnownOption
 {
@@ -162,8 +160,8 @@ public final class main
 
 	/**/// temporary lines
 	{
-	String[] rooms = { "blacktooth17triple.xml", "finalroom.xml" } ;
-	for ( String room : rooms ) {
+	String[] mapXmlFiles = head.over.heels.rooms.GameMap.game_map_folder.list() ;
+	for ( String room : mapXmlFiles ) {
 		head.over.heels.rooms.RoomMaker makingRoomTest = new head.over.heels.rooms.RoomMaker( room );
 		head.over.heels.rooms.Room madeRoom = makingRoomTest.getMadeRoom() ;
 		if ( madeRoom != null ) {
@@ -173,7 +171,7 @@ public final class main
 		System.out.println("   floor is " + madeRoom.getKindOfFloor());
 
 		NamedOffscreenImage roomImage = new NamedOffscreenImage( madeRoom.getSizeOfRoomImage() );
-		roomImage.setName( madeRoom.getNameOfRoomDescriptionFile() + " image" );
+		roomImage.setName( FileUtilities.fileNameWithoutDotSuffix( madeRoom.getNameOfRoomDescriptionFile() ) + "-image" );
 		java.awt.Graphics2D g2d = roomImage.createGraphics() ;
 		madeRoom.draw( g2d );
 		g2d.dispose() ;

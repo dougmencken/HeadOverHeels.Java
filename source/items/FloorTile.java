@@ -51,6 +51,19 @@ public class FloorTile extends ShadyMediated implements Drawable, Comparable
 		return this.getCell().equals( that.getCell() );
 	}
 
+	private transient Integer hash = null ;
+
+	/* @Override */
+	public int hashCode () {
+		if ( hash == null ) {
+			final int seed = 359 ;
+			int hash = ( seed << 5 ) - seed + this.getCell().getX() ; // 31×359 + cellX
+			hash = ( hash << 5 ) - hash + this.getCell().getY() ; // 31 × ( 31×359 + cellX ) + cellY
+			this.hash = Integer.valueOf( hash );
+		}
+		return this.hash.intValue() ;
+	}
+
 	// implementing Comparable
 	public int compareTo ( Object that ) {
 		if ( that instanceof FloorTile )
