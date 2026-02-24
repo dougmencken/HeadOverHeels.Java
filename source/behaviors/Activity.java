@@ -12,13 +12,16 @@ package head.over.heels.behaviors ;
 public class Activity
 {
 
-	private String letters ;
+	private final String letters ;
 
-	protected Activity( String text ) {  this.letters = text ;  }
+	public boolean equals( Object that ) {
+		return ( that instanceof Activity ) ? this.equals( (Activity) that ) : false ;
+	}
+	public boolean equals ( Activity that ) {
+		return ( that == this ) || that.letters.equals( this.letters );
+	}
 
-	protected Activity( Activity copyMe ) {  this.letters = copyMe.letters ;  }
-
-	public boolean equals ( Activity that ) {  return that.letters.equals( this.letters );  }
+	public int hashCode () {  return 293339 + this.letters.hashCode() ;  }
 
 	/* constants */
 
@@ -35,6 +38,11 @@ public class Activity
 
 	public static final Activity  MetLethalItem	= new Activity( "met a lethal item" );
 	public static final Activity  Vanishing		= new Activity( "vanishing" );
+
+	protected Activity( String text ) {
+		if ( text == null ) throw new IllegalArgumentException( "hey how could one do new Activity(null)" ) ;
+		this.letters = text ;
+	}
 
 }
 

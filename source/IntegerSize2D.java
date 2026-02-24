@@ -53,6 +53,7 @@ public class IntegerSize2D
 		return ( that instanceof IntegerSize2D ) ? this.equals( (IntegerSize2D) that ) : false ;
 	}
 	public boolean equals( IntegerSize2D that ) {
+		if ( this == that ) return true ;
 		return ( this.getFirst() == that.getFirst() ) && ( this.getSecond() == that.getSecond() ) ;
 	}
 

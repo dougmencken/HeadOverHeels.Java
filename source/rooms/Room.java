@@ -19,7 +19,6 @@ import head.over.heels.items.FloorTile ;
 
 import head.over.heels.IntegerPoint2D ;
 import head.over.heels.IntegerSize2D ;
-import head.over.heels.Colours ;
 
 import java.util.Vector ;
 import java.util.Set ;

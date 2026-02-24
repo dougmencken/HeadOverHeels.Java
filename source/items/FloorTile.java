@@ -48,6 +48,7 @@ public class FloorTile extends ShadyMediated implements Drawable, Comparable
 		return ( that instanceof FloorTile ) ? this.equals( (FloorTile) that ) : false ;
 	}
 	public boolean equals ( FloorTile that ) {
+		if ( this == that ) return true ;
 		return this.getCell().equals( that.getCell() );
 	}
 
