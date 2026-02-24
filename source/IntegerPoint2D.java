@@ -13,7 +13,7 @@ package head.over.heels ;
  * A couple of integers named x and y
  */
 
-public class IntegerPoint2D
+public final class IntegerPoint2D
 {
 
 	private final int x ;

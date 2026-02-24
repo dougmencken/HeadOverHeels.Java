@@ -13,7 +13,7 @@ package head.over.heels ;
  * A couple of integers representing a size in two-dimensional space
  */
 
-public class IntegerSize2D
+public final class IntegerSize2D
 {
 
 	private final int widthX ;

@@ -30,6 +30,7 @@ public class FloorTile extends ShadyMediated implements Drawable, Comparable
 	 */
 	public FloorTile( IntegerPoint2D cell, NamedOffscreenImage graphicsOfTile )
 	{
+		if ( cell == null ) throw new IllegalArgumentException( "null cell" );
 		this.cell = cell ;
 
 		if ( graphicsOfTile == null ) throw new IllegalArgumentException( "null floor tile graphics" );

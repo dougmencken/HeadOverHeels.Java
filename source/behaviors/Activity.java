@@ -14,14 +14,14 @@ public class Activity
 
 	private final String letters ;
 
-	public boolean equals( Object that ) {
+	public final boolean equals( Object that ) {
 		return ( that instanceof Activity ) ? this.equals( (Activity) that ) : false ;
 	}
-	public boolean equals ( Activity that ) {
+	public final boolean equals( Activity that ) {
 		return ( that == this ) || that.letters.equals( this.letters );
 	}
 
-	public int hashCode () {  return 293339 + this.letters.hashCode() ;  }
+	public final int hashCode () {  return 293339 + this.letters.hashCode() ;  }
 
 	/* constants */
 
