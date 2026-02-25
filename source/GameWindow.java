@@ -8,18 +8,19 @@
 
 package head.over.heels ;
 
-import head.over.heels.gui.transitions.ImageTransition ;
-import head.over.heels.gui.transitions.RandomPixelFade ;
-
 import javax.swing.JFrame ;
 import javax.swing.JComponent ;
 
 import java.awt.Color ;
 
+import head.over.heels.gui.transitions.ImageTransition ;
+import head.over.heels.gui.transitions.RandomPixelFade ;
+
+import head.over.heels.gui.swing.PeriodicRepainter ;
+
 
 class DrawnInTheGameWindow extends JComponent
 {
-
 	/**
 	 * The buffer to draw on and then copy the whole buffer to the screen
 	 */
@@ -27,31 +28,7 @@ class DrawnInTheGameWindow extends JComponent
 
 	OffscreenImage getWhatToDraw () {  return whatToDraw ;  }
 
-	class RepaintTimer extends javax.swing.Timer
-	{
-		RepaintTimer( JComponent repaintMe )
-		{
-			super( /* delay */ 10 /* milliseconds */ ,
-				new java.awt.event.ActionListener () {
-					public void actionPerformed( java.awt.event.ActionEvent e ) {
-						if ( repaintMe != null )
-							repaintMe.repaint ();
-					}
-				} ) ;
-		}
-
-		public void start () {
-			System.out.println( "starting the repaint timer" );
-			super.start ();
-		}
-
-		public void stop () {
-			System.out.println( "stopping the repaint timer" );
-			super.stop ();
-		}
-	}
-
-	private RepaintTimer repaintTimer ;
+	private PeriodicRepainter repainter ;
 
 	private ImageTransition transition ;
 
@@ -61,7 +38,7 @@ class DrawnInTheGameWindow extends JComponent
 		setBackground( Colours.reducedRed );
 		setSize( width, height );
 
-		startRepaintTimer ();
+		startRepainter ();
 	}
 
 	public void setSize ( int width, int height )
@@ -140,21 +117,21 @@ class DrawnInTheGameWindow extends JComponent
 		///g2d.dispose ();
 	}
 
-	void startRepaintTimer ()
+	void startRepainter ()
 	{
-		if ( this.repaintTimer == null ) {
-			this.repaintTimer = new RepaintTimer( this );
+		if ( this.repainter == null ) {
+			this.repainter = new PeriodicRepainter( this, 10 /* delay in milliseconds */ );
 		}
-		if ( ! this.repaintTimer.isRunning () )
-			this.repaintTimer.start ();
-		else	this.repaintTimer.restart ();
+		if ( ! this.repainter.isRunning () )
+			this.repainter.start ();
+		else	this.repainter.restart ();
 	}
 
-	void stopRepaintTimer ()
+	void stopRepainter ()
 	{
-		if ( this.repaintTimer != null && this.repaintTimer.isRunning() ) {
-			this.repaintTimer.stop () ;
-			this.repaintTimer = null ;
+		if ( this.repainter != null && this.repainter.isRunning() ) {
+			this.repainter.stop () ;
+			this.repainter = null ;
 		}
 	}
 
@@ -198,7 +175,6 @@ public class GameWindow extends JFrame
 
 	private GamePreferences preferences ;
 
-
 	public GameWindow ( int width, int height )
 	{
 		super( "Foot and Mouth (Java)" + " version " + main.gameVersion() );
@@ -215,7 +191,7 @@ public class GameWindow extends JFrame
 			static final int ToWhite   = 7 ;
 			static final int ToGray    = 8 ;
 
-			int toColor = ToRed ;
+			private int toColor = ToRed ;
 
 			public void mouseReleased( java.awt.event.MouseEvent e ) {
 				++ toColor ;
@@ -299,7 +275,7 @@ public class GameWindow extends JFrame
 		while ( ! this.pane.isTransitionFinished () )
 			this.pane.waitForTransitionToFinish ();
 
-		this.pane.stopRepaintTimer ();
+		this.pane.stopRepainter ();
 	}
 
 	public void dispose ()

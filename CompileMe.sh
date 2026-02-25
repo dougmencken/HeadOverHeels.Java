@@ -2,6 +2,7 @@
 
 [ -d com/github/trilarion/sound ] || ./submodules/CompileSubModules.sh
 
+#javac -source 7 -target 7
 javac -verbose -g -d . \
 	source/*.java \
 	source/items/*.java \
@@ -13,4 +14,5 @@ javac -verbose -g -d . \
 2>&1 | grep --line-buffered -v '\[loading' | grep --line-buffered -v '\[parsing completed' \
 	| sed --unbuffered 's/\[parsing started/parsing/' \
 	| sed --unbuffered 's/[][]//g' \
-	| sed --unbuffered 's/SimpleFileObject//'
+	| sed --unbuffered 's/SimpleFileObject//' \
+	| sed --unbuffered 's/RegularFileObject//'
