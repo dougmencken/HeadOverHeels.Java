@@ -55,20 +55,28 @@ class MusicPlaying implements Runnable
 		if ( this.streamIn == null ) return ;
 
 		synchronized ( this.streamIn ) {
-			// what to feed to the audio mixer
-			AudioFormat pcmAudioFormat = new AudioFormat (
-				this.streamIn.getFormat().getSampleRate(), 16, this.streamIn.getFormat().getChannels(), true, false
-			);
+			System.out.println( "the audio format before converting is " + this.streamIn.getFormat().toString() );
 
-			try (	// convert the audio input stream to the desired encoding
-				AudioInputStream pcmAudioIn
-					= AudioSystem.getAudioInputStream( pcmAudioFormat, /* source */ this.streamIn ) ;
+			// convert the audio stream into 16-bit little-endian signed PCM
+			// for feeding to the audio mixer
+			AudioFormat pcmEncoding = new AudioFormat (
+				/* sample rate in samples per second */ this.streamIn.getFormat().getSampleRate(),
+				/* sample size in bits */ 16,
+				/* channels (1 for mono, 2 for stereo) */ this.streamIn.getFormat().getChannels(),
+				/* signed */ true,
+				/* big-endian */ false  ) ;
+
+			try (	// convert to the desired encoding
+				AudioInputStream convertedAudioIn
+					= AudioSystem.getAudioInputStream( pcmEncoding, /* source */ this.streamIn ) ;
 
 				// get the line from the audio mixer for a preloaded clip
-				Clip clip = AudioSystem.getClip () )
+				Clip clip = AudioSystem.getClip()  )
 			{
-				if ( clip != null ) {
-					clip.open( pcmAudioIn );
+				if ( convertedAudioIn != null && clip != null ) {
+					System.out.println( "after converting, the audio format is " + convertedAudioIn.getFormat().toString() );
+
+					clip.open( convertedAudioIn );
 
 					clip.setFramePosition( 0 ); // rewind
 					/* clip.setLoopPoints( 0, clip.getFrameLength() - 1 ); */
@@ -89,6 +97,17 @@ class MusicPlaying implements Runnable
 				System.err.println( "an audio mixer’s output line cannot be opened" );
 			} catch ( java.io.IOException x ) {  x.printStackTrace ();  }
 			  catch ( IllegalArgumentException e ) { /* ignore */ }
+			  catch ( NegativeArraySizeException e ) {
+				// occurs when the PulseAudio Java sound system tries to allocate
+				// an audio buffer with a negative size, this frequently happens
+				// in older OpenJDK/IcedTea builds, specifically when the PulseAudio
+				// returns an incorrect data length during PulseAudioClip.open()
+				e.printStackTrace( System.err ) ;
+
+				Throwable[] suppressed = e.getSuppressed() ; // IllegalStateException( "line already closed" )
+										// thrown by icedtea.pulseaudio.PulseAudioClip.close()
+				System.err.println( suppressed.length + StringUtilities.pluralForNot1( suppressed.length, " suppressed exception" ) );
+				for ( Throwable t : suppressed ) t.printStackTrace( System.err ) ;  }
 		}
 	}
 
