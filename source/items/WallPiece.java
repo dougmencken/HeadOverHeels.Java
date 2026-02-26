@@ -50,6 +50,8 @@ public class WallPiece extends Mediated implements Drawable
 		this.alongX = trueXfalseY ;
 		this.position = index ;
 		this.wallPieceImage = PoolOfPictures.getRecentPool().getPicture( imageFile );
+		if ( this.wallPieceImage == null )
+			System.out.println( "missing " + imageFile + " image of a wall segment" );
 	}
 
 	/* @Override */
@@ -67,11 +69,18 @@ public class WallPiece extends Mediated implements Drawable
 	private void calculateOffset ()
 	{
 		if ( super.getMediator() == null ) return ;
+		if ( this.wallPieceImage == null ) return ;
 
 		Room room = super.getMediator().getRoom() ;
 		int oneCell = room.getSizeOfOneCell() ;
 
-		// ....
+		int offsetX = 1 ;
+		if ( this.isAlongX() )	offsetX += ( getPosition() << 1 ) * oneCell ;
+		else			offsetX -= ( ( getPosition() + 2 ) << 1 ) * oneCell ;
+
+		int offsetY = ( getPosition() + 1 ) * oneCell - this.wallPieceImage.getHeight() - 1 ;
+
+		this.offset = new IntegerPoint2D( room.getOrigin().getX() + offsetX, room.getOrigin().getY() + offsetY );
 	}
 
 	/**

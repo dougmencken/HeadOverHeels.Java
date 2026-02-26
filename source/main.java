@@ -165,10 +165,10 @@ public final class main
 		head.over.heels.rooms.RoomMaker makingRoomTest = new head.over.heels.rooms.RoomMaker( room );
 		head.over.heels.rooms.Room madeRoom = makingRoomTest.getMadeRoom() ;
 		if ( madeRoom != null ) {
-		System.out.println("made room " + StringUtilities.putInQuotes( madeRoom.getNameOfRoomDescriptionFile() ));
-		System.out.println("   scenery " + StringUtilities.putInQuotes( madeRoom.getScenery() ));
-		System.out.println("   " + madeRoom.getCellsAlongX() + " cells along north–south" + " × " + madeRoom.getCellsAlongY() + " cells along east–west");
-		System.out.println("   floor is " + madeRoom.getKindOfFloor());
+		System.out.println("🤩 made room " + StringUtilities.putInQuotes( madeRoom.getNameOfRoomDescriptionFile() ));
+		System.out.println("   ✅ scenery " + StringUtilities.putInQuotes( madeRoom.getScenery() ));
+		System.out.println("   ✅ " + madeRoom.getCellsAlongX() + " cells along north–south" + " × " + madeRoom.getCellsAlongY() + " cells along east–west");
+		System.out.println("   ✅ floor is " + madeRoom.getKindOfFloor());
 
 		NamedOffscreenImage roomImage = new NamedOffscreenImage( madeRoom.getSizeOfRoomImage() );
 		roomImage.setName( FileUtilities.fileNameWithoutDotSuffix( madeRoom.getNameOfRoomDescriptionFile() ) + "-image" );

@@ -211,7 +211,7 @@ public class Room extends Mediated implements Drawable
 
 		piece.setMediator( getMediator() );
 
-		// ....
+		this.wallSegments.add( piece );
 	}
 
 	public void addDoor ( Door door )

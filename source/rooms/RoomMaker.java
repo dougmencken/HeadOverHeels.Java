@@ -120,6 +120,23 @@ public class RoomMaker
 		// the floor
 		RoomMaker.makeFloor( room, rootElement );
 
+		// the walls
+		Node wallsNode = rootElement.getElementsByTagName( "walls" ).item( 0 );
+		if ( wallsNode != null && wallsNode.getNodeType() == Node.ELEMENT_NODE ) {
+			Element wallsElement = (Element) wallsNode ;
+
+			NodeList wallNodes = wallsElement.getElementsByTagName( "wall" );
+			for ( int i = 0 ; i < wallNodes.getLength() ; ++ i ) {
+				Node wallNode = wallNodes.item( i );
+				if ( wallNode.getNodeType() == Node.ELEMENT_NODE ) {
+					Element wallElement = (Element) wallNode ;
+
+					WallPiece piece = RoomMaker.makeWallPiece( wallElement );
+					if ( piece != null ) room.addWallSegment( piece );
+				}
+			}
+		}
+
 		// ....
 
 		return room ;
@@ -142,6 +159,25 @@ public class RoomMaker
 
 	private static WallPiece makeWallPiece( Element wallElement )
 	{
+		String xy = wallElement.getAttribute( "along" );
+		if ( xy == null || xy.isEmpty() ) return null ;
+		if ( ! xy.equals( "x" ) && ! xy.equals( "y" ) ) return null ;
+
+		Node positionNode = wallElement.getElementsByTagName( "position" ).item( 0 );
+		if ( positionNode == null ) return null ;
+
+		Node pictureNode = wallElement.getElementsByTagName( "picture" ).item( 0 );
+		if ( pictureNode == null ) return null ;
+
+		String picture = pictureNode.getTextContent() ;
+
+		try {
+			int position = Integer.parseInt( positionNode.getTextContent() );
+
+			return new WallPiece( xy.equals( "x" ), position, picture );
+		}
+		catch ( NumberFormatException e ) {}
+
 		return null ;
 	}
 
