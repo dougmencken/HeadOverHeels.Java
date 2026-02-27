@@ -52,63 +52,7 @@ class MusicPlaying implements Runnable
 
 	public void run ()
 	{
-		if ( this.streamIn == null ) return ;
-
-		synchronized ( this.streamIn ) {
-			System.out.println( "the audio format before converting is " + this.streamIn.getFormat().toString() );
-
-			// convert the audio stream into 16-bit little-endian signed PCM
-			// for feeding to the audio mixer
-			AudioFormat pcmEncoding = new AudioFormat (
-				/* sample rate in samples per second */ this.streamIn.getFormat().getSampleRate(),
-				/* sample size in bits */ 16,
-				/* channels (1 for mono, 2 for stereo) */ this.streamIn.getFormat().getChannels(),
-				/* signed */ true,
-				/* big-endian */ false  ) ;
-
-			try (	// convert to the desired encoding
-				AudioInputStream convertedAudioIn
-					= AudioSystem.getAudioInputStream( pcmEncoding, /* source */ this.streamIn ) ;
-
-				// get the line from the audio mixer for a preloaded clip
-				Clip clip = AudioSystem.getClip()  )
-			{
-				if ( convertedAudioIn != null && clip != null ) {
-					System.out.println( "after converting, the audio format is " + convertedAudioIn.getFormat().toString() );
-
-					clip.open( convertedAudioIn );
-
-					clip.setFramePosition( 0 ); // rewind
-					/* clip.setLoopPoints( 0, clip.getFrameLength() - 1 ); */
-					clip.loop( this.looping ? Clip.LOOP_CONTINUOUSLY : 0 );
-
-					clip.start() ;
-
-					final long period = clip.getMicrosecondLength () ;
-					while ( ! this.stopped && ( this.looping || clip.getMicrosecondPosition() < period ) ) {
-						try {
-							Thread.sleep( 11 /* milliseconds */ );
-						} catch ( InterruptedException e ) {  this.stopped = true ;  }
-					}
-
-					clip.stop () ;
-				}
-			} catch ( javax.sound.sampled.LineUnavailableException ex ) {
-				System.err.println( "an audio mixer’s output line cannot be opened" );
-			} catch ( java.io.IOException x ) {  x.printStackTrace ();  }
-			  catch ( IllegalArgumentException e ) { /* ignore */ }
-			  catch ( NegativeArraySizeException e ) {
-				// occurs when the PulseAudio Java sound system tries to allocate
-				// an audio buffer with a negative size, this frequently happens
-				// in older OpenJDK/IcedTea builds, specifically when the PulseAudio
-				// returns an incorrect data length during PulseAudioClip.open()
-				e.printStackTrace( System.err ) ;
-
-				Throwable[] suppressed = e.getSuppressed() ; // IllegalStateException( "line already closed" )
-										// thrown by icedtea.pulseaudio.PulseAudioClip.close()
-				System.err.println( suppressed.length + StringUtilities.pluralForNot1( suppressed.length, " suppressed exception" ) );
-				for ( Throwable t : suppressed ) t.printStackTrace( System.err ) ;  }
-		}
+		// nothing here for Java 1.5
 	}
 
 	void stopPlaying ()

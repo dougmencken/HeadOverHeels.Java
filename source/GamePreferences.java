@@ -156,8 +156,10 @@ public class GamePreferences
 		videoHeight.setTextContent( String.valueOf( this.screenHeight ) );
 		video.appendChild( videoHeight );
 
-		try ( java.io.FileOutputStream outputStream = new java.io.FileOutputStream( this.preferencesFile ) )
-		{
+		java.io.FileOutputStream outputStream = null ;
+		try {
+			outputStream = new java.io.FileOutputStream( this.preferencesFile );
+
 			javax.xml.transform.dom.DOMSource source = new javax.xml.transform.dom.DOMSource( preferences );
 			javax.xml.transform.stream.StreamResult result = new javax.xml.transform.stream.StreamResult( outputStream );
 
@@ -167,6 +169,10 @@ public class GamePreferences
 		}
 		catch ( javax.xml.transform.TransformerException e ) {  return false ;  }
 		catch ( java.io.IOException e ) {  return false ;  }
+		finally {
+			if ( outputStream != null )
+				try {  outputStream.close() ;  } catch ( java.io.IOException ignored ) {}
+		}
 
 		return true ;
 	}

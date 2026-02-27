@@ -1,9 +1,8 @@
 #!/bin/sh
 
-[ -d com/github/trilarion/sound ] || ./submodules/CompileSubModules.sh
+##[ -d com/github/trilarion/sound ] || ./submodules/CompileSubModules.sh # incompatible with Java 5
 
-#javac -source 7 -target 7
-javac -verbose -g -d . \
+javac -source 5 -target 5 -verbose -g -d . \
 	source/*.java \
 	source/items/*.java \
 	source/rooms/*.java \
