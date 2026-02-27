@@ -119,13 +119,15 @@ class MusicPlaying implements Runnable
 
 	void close()
 	{
+		if ( this.streamIn == null ) return ;
+
 		synchronized ( this.streamIn ) {
 			try {
 				this.streamIn.close() ;
 			} catch ( java.io.IOException ignored ) {}
-
-			this.streamIn = null ;
 		}
+
+		this.streamIn = null ;
 	}
 
 }
