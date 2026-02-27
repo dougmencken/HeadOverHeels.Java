@@ -44,7 +44,7 @@ public final class main
 
 	private static final int EXIT_SUCCESS = 0 ;
 
-	private static final String current_version = "0.4dev" ;
+	private static final String current_version = "0.5dev" ;
 
 	public static String gameVersion ()
 	{
