@@ -397,7 +397,7 @@ class ItemFramesAndAnimationPanel extends JPanel implements java.awt.event.Mouse
 				java.awt.Image[] frames = ItemFramesAndAnimationPanel.getImagesFromLabels( this.panelWithFrames.getComponents() );
 
 				final int howManyFrames = frames.length ;
-				if ( ( howManyFrames >> 1 ) << 1 != howManyFrames )
+				if ( ( howManyFrames & 1 ) == 1 )
 					throw new head.over.heels.UnlikelyToHappenException( "odd number of frames + shadows" );
 
 				final javax.swing.ImageIcon[] icons = new javax.swing.ImageIcon[ howManyFrames ];
