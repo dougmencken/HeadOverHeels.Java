@@ -75,9 +75,9 @@ public class FloorTile extends ShadyMediated implements Drawable, Comparable
 	}
 	public int compareTo ( FloorTile that )
 	{
-		int y2y = Integer.compare( this.getCell().getY(), that.getCell().getY() );
+		int y2y = Integer.valueOf( this.getCell().getY() ).compareTo( Integer.valueOf( that.getCell().getY() ) );
 		if ( y2y != 0 ) return y2y ;
-		return Integer.compare( this.getCell().getX(), that.getCell().getX() );
+		return Integer.valueOf( this.getCell().getX() ).compareTo( Integer.valueOf( that.getCell().getX() ) );
 	}
 
 	// picture of the tile

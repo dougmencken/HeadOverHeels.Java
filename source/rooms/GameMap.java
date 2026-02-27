@@ -135,8 +135,10 @@ public class GameMap
 			joined = null ;
 
 			for ( TwoJoiningRooms link : joiningRooms ) {
-				java.util.SortedSet< TwoJoiningRooms > tailOfLinks = joiningRooms.tailSet( link, /* not including link */ false );
+				java.util.SortedSet< TwoJoiningRooms > tailOfLinks = joiningRooms.tailSet( link ); // including the ‘link’ itself
 				for ( TwoJoiningRooms otherLink : tailOfLinks ) {
+					if ( otherLink == link ) continue ;
+
 					if ( link.isReciprocalWith( otherLink ) ) {
 						joined = new MutuallyJoinedRooms( link, otherLink );
 						break ;
