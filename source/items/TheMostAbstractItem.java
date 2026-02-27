@@ -191,14 +191,14 @@ public abstract class TheMostAbstractItem extends Mediated
 
 	public void addFrameTo ( String sequence, NamedOffscreenImage frame )
 	{
-		if ( sequence == null || sequence.isEmpty() ) return ; // don’t add to ""
+		if ( sequence == null || sequence.length() == 0 ) return ; // don’t add to ""
 
 		if ( this.frames.get( sequence ) == null )
 			this.frames.put( sequence, new Vector< NamedOffscreenImage >() );
 
 		this.frames.get( sequence ).add( frame );
 
-		if ( getCurrentFrameSequence().isEmpty() ) setCurrentFrameSequence( sequence );
+		if ( getCurrentFrameSequence().length() == 0 ) setCurrentFrameSequence( sequence );
 	}
 
 	public String toString ()

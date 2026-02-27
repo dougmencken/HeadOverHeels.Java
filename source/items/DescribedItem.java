@@ -192,7 +192,7 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 
 	public void addShadowTo ( String sequence, NamedOffscreenImage shadow )
 	{
-		if ( sequence == null || sequence.isEmpty() ) return ; // don’t add to ""
+		if ( sequence == null || sequence.length() == 0 ) return ; // don’t add to ""
 
 		if ( this.shadows == null )
 			this.shadows = new java.util.HashMap< String, Vector< NamedOffscreenImage > > () ;
@@ -241,7 +241,7 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 
 		DescriptionOfItem description = getDescriptionOfItem() ;
 
-		if ( ! description.isPartOfDoor() && ! description.getNameOfFramesFile().isEmpty() ) {
+		if ( ! description.isPartOfDoor() && description.getNameOfFramesFile().length() > 0 ) {
 			this.makeFrames() ;
 
 			if ( description.getWidthOfShadow() > 0 && description.getHeightOfShadow() > 0 )
@@ -259,7 +259,7 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 
 		if ( frameWidth == 0 || frameHeight == 0 )
 			throw new UnlikelyToHappenException( "zero frame width or height for item " + StringUtilities.putInQuotes( getKind() ) );
-		if ( framesFile.isEmpty() )
+		if ( framesFile.length() == 0 )
 			throw new UnlikelyToHappenException( "empty file name with frames for item " + StringUtilities.putInQuotes( getKind() ) );
 
 		NamedOffscreenImage allTheFrames = PoolOfPictures.getRecentPool().getPicture( framesFile );
@@ -330,7 +330,7 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 
 		if ( shadowWidth == 0 || shadowHeight == 0 )
 			throw new UnlikelyToHappenException( "zero width or height of shadow for item " + StringUtilities.putInQuotes( getKind() ) );
-		if ( shadowsFile.isEmpty() )
+		if ( shadowsFile.length() == 0 )
 			throw new UnlikelyToHappenException( "empty file name with shadows for item " + StringUtilities.putInQuotes( getKind() ) );
 
 		NamedOffscreenImage allTheShadows = PoolOfPictures.getRecentPool().getPicture( shadowsFile );

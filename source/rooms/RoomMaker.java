@@ -185,7 +185,7 @@ public class RoomMaker
 	private static WallPiece makeWallPiece( XElement wallElement )
 	{
 		String xy = wallElement.getAttribute( "along" );
-		if ( xy == null || xy.isEmpty() ) return null ;
+		if ( xy == null || xy.length() == 0 ) return null ;
 		if ( ! xy.equals( "x" ) && ! xy.equals( "y" ) ) return null ;
 
 		int position = wallElement.getInt( "position", far_far_away );
@@ -224,7 +224,7 @@ public class RoomMaker
 			}
                 }
 
-		if ( ! room.getScenery().isEmpty() ) {
+		if ( room.getScenery().length() > 0 ) {
 			// make the floor by its kind (plain or mortal) and the room’s scenery, without listing every tile
 
 			///Door eastDoor = room.getDoorOn( "east" );

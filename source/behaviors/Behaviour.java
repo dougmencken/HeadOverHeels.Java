@@ -98,7 +98,7 @@ public abstract class Behaviour
 				( item instanceof DescribedItem ) ?
 					new Volatile( (DescribedItem) item, name ) : null ;
 		else
-		if ( name.isEmpty () || name.equals( "still" ) || name.equals( "bubbles" ) )
+		if ( name.length() == 0 || name.equals( "still" ) || name.equals( "bubbles" ) )
 			return null ;
 		else
 		throw new IllegalArgumentException( "unknown behavior " + StringUtilities.putInQuotes( name ) + " for " + item.toString () );

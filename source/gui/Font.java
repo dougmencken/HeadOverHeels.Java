@@ -82,7 +82,7 @@ public class Font
 	 */
 	public Font( String color, boolean doubleHeight, int spaceTwitter /* spaceX */, int spaceY )
 	{
-		this.fontColor = Colours.byName( color.isEmpty() ? "white" : color );
+		this.fontColor = Colours.byName( color.length() == 0 ? "white" : color );
 
 		this.doubleHeight = doubleHeight ;
 
@@ -220,7 +220,7 @@ public class Font
 		int howManyLetters = imagesOfLetters.size ();
 		for ( int index = 0 ; index < howManyLetters ; ++ index ) {
 			String letter = listOfLetters.letterAt( index ) ;
-			if ( ! letter.isEmpty () )
+			if ( letter.length() > 0 )
 				Font.letterToImage.put( letter, imagesOfLetters.elementAt( index ) );
 		}
 	}
@@ -436,7 +436,7 @@ public class Font
 		for ( int l = 0 ; l < lettersThere ; )
 		{
 			String letter = listOfLetters.letterAt( l );
-			if ( ! letter.isEmpty() ) {
+			if ( letter.length() > 0 ) {
 				String [] lines = Font.letterToImage.get( letter );
 				if ( lines == null /* no image of this letter in the font */ )
 					throw new NullPointerException( "there’s no image for letter \"" + letter + "\" in the font" );

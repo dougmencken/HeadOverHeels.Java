@@ -359,8 +359,8 @@ public class Pictures
 					.append( newline ) ;
 		}
 
-		showUsage = showUsage || what2do.isEmpty() || what2do.equals( "usage" ) ;
-		if ( ! what2do.isEmpty() )
+		showUsage = showUsage || what2do.length() == 0 || what2do.equals( "usage" ) ;
+		if ( what2do.length() > 0 )
 			out.append( "doing " ).append( StringUtilities.putInQuotes( what2do ) ).append( newline ).append( newline ) ;
 
 		if ( showUsage ) {

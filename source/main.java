@@ -115,7 +115,7 @@ public final class main
 
 				if ( knownOption ) {
 					System.out.print( "got option \"" + option + "\"" );
-					if ( ! value.isEmpty () ) System.out.print( " with value \"" + value + "\"" );
+					if ( value.length() > 0 ) System.out.print( " with value \"" + value + "\"" );
 					System.out.println( );
 				} else
 					System.out.println( "got unknown option \"" + option + "\"" );
