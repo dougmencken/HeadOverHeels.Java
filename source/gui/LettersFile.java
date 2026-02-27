@@ -36,8 +36,7 @@ public class LettersFile
 			return ;
 		}
 
-		int lengthOFile = (int) file.length () ;
-		byte [] bytes = new byte [ lengthOFile ];
+		byte [] bytes = new byte [ (int) file.length() ];
 		int bytesRead = 0 ;
 		try ( java.io.FileInputStream stream = new java.io.FileInputStream( file ) )
 		{

@@ -43,9 +43,9 @@ public class TabbedPaneWithTabsInOneRow extends JTabbedPane
 	{
 		int maxPreferredHeight = ( super.getSelectedComponent() == null ) ? 0 : super.getSelectedComponent().getPreferredSize().height ;
 		for ( int n = 0 ; n < super.getTabCount() ; n ++ ) {
-			Component tabComponent = super.getTabComponentAt( n ) ;
-			if ( tabComponent != null )
-				maxPreferredHeight = Math.max( maxPreferredHeight, tabComponent.getPreferredSize().height );
+			Component nth = super.getComponentAt( n ) ;
+			if ( nth != null )
+				maxPreferredHeight = Math.max( maxPreferredHeight, nth.getPreferredSize().height );
 		}
 
 		return new Dimension(
