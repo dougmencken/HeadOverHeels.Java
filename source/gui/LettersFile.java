@@ -18,8 +18,16 @@ import head.over.heels.StringUtilities ;
 public class LettersFile
 {
 
-	private java.util.Vector < String > letters ;
+	private String [] letters ;
 
+	private boolean lettersWereReadFromAFile = false ;
+
+	public boolean wereTheLettersReadFromAFile() {  return this.lettersWereReadFromAFile ;  }
+
+	/**
+	 * The no-argument constructor generates the list of letters by the code,
+	 * without reading it from a file
+	 */
 	public LettersFile ()
 	{
 		this.letters = generateListOfLetters () ;
@@ -30,35 +38,43 @@ public class LettersFile
 	 */
 	public LettersFile( java.io.File file )
 	{
-		if ( ! file.exists() || ! file.isFile() || ! file.canRead() ) {
-			System.out.println( "generating the list of letters since there’s no " + StringUtilities.putInSingleQuotes( file.getPath() ) + " file" );
-			this.letters = generateListOfLetters () ;
+		if ( file == null || ! file.exists() || ! file.isFile() || ! file.canRead() ) {
+			this.letters = generateListOfLetters() ;
 			return ;
 		}
 
 		byte [] bytes = new byte [ (int) file.length() ];
 		int bytesRead = 0 ;
-		try ( java.io.FileInputStream stream = new java.io.FileInputStream( file ) )
-		{
+		java.io.FileInputStream stream = null ;
+		try {
+			stream = new java.io.FileInputStream( file );
 			bytesRead = stream.read( bytes );
 		}
-		catch ( java.io.IOException e ) {  return ;  }
+		catch ( java.io.IOException e ) {
+			this.letters = generateListOfLetters() ;
+			return ;
+		}
+		finally {
+			if ( stream != null )
+				try {  stream.close() ;  } catch ( java.io.IOException ignored ) {}
+		}
 
 		// at first, count the letters
 		int howManyLetters = 0 ;
 		for ( int at = 0 ; at < bytesRead ; at ++ ) {
 			short b = (short) ( ( (int) bytes[ at ] ) & 0xff );
 			if ( ( b == 0 ) || ( ( b & 0x80 ) == 0 ) || ( ( b & 0xC0 ) == 0xC0 ) )
-				howManyLetters++;
+				howManyLetters ++ ;
 		}
 		System.out.println( "🧐 file " + StringUtilities.putInQuotes( file.getPath () ) + " lists " + howManyLetters + " letters" );
 
-		this.letters = new java.util.Vector < String > ( howManyLetters );
+		this.letters = new String [ howManyLetters ] ;
 
+		int index = 0 ;
 		for ( int inBytes = 0 ; inBytes < bytesRead ; ) {
 			short b = (short) ( ( (int) bytes[ inBytes ] ) & 0xff );
 			if ( b == 0 ) {
-				this.letters.add( "" );
+				this.letters[ index ++ ] = "" ;
 				inBytes ++ ;
 			} else {
 				byte [] letter = new byte [ 5 ];
@@ -79,32 +95,36 @@ public class LettersFile
 					newLetter = new String( letter, "UTF-8" );
 				} catch ( java.io.UnsupportedEncodingException e ) {/* 🤔 */}
 
-				if ( ! newLetter.isEmpty() ) {
+				if ( newLetter.length() > 0 ) {
 					if ( newLetter.charAt( 0 ) == ' ' ) newLetter = " " ;
 					else newLetter = newLetter.trim (); // trim to add "a" not "a\0\0\0\0"
 					if ( newLetter.charAt( 0 ) == '\u0022' ) newLetter = "\u005c\u0022" ;
 				}
 
-				this.letters.add( newLetter );
-                        }
+				this.letters[ index ++ ] = newLetter ;
+			}
 		}
+
+		this.lettersWereReadFromAFile = true ;
 	}
 
 	public int howManyLetters ()
 	{
-		return this.letters.size ();
+		return ( this.letters != null ) ? this.letters.length : 0 ;
 	}
 
 	public String letterAt( int i )
 	{
-		return this.letters.elementAt( i );
+		if ( this.letters == null || i >= this.letters.length || i < 0 ) return null ;
+
+		return this.letters[ i ];
 	}
 
 	public boolean writeTo( java.io.File file )
 	{
 		int howManyBytes = 0 ;
 
-		java.util.Vector < byte [] > lettersUtf8 = new java.util.Vector < byte [] > ( howManyLetters() ) ;
+		java.util.ArrayList< byte[] > lettersUtf8 = new java.util.ArrayList< byte[] >( howManyLetters() ) ;
 		for ( String letter : this.letters ) {
 			byte [] utf8 = LettersFile.letterToUtf8( letter );
 			lettersUtf8.add( utf8 );
@@ -117,11 +137,16 @@ public class LettersFile
 			for ( int j = 0 ; j < utf8letter.length ; ++ j )
 				bytes[ inBytes ++ ] = utf8letter[ j ];
 
-		try ( java.io.FileOutputStream stream = new java.io.FileOutputStream( file ) )
-		{
+		java.io.FileOutputStream stream = null ;
+		try {
+			stream = new java.io.FileOutputStream( file ) ;
 			stream.write( bytes );
 		}
 		catch ( java.io.IOException e ) {  return false ;  }
+		finally {
+			if ( stream != null )
+				try {  stream.close() ;  } catch ( java.io.IOException ignored ) {}
+		}
 
 		return true ;
 	}
@@ -142,7 +167,7 @@ public class LettersFile
 			out.append( "\"" );
 			if ( utf16.length > 0 && utf16[ 0 ] != 0 )
 				for ( int c = 0 ; c < utf16.length ; c ++ )
-					out.append( "\\u" + String.format( "%04x", utf16[ c ] ) );
+					out.append( "\\u" + String.format("%04x", new Object[]{ Short.valueOf( utf16[ c ] ) }) );
 			out.append( "\"" );
 			out.append( " );" );
 
@@ -155,7 +180,7 @@ public class LettersFile
 			out.append( " // utf8 { " );
 			byte [] bytesUtf8 = LettersFile.letterToUtf8( letter );
 			for ( int b = 0 ; b < bytesUtf8.length ; b ++ ) {
-				out.append( "0x" + String.format( "%02x", bytesUtf8[ b ] ) );
+				out.append( "0x" + String.format("%02x", new Object[]{ Byte.valueOf( bytesUtf8[ b ] ) }) );
 				if ( b + 1 < bytesUtf8.length ) out.append( ", " );
 			}
 			out.append( " }" );
@@ -167,6 +192,8 @@ public class LettersFile
 
 	public static byte [] letterToUtf8 ( String letter )
 	{
+		if ( letter == null ) return null ;
+
 		byte [] bytesUtf8 = new byte [] { 0 };
 
 		// for an empty string, the result is an array with the single zero byte
@@ -191,6 +218,8 @@ public class LettersFile
 
 	public static short [] letterToUtf16 ( String letter )
 	{
+		if ( letter == null ) return null ;
+
 		// for an empty string, the result is an array with the single 16-bit zero
 		if ( letter.length () == 0 ) return new short [] { 0 };
 
@@ -214,9 +243,9 @@ public class LettersFile
 		return toReturn ; // 🙄
 	}
 
-	public static java.util.Vector < String > generateListOfLetters ()
+	public static String [] generateListOfLetters ()
 	{
-		java.util.Vector < String > letters = new java.util.Vector < String > ( 336 );
+		java.util.ArrayList< String > letters = new java.util.ArrayList< String >( 16*21 );
 
 		// quotation mark " 0x22
 		// letters.add( "\u005c\u0022" ); /* "\"" */ // utf8 { 0x22 }
@@ -573,7 +602,7 @@ public class LettersFile
 		letters.add( "\u045b" ); /* "ћ" */ // utf8 { 0xd1, 0x9b }
 		letters.add( "\u045f" ); /* "џ" */ // utf8 { 0xd1, 0x9f }
 
-		return letters ;
+		return letters.toArray( new String[ letters.size() ] );
 	}
 
 	/**
