@@ -181,12 +181,41 @@ public final class main
 	}
 	/**/// ❌ ✔️
 
-		GameWindow window = new GameWindow( width, height ) ;
-		window.setVisible( true );
-		window.randomPixelFadeIn( java.awt.Color.black );
+		final GameWindow window = new GameWindow( width, height ) ;
 
-		head.over.heels.items.ListOfItemsWindow itemsWindow = new head.over.heels.items.ListOfItemsWindow() ;
-		itemsWindow.setVisible( true );
+		javax.swing.SwingUtilities.invokeLater (
+			new Runnable() {
+				public void run()
+				{
+					window.setVisible( true );
+					window.randomPixelFadeIn( java.awt.Color.black );
+				}
+			} );
+
+		final head.over.heels.items.ListOfItemsWindow itemsWindow = new head.over.heels.items.ListOfItemsWindow() ;
+
+		javax.swing.SwingUtilities.invokeLater( new Runnable() {
+			public void run()
+			{
+				itemsWindow.pack() ;
+
+				// the window is not yet realized (not visible)
+				// and getGraphicsConfiguration() may return a default/uninitialized config
+				// giving the bounds like (0,0)
+				///java.awt.Rectangle screenBounds = itemsWindow.getGraphicsConfiguration().getBounds() ;
+
+				java.awt.Rectangle screenBounds = java.awt.GraphicsEnvironment
+										.getLocalGraphicsEnvironment()
+										.getDefaultScreenDevice()
+										.getDefaultConfiguration()
+										.getBounds() ;
+
+				java.awt.Point desiredLocation = new java.awt.Point( ( screenBounds.width << 1 ) / 3, screenBounds.height >> 2 );
+				itemsWindow.setLocation( desiredLocation );
+
+				itemsWindow.setVisible( true );
+			}
+		} );
 
 	String musicFile = "music" + java.io.File.separator + "freedom.ogg" ;
 	SoundManager.getInstance().play( new java.io.File( Storage.getPathToGameData(), musicFile ), /* loop */ true );

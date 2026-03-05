@@ -15,7 +15,12 @@ import javax.swing.JComboBox ;
 import javax.swing.JLabel ;
 import javax.swing.JTabbedPane ;
 
+import java.awt.event.ActionEvent ;
+import java.awt.event.ActionListener ;
+
 import head.over.heels.gui.swing.CuteSwingButton ;
+import head.over.heels.gui.swing.DeferredReshaper ;
+import head.over.heels.gui.swing.FixedHeightLabel ;
 import head.over.heels.gui.swing.TabbedPaneWithTabsInOneRow ;
 
 import head.over.heels.StringUtilities ;
@@ -26,28 +31,28 @@ public class ListOfItemsWindow extends JFrame
 
 	private JComboBox< String > theList ;
 
-	private JLabel itemWidthX = new JLabel() ;
-	private JLabel itemWidthY = new JLabel() ;
-	private JLabel itemHeight = new JLabel() ;
+	private FixedHeightLabel itemWidthX = new FixedHeightLabel() ;
+	private FixedHeightLabel itemWidthY = new FixedHeightLabel() ;
+	private FixedHeightLabel itemHeight = new FixedHeightLabel() ;
 
-	private JLabel itemWeight = new JLabel() ;
-	private JLabel itemSpeed = new JLabel() ;
+	private FixedHeightLabel itemWeight = new FixedHeightLabel() ;
+	private FixedHeightLabel itemSpeed = new FixedHeightLabel() ;
 
-	private JLabel itemIsMortal = new JLabel() ;
+	private FixedHeightLabel itemIsMortal = new FixedHeightLabel() ;
 
-	private JLabel itemFramesFile = new JLabel() ;
-	private JLabel itemFrameWidth = new JLabel() ;
-	private JLabel itemFrameHeight = new JLabel() ;
+	private FixedHeightLabel itemFramesFile = new FixedHeightLabel() ;
+	private FixedHeightLabel itemFrameWidth = new FixedHeightLabel() ;
+	private FixedHeightLabel itemFrameHeight = new FixedHeightLabel() ;
 
-	private JLabel itemDelayBetweenFrames = new JLabel() ;
+	private FixedHeightLabel itemDelayBetweenFrames = new FixedHeightLabel() ;
 
-	private JLabel itemShadowsFile = new JLabel() ;
-	private JLabel itemWidthOfShadow = new JLabel() ;
-	private JLabel itemHeightOfShadow = new JLabel() ;
+	private FixedHeightLabel itemShadowsFile = new FixedHeightLabel() ;
+	private FixedHeightLabel itemWidthOfShadow = new FixedHeightLabel() ;
+	private FixedHeightLabel itemHeightOfShadow = new FixedHeightLabel() ;
 
-	private JLabel itemSequenceOFrames = new JLabel() ;
-	private JLabel itemOrientations = new JLabel() ;
-	private JLabel itemExtraFrames = new JLabel() ;
+	private FixedHeightLabel itemSequenceOFrames = new FixedHeightLabel() ;
+	private FixedHeightLabel itemOrientations = new FixedHeightLabel() ;
+	private FixedHeightLabel itemExtraFrames = new FixedHeightLabel() ;
 
 	private CuteSwingButton graphicsButton ;
 
@@ -58,19 +63,18 @@ public class ListOfItemsWindow extends JFrame
 		super.setResizable( false );
 		super.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 
-		JPanel panel = new JPanel() ;
+		JPanel panel = new JPanel() ; // will become the content pane eventually
 		panel.setLayout( new javax.swing.BoxLayout( panel, javax.swing.BoxLayout.Y_AXIS ) );
 		panel.setBorder( new javax.swing.border.EmptyBorder( 20, 20, 20, 20 ) ) ;
-		super.add( panel );
 
 		this.theList = new JComboBox< String >( ItemDescriptions.descriptions().getAllKindsOfItems() );
 		this.theList.setMaximumRowCount( 16 );
 		this.theList.setSelectedItem( "headoverheels" );
-		this.theList.addActionListener( new java.awt.event.ActionListener( )
+		this.theList.addActionListener( new ActionListener( )
 		{
-			public void actionPerformed( java.awt.event.ActionEvent e ) {
-				updateLabels ();
-				pack() ;
+			public void actionPerformed( ActionEvent e ) {
+				updateLabels() ;
+				smoothlyResizeTo( getPreferredSize(), 333, false /* top-left anchoring */ );
 			}
 		} );
 
@@ -81,49 +85,48 @@ public class ListOfItemsWindow extends JFrame
 
 		ItemDescriptionPanel infoPanel = new ItemDescriptionPanel() ;
 		{
-			infoPanel.addTwoLabels( new JLabel( "width x" ), this.itemWidthX );
-			infoPanel.addTwoLabels( new JLabel( "width y" ), this.itemWidthY );
-			infoPanel.addTwoLabels( new JLabel( "height" ), this.itemHeight );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "width x" ), this.itemWidthX );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "width y" ), this.itemWidthY );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "height" ), this.itemHeight );
 
-			infoPanel.addTwoLabels( new JLabel( "weight" ), this.itemWeight );
-			infoPanel.addTwoLabels( new JLabel( "speed" ), this.itemSpeed );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "weight" ), this.itemWeight );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "speed" ), this.itemSpeed );
 
-			infoPanel.addTwoLabels( new JLabel( "is mortal?" ), this.itemIsMortal );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "is mortal?" ), this.itemIsMortal );
 
-			infoPanel.addTwoLabels( new JLabel( "frames file" ), this.itemFramesFile );
-			infoPanel.addTwoLabels( new JLabel( "frame width" ), this.itemFrameWidth );
-			infoPanel.addTwoLabels( new JLabel( "frame height" ), this.itemFrameHeight );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "frames file" ), this.itemFramesFile );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "frame width" ), this.itemFrameWidth );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "frame height" ), this.itemFrameHeight );
 
-			infoPanel.addTwoLabels( new JLabel( "delay between frames" ), this.itemDelayBetweenFrames );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "delay between frames" ), this.itemDelayBetweenFrames );
 
-			infoPanel.addTwoLabels( new JLabel( "shadows file" ), this.itemShadowsFile );
-			infoPanel.addTwoLabels( new JLabel( "width of shadow" ), this.itemWidthOfShadow );
-			infoPanel.addTwoLabels( new JLabel( "height of shadow" ), this.itemHeightOfShadow );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "shadows file" ), this.itemShadowsFile );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "width of shadow" ), this.itemWidthOfShadow );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "height of shadow" ), this.itemHeightOfShadow );
 
-			infoPanel.addTwoLabels( new JLabel( "sequence o’ frames" ), this.itemSequenceOFrames );
-			infoPanel.addTwoLabels( new JLabel( "orientations" ), this.itemOrientations );
-			infoPanel.addTwoLabels( new JLabel( "extra frames" ), this.itemExtraFrames );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "sequence o’ frames" ), this.itemSequenceOFrames );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "orientations" ), this.itemOrientations );
+			infoPanel.addTwoLabels( new FixedHeightLabel( "extra frames" ), this.itemExtraFrames );
 		}
 		panel.add( infoPanel );
 
 		panel.add( javax.swing.Box.createVerticalStrut( 10 ) );
 
 		this.graphicsButton = new CuteSwingButton( "🖼 graphics" );
-		this.graphicsButton.addActionListener( new java.awt.event.ActionListener ()
+		this.graphicsButton.addActionListener( new ActionListener ()
 		{
-			public void actionPerformed( java.awt.event.ActionEvent ae ) {
+			public void actionPerformed( ActionEvent ae ) {
 				showItemGraphics() ;
 			}
 		} );
 
 		panel.add( this.graphicsButton );
 
-		this.updateLabels() ;
-		super.pack() ;
+		super.setContentPane( panel );
 
-		java.awt.GraphicsConfiguration gconfig = super.getGraphicsConfiguration() ;
-		java.awt.Rectangle bounds = gconfig.getBounds() ;
-		super.setLocation( ( bounds.width << 1 ) / 3, bounds.height >> 2 );
+		this.updateLabels() ;
+
+		///this.resizeToPreferred() ;
 	}
 
 	public void updateLabels ()
@@ -171,6 +174,10 @@ public class ListOfItemsWindow extends JFrame
 		}
 		else
 			this.resetLabels() ;
+
+		// update the preferred size
+		getContentPane().setPreferredSize( null );
+		( (JPanel) getContentPane() ).revalidate() ;
 	}
 
 	public void resetLabels ()
@@ -199,13 +206,96 @@ public class ListOfItemsWindow extends JFrame
 		this.itemExtraFrames.setText( "𝓮𝔁𝓽𝓻𝓪-𝓯𝓻𝓪𝓶𝓮𝓼" );
 	}
 
+	public void resizeToPreferred ()
+	{
+		java.awt.Dimension preferred = super.getPreferredSize() ;
+		super.setSize( preferred.width, preferred.height );
+	}
+
+	private javax.swing.Timer smoothResizeTimer = null ;
+
+	/**
+	 * @param  desiredSize      the desired final size of the frame
+	 * @param  duration         transition duration in milliseconds
+	 * @param  anchorToCenter   center anchoring if true, top-left anchoring if false
+	 */
+	public void smoothlyResizeTo (	java.awt.Dimension desiredSize,
+					int duration /* in milliseconds */,
+					final boolean anchorToCenter )
+	{
+		if ( this.smoothResizeTimer != null )
+			if ( this.smoothResizeTimer.isRunning() )
+				this.smoothResizeTimer.stop() ; // stop previous transition
+
+		final java.awt.Rectangle from = super.getBounds() ;
+
+		java.awt.Point toPoint = from.getLocation() ;
+
+		// optional center anchoring
+		if ( anchorToCenter ) {
+			toPoint.x += ( from.width - desiredSize.width ) >> 1 ;
+			toPoint.y += ( from.height - desiredSize.height ) >> 1 ;
+		}
+
+		final java.awt.Rectangle to = new java.awt.Rectangle( toPoint, desiredSize );
+
+		final int fps = 50 ;
+		final int delay = 1000 / fps ;
+		final int steps = Math.max( 1, duration / delay );
+
+		this.smoothResizeTimer = new javax.swing.Timer( delay, new ActionListener() {
+
+				private int step = 0 ;
+
+				public void actionPerformed( ActionEvent ae ) {
+					this.step ++ ;
+					float t = this.step / (float) steps ;
+
+					// easing with slope(t)
+					///float slope = t ; // linear
+					///float slope = (float)( -Math.cos(Math.PI * t) / 2.0 + 0.5 ) ;
+					float slope = 1 - (1 - t)*(1 - t) ;
+
+					///int x = (int)( from.x + (to.x - from.x) * slope );
+					///int y = (int)( from.y + (to.y - from.y) * slope );
+					int x = from.x ;
+					int y = from.y ;
+					int w = (int)( from.width  + ( to.width - from.width ) * slope );
+					int h = (int)( from.height + (to.height - from.height) * slope );
+
+					if ( anchorToCenter ) {
+						x += ( from.width - w ) >> 1 ;
+						y += ( from.height - h ) >> 1 ;
+					}
+
+					setBounds( x, y, w, h );
+
+					if ( this.step >= steps ) {
+						// timer is the source of the event
+						( (javax.swing.Timer) ae.getSource() ).stop() ;
+
+						// final deferred correction
+						javax.swing.SwingUtilities.invokeLater(
+							new DeferredReshaper( ListOfItemsWindow.this, to.getLocation(), to.getSize() )
+						) ;
+					}
+				}
+		} );
+
+		this.smoothResizeTimer.start () ;
+	}
+
 	public void showItemGraphics ()
 	{
 		Object chosenItem = this.theList.getSelectedItem() ;
 		if ( chosenItem != null ) {
-			String kind = chosenItem.toString() ;
-			ItemGraphicsWindow graphicsWindow = new ItemGraphicsWindow( kind, this );
-			graphicsWindow.setVisible( true );
+			final String kind = chosenItem.toString() ;
+			javax.swing.SwingUtilities.invokeLater( new Runnable() {
+				public void run() {
+					ItemGraphicsWindow graphicsWindow = new ItemGraphicsWindow( kind, ListOfItemsWindow.this );
+					graphicsWindow.setVisible( true );
+				}
+			} );
 		}
 	}
 
@@ -215,19 +305,58 @@ public class ListOfItemsWindow extends JFrame
 class ItemDescriptionPanel extends JPanel
 {
 
+	private int row ;
+
 	ItemDescriptionPanel( )
 	{
-		super() ;
-		super.setLayout( new java.awt.GridLayout( /* rows */ 16, /* columns */ 2, /* h gap */ 20, /* v gap */ 5 ) );
+		super( new java.awt.GridBagLayout() );
+
+		this.row = 0 ;
 	}
 
-	void addTwoLabels( JLabel first, JLabel second )
+	void addTwoLabels( FixedHeightLabel first, FixedHeightLabel second )
 	{
-		if ( first == null ) first = new JLabel( "➡️ 1st label is null ⬅️" );
-		if ( second == null ) second = new JLabel( "➡️ 2nd label is null ⬅️" );
+		if ( first == null ) first = new FixedHeightLabel( "➡️ 1st label is null ⬅️" );
+		if ( second == null ) second = new FixedHeightLabel( "➡️ 2nd label is null ⬅️" );
 
-		super.add( first );
-		super.add( second );
+		int rowHeight = Math.max( first.getFontMetrics( first.getFont() ).getHeight(),
+						second.getFontMetrics(second.getFont()).getHeight() );
+		// left column
+		{
+			java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints() ;
+
+			gbc.gridx = 0 ;
+			gbc.gridy = this.row ;
+			gbc.weightx = 0.9 ;
+			gbc.weighty = 1 ;
+			gbc.anchor = java.awt.GridBagConstraints.EAST ;
+			gbc.fill = java.awt.GridBagConstraints.HORIZONTAL ;
+			gbc.insets = new java.awt.Insets( /* top */ 3, /* left */ 20, /* bottom */ 3, /* right */ 10 );
+
+			first.setHorizontalAlignment( javax.swing.SwingConstants.RIGHT );
+			first.setFixedHeight( rowHeight );
+
+			super.add( first, gbc );
+		}
+		// right column
+		{
+			java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints() ;
+
+			gbc.gridx = 1 ;
+			gbc.gridy = this.row ;
+			gbc.weightx = 1 ;
+			gbc.weighty = 1 ;
+			gbc.anchor = java.awt.GridBagConstraints.WEST ;
+			gbc.fill = java.awt.GridBagConstraints.HORIZONTAL ;
+			gbc.insets = new java.awt.Insets( /* top */ 3, /* left */ 10, /* bottom */ 3, /* right */ 20 );
+
+			second.setHorizontalAlignment( javax.swing.SwingConstants.LEFT );
+			second.setFixedHeight( rowHeight );
+
+			super.add( second, gbc );
+		}
+
+		this.row ++ ;
 	}
 
 }
@@ -414,11 +543,11 @@ class ItemFramesAndAnimationPanel extends JPanel implements java.awt.event.Mouse
 				this.animationTimer
 					= new javax.swing.Timer(
 						delayBetweenFrames,
-						new java.awt.event.ActionListener ()
+						new ActionListener ()
 						{
 							private int currentFrame = 0 ;
 
-							public void actionPerformed( java.awt.event.ActionEvent e ) {
+							public void actionPerformed( ActionEvent e ) {
 								if ( ! panelForAnimation.isShowing() ) return ;
 
 								this.currentFrame ++ ;
