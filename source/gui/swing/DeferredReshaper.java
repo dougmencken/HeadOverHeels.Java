@@ -52,8 +52,8 @@ public class DeferredReshaper implements Runnable {
 
 	/**
 	 * @param  window   the window to reshape (setBounds on)
-	 * @param  at       the desired location
-	 * @param  size     the desired size
+	 * @param  at       the desired location or null for the current location of the window
+	 * @param  size     the desired size or null for the current size of the window
 	 * @param  times    how many times to request reshaping
 	 */
 	public DeferredReshaper( Window window, Point at, Dimension size, int times )
@@ -61,8 +61,8 @@ public class DeferredReshaper implements Runnable {
 		if ( window == null ) throw new IllegalArgumentException( "can’t reshape null" );
 		this.window = window ;
 
-		if ( at == null || size == null )
-			throw new IllegalArgumentException( "don’t reshape to null" );
+		if ( at == null ) at = window.getLocation() ;
+		if ( size == null ) size = window.getSize() ;
 
 		this.x = at.x ;			// copy the Point and Dimension
 		this.y = at.y ;			// objects to the primitives
