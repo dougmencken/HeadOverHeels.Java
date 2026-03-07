@@ -84,9 +84,40 @@ public class StringUtilities
 		return out.toString() ;
 	}
 
+	private static String fillGaps( String in ) {  return fillGaps( in, '×' );  }
+
+	private static String fillGaps( String in, char symbol )
+	{
+		if ( in == null ) return null ;
+
+		char[] out = in.toCharArray() ;
+		int length = out.length ;
+
+		int firstNonSpace = 0 ;
+		while ( firstNonSpace < length && out[ firstNonSpace ] == ' ' )
+			++ firstNonSpace ;
+
+		int lastNonSpace = length - 1 ;
+		while ( lastNonSpace >= 0 && out[ lastNonSpace ] == ' ' )
+			-- lastNonSpace ;
+
+		for ( int c = firstNonSpace + 1 ; c < lastNonSpace ; c ++ )
+			if ( out[ c ] == ' ' ) out[ c ] = symbol ;
+
+		return new String( out );
+	}
+
 	public static void main( String[] ignored )
 	{
-		System.out.println( StringUtilities.makeRandomString( 16 ) );
+		System.out.println( StringUtilities.makeRandomString( 67 ) );
+
+		System.out.println( StringUtilities.fillGaps( "   - -   " ) );
+		System.out.println( StringUtilities.fillGaps( " /     \\ " ) );
+		System.out.println( StringUtilities.fillGaps( "|       |" ) );
+		System.out.println( StringUtilities.fillGaps( " \\     / " ) );
+		System.out.println( StringUtilities.fillGaps( "   - -   " ) );
 	}
+
+	private StringUtilities() {  super() ;  } // no instances
 
 }

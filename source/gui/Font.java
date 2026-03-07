@@ -16,6 +16,8 @@ import head.over.heels.Pictures ;
 import head.over.heels.Storage ;
 import head.over.heels.TooManyColoursException ;
 
+import head.over.heels.StringUtilities ;
+
 
 /**
  * The font with letters from the picture file. The letters have colour and can be double height
@@ -100,7 +102,7 @@ public class Font
 
 		BufferedImage fontFromFile = Pictures.readFromFile( imageFile );
 		if ( fontFromFile == null ) {
-			System.err.println( "oops, can’t get the image of letters from file \"" + imageFile.getPath() + "\"" );
+			System.err.println( "oops, can’t get the image of letters from file " + StringUtilities.putInQuotes( imageFile.getPath() ) );
 			return null ;
 		}
 
@@ -299,7 +301,7 @@ public class Font
 
 	public static BufferedImage imageOf( String letter, Color color, int hSpace, int vSpace )
 	{
-		if ( letter.isEmpty () ) return null ;
+		if ( letter == null || letter.length() == 0 ) return null ;
 		if ( Font.letterToImage == null ) return null ;
 		if ( ! Font.letterToImage.containsKey( letter ) ) return null ;
 
@@ -371,20 +373,17 @@ public class Font
 		return image ;
 	}
 
-	public static StringBuilder dumpTextualBitmap( String prefix, String [] bitmap, String suffix )
+	private static String dumpTextualBitmap( String prefix, String [] bitmap, String suffix )
 	{
-		StringBuilder out = new StringBuilder( );
+		if ( bitmap == null ) return "null" ;
 
-		if ( bitmap == null ) {
-			out.append( "null" );
-			return out ;
-		}
+		StringBuilder out = new StringBuilder( );
 
 		for ( int l = 0 ; l < bitmap.length ; ++ l )
 			out.append( prefix ).append( bitmap[ l ] ).append( suffix ).append( l )
 						.append( System.getProperty( "line.separator" ) );
 
-		return out ;
+		return out.toString() ;
 	}
 
 	private static void composeAndWriteImageOFont( java.io.File newFile )
@@ -534,31 +533,31 @@ public class Font
 
 			String [] newlines = new String [ ( lines != null ) ? lines.length : 25 ] ;
 			int l = 0 ;
-			newlines[ l++ ] = fillGaps( "              " ); // 0
-			newlines[ l++ ] = fillGaps( "              " ); // 1
-			newlines[ l++ ] = fillGaps( "              " ); // 2
-			newlines[ l++ ] = fillGaps( "              " ); // 3
-			newlines[ l++ ] = fillGaps( "              " ); // 4
-			newlines[ l++ ] = fillGaps( "              " ); // 5
-			newlines[ l++ ] = fillGaps( "      00      " ); // 6
-			newlines[ l++ ] = fillGaps( "     0000     " ); // 7
-			newlines[ l++ ] = fillGaps( "    00  00    " ); // 8
-			newlines[ l++ ] = fillGaps( "   00    00   " ); // 9
-			newlines[ l++ ] = fillGaps( "  00      00  " ); // 10
-			newlines[ l++ ] = fillGaps( " 0000    0000 " ); // 11
-			newlines[ l++ ] = fillGaps( " 0000    0000 " ); // 12
-			newlines[ l++ ] = fillGaps( "    0    0    " ); // 13
-			newlines[ l++ ] = fillGaps( "    0    0    " ); // 14
-			newlines[ l++ ] = fillGaps( "    0    0    " ); // 15
-			newlines[ l++ ] = fillGaps( "    0    0    " ); // 16
-			newlines[ l++ ] = fillGaps( "    000000    " ); // 17
-			newlines[ l++ ] = fillGaps( "    000000    " ); // 18
-			newlines[ l++ ] = fillGaps( "              " ); // 19
-			newlines[ l++ ] = fillGaps( "              " ); // 20
-			newlines[ l++ ] = fillGaps( "              " ); // 21
-			newlines[ l++ ] = fillGaps( "              " ); // 22
-			newlines[ l++ ] = fillGaps( "              " ); // 23
-			newlines[ l++ ] = fillGaps( "              " ); // 24
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 0
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 1
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 2
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 3
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 4
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 5
+			newlines[ l++ ] = StringUtilities.fillGaps( "      00      " ); // 6
+			newlines[ l++ ] = StringUtilities.fillGaps( "     0000     " ); // 7
+			newlines[ l++ ] = StringUtilities.fillGaps( "    00  00    " ); // 8
+			newlines[ l++ ] = StringUtilities.fillGaps( "   00    00   " ); // 9
+			newlines[ l++ ] = StringUtilities.fillGaps( "  00      00  " ); // 10
+			newlines[ l++ ] = StringUtilities.fillGaps( " 0000    0000 " ); // 11
+			newlines[ l++ ] = StringUtilities.fillGaps( " 0000    0000 " ); // 12
+			newlines[ l++ ] = StringUtilities.fillGaps( "    0    0    " ); // 13
+			newlines[ l++ ] = StringUtilities.fillGaps( "    0    0    " ); // 14
+			newlines[ l++ ] = StringUtilities.fillGaps( "    0    0    " ); // 15
+			newlines[ l++ ] = StringUtilities.fillGaps( "    0    0    " ); // 16
+			newlines[ l++ ] = StringUtilities.fillGaps( "    000000    " ); // 17
+			newlines[ l++ ] = StringUtilities.fillGaps( "    000000    " ); // 18
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 19
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 20
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 21
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 22
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 23
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 24
 			System.out.println() ;
 
 			Font.letterToImage.put( letter, newlines );
@@ -580,31 +579,31 @@ public class Font
 
 			String [] newlines = new String [ ( lines != null ) ? lines.length : 25 ] ;
 			int l = 0 ;
-			newlines[ l++ ] = fillGaps( "              " ); // 0
-			newlines[ l++ ] = fillGaps( "              " ); // 1
-			newlines[ l++ ] = fillGaps( "              " ); // 2
-			newlines[ l++ ] = fillGaps( "              " ); // 3
-			newlines[ l++ ] = fillGaps( "              " ); // 4
-			newlines[ l++ ] = fillGaps( "              " ); // 5
-			newlines[ l++ ] = fillGaps( "     00       " ); // 6
-			newlines[ l++ ] = fillGaps( "     000      " ); // 7
-			newlines[ l++ ] = fillGaps( "     0000     " ); // 8
-			newlines[ l++ ] = fillGaps( "     00 00    " ); // 9
-			newlines[ l++ ] = fillGaps( " 000000  00   " ); // 10
-			newlines[ l++ ] = fillGaps( " 00       00  " ); // 11
-			newlines[ l++ ] = fillGaps( " 00        00 " ); // 12
-			newlines[ l++ ] = fillGaps( " 00       00  " ); // 13
-			newlines[ l++ ] = fillGaps( " 000000  00   " ); // 14
-			newlines[ l++ ] = fillGaps( "     00 00    " ); // 15
-			newlines[ l++ ] = fillGaps( "     0000     " ); // 16
-			newlines[ l++ ] = fillGaps( "     000      " ); // 17
-			newlines[ l++ ] = fillGaps( "     00       " ); // 18
-			newlines[ l++ ] = fillGaps( "              " ); // 19
-			newlines[ l++ ] = fillGaps( "              " ); // 20
-			newlines[ l++ ] = fillGaps( "              " ); // 21
-			newlines[ l++ ] = fillGaps( "              " ); // 22
-			newlines[ l++ ] = fillGaps( "              " ); // 23
-			newlines[ l++ ] = fillGaps( "              " ); // 24
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 0
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 1
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 2
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 3
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 4
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 5
+			newlines[ l++ ] = StringUtilities.fillGaps( "     00       " ); // 6
+			newlines[ l++ ] = StringUtilities.fillGaps( "     000      " ); // 7
+			newlines[ l++ ] = StringUtilities.fillGaps( "     0000     " ); // 8
+			newlines[ l++ ] = StringUtilities.fillGaps( "     00 00    " ); // 9
+			newlines[ l++ ] = StringUtilities.fillGaps( " 000000  00   " ); // 10
+			newlines[ l++ ] = StringUtilities.fillGaps( " 00       00  " ); // 11
+			newlines[ l++ ] = StringUtilities.fillGaps( " 00        00 " ); // 12
+			newlines[ l++ ] = StringUtilities.fillGaps( " 00       00  " ); // 13
+			newlines[ l++ ] = StringUtilities.fillGaps( " 000000  00   " ); // 14
+			newlines[ l++ ] = StringUtilities.fillGaps( "     00 00    " ); // 15
+			newlines[ l++ ] = StringUtilities.fillGaps( "     0000     " ); // 16
+			newlines[ l++ ] = StringUtilities.fillGaps( "     000      " ); // 17
+			newlines[ l++ ] = StringUtilities.fillGaps( "     00       " ); // 18
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 19
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 20
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 21
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 22
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 23
+			newlines[ l++ ] = StringUtilities.fillGaps( "              " ); // 24
 			System.out.println() ;
 
 			Font.letterToImage.put( letter, newlines );
@@ -620,32 +619,5 @@ public class Font
 
 		Font.composeAndWriteImageOFont( new java.io.File( Storage.getGameStorageInHome (), "font.new.png" ) );
 	}
-
-	/***** private static String fillGaps( String in )
-	{
-		int firstNonSpace = in.length() ;
-		for ( int c = 0 ; c < in.length() ; ++ c )
-			if ( in.charAt( c ) != ' ' ) {
-				firstNonSpace = c ;
-				break ;
-			}
-
-		int lastNonSpace = -1 ;
-		for ( int c = in.length() - 1 ; c >= 0 ; -- c )
-			if ( in.charAt( c ) != ' ' ) {
-				lastNonSpace = c ;
-				break ;
-			}
-
-		StringBuilder out = new StringBuilder( in );
-
-		for ( int c = firstNonSpace ; c < lastNonSpace ; c ++ ) {
-			if ( out.charAt( c ) == ' ' ) out.setCharAt( c, 'X' );
-		}
-
-		System.out.println( "fillGaps : \"" + in + "\" becomes \"" + out + "\"" );
-
-		return out.toString () ;
-	} *****/
 
 }

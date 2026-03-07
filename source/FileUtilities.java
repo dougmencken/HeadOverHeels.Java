@@ -43,4 +43,6 @@ public class FileUtilities
 		return ( lastDotAt > 0 ) ? name.substring( 0, lastDotAt ) : name ;
 	}
 
+	private FileUtilities() {  super() ;  } // no instances
+
 }
