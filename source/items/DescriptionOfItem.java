@@ -8,8 +8,6 @@
 
 package head.over.heels.items ;
 
-import java.util.Vector ;
-
 
 /**
  * The description of an item as read from items.xml
@@ -111,36 +109,52 @@ public class DescriptionOfItem implements Cloneable
 	public int getHeightOfShadow () {  return this.heightOfShadow ;  }
 	public void setHeightOfShadow( int newHeightOfShadow ) {  this.heightOfShadow = newHeightOfShadow ;  }
 
-	/**
-	 * The sequence of item's frames for one orientation
-	 */
-	private Vector< Integer > sequenceOFrames = new Vector< Integer >() ;
+	// the frame sequence is just the single 0 for a static item
+	private static final int[] single_frame_sequence = new int[]{ 0 } ;
 
-	public int howManyFramesPerOrientation () {  return this.sequenceOFrames.size() ;  }
+	/**
+	 * The sequence of item’s frames for one orientation
+	 */
+	private int[] sequenceOFrames = single_frame_sequence ;
+
+	public int howManyFramesPerOrientation () {  return this.sequenceOFrames.length ;  }
 
 	int getFrameAt( int at ) {
-		return ( at >= 0 && at < this.sequenceOFrames.size () ) ? this.sequenceOFrames.elementAt( at ) : 0 ;  }
+		if ( at >= 0 && at < this.sequenceOFrames.length )
+			return this.sequenceOFrames[ at ] ;
+		else
+			throw new IndexOutOfBoundsException( "at=" + at + " is out of 0 ≤ at < " + this.sequenceOFrames.length );
+	}
 
-	public boolean isSequenceOFramesSimple ()
+	void setSequenceOFrames( int [] newSequence )
 	{
-		for ( int i = 0 ; i < this.sequenceOFrames.size () ; i ++ )
-			if ( this.sequenceOFrames.elementAt( i ) != i ) return false ;
+		this.sequenceOFrames = ( newSequence != null && newSequence.length > 1 ) ? newSequence : single_frame_sequence ;
+	}
+
+	boolean isSequenceOFramesSimple ()
+	{
+		int[] sequence = this.sequenceOFrames ;
+		int frames = sequence.length ;
+
+		for ( int i = 0 ; i < frames ; i ++ )
+			if ( sequence[ i ] != i ) return false ;
 
 		return true ;
 	}
 
-	void makeSequenceOFrames( int howMany )
+	void setSimpleSequenceOFrames( int howMany )
 	{
-		if ( sequenceOFrames.size() > 0 ) sequenceOFrames.clear () ;
-
-		for ( int j = 0 ; j < howMany ; j ++ )
-			sequenceOFrames.add( j );
+		setSequenceOFrames( ( howMany > 1 ) ? makeSimpleSequence( howMany ) : single_frame_sequence );
 	}
 
-	void setSequenceOFrames( Vector< Integer > newSequence )
-	{
-		if ( sequenceOFrames.size() > 0 ) sequenceOFrames.clear () ;
-		this.sequenceOFrames = newSequence ;
+	private static int[] makeSimpleSequence ( int length ) {
+		if ( length < 1 ) length = 1 ;
+
+		int[] simpleSequence = new int[ length ] ;
+		for ( int j = 0 ; j < length ; ++ j )
+			simpleSequence[ j ] = j ;
+
+		return simpleSequence ;
 	}
 
 	/**
@@ -201,8 +215,8 @@ public class DescriptionOfItem implements Cloneable
 				&& this.delayBetweenFrames == that.delayBetweenFrames
 				&& this.nameOfShadowsFile.equals( that.nameOfShadowsFile )
 				&& this.widthOfShadow == that.widthOfShadow && this.heightOfShadow == that.heightOfShadow
-				&& ( this.sequenceOFrames.equals( that.sequenceOFrames )
-					|| ( this.sequenceOFrames.size() <= 1 && that.sequenceOFrames.size() <= 1 ) )
+				&& ( java.util.Arrays.equals( this.sequenceOFrames, that.sequenceOFrames )
+					|| ( this.sequenceOFrames.length == 1 && that.sequenceOFrames.length == 1 ) )
 				&& this.orientations == that.orientations
 				&& this.extraFrames == that.extraFrames
 		;
@@ -238,11 +252,13 @@ public class DescriptionOfItem implements Cloneable
 		theClone.heightOfShadow = this.heightOfShadow ;
 
 		// copy the sequence of animation
-		if ( this.sequenceOFrames.size () > 1 )
-			for ( Integer frame : this.sequenceOFrames )
-				theClone.sequenceOFrames.add( frame );
-		else
-			theClone.sequenceOFrames.add( 0 ); // it’s just single 0 for a static item
+		int howManyFrames = howManyFramesPerOrientation() ;
+		if ( howManyFrames > 1 ) {
+			int [] sequence = new int[ howManyFrames ] ;
+			for ( int i = 0 ; i < howManyFrames ; ++ i )
+				sequence[ i ] = this.sequenceOFrames[ i ] ;
+			theClone.setSequenceOFrames( sequence );
+		}
 
 		theClone.orientations = this.orientations ;
 		theClone.extraFrames = this.extraFrames ;
@@ -332,13 +348,13 @@ public class DescriptionOfItem implements Cloneable
 		}
 
 		if ( isSequenceOFramesSimple () ) {
-			if /* item is not static */ ( howManyFramesPerOrientation () > 1 ) {
+			if /* item is not static */ ( howManyFramesPerOrientation() > 1 ) {
 				text.append( indent );
-				text.append( "<frames>" + howManyFramesPerOrientation () + "</frames>" );
+				text.append( "<frames>" + howManyFramesPerOrientation() + "</frames>" );
 				text.append( newline );
 			}
 		} else
-			for ( Integer frame : this.sequenceOFrames ) {
+			for ( int frame : this.sequenceOFrames ) {
 				text.append( indent );
 				text.append( "<frame>" + frame + "</frame>" );
 				text.append( newline );

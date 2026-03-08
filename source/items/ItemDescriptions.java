@@ -367,31 +367,31 @@ public class ItemDescriptions
 
 		// the sequence of frames for an orientation may be either simple 0,1,2,... or custom
 		Node framesNode = element.getElementsByTagName( "frames" ).item( 0 );
-		if ( framesNode != null )
-		{
+		if ( framesNode != null ) {
 			try { // parseInt can throw NumberFormatException
-				description.makeSequenceOFrames( Integer.parseInt( framesNode.getTextContent () ) ) ;
+				description.setSimpleSequenceOFrames( Integer.parseInt( framesNode.getTextContent() ) ) ;
 			} catch ( NumberFormatException e ) { }
-		} else
-		{
+		}
+		else {
 			NodeList frameNodes = element.getElementsByTagName( "frame" );
-			try {
-				// the custom sequence
-				java.util.Vector< Integer > customSequence = new java.util.Vector< Integer >() ;
+			int howManyFrames = frameNodes.getLength() ;
+			if ( howManyFrames > 1 ) {
+				int[] customSequence = new int[ howManyFrames ] ;
+				try {
+					for ( int i = 0 ; i < howManyFrames ; ++ i )
+						customSequence[ i ] = Integer.parseInt( frameNodes.item( i ).getTextContent() );
 
-				for ( int i = 0 ; i < frameNodes.getLength() ; i ++ ) {
-					Node frameNode = frameNodes.item( i );
-					customSequence.add( Integer.parseInt( frameNode.getTextContent () ) ) ;
-				}
-				if ( customSequence.size() > 0 )
 					description.setSequenceOFrames( customSequence ) ;
+				}
+				catch ( NumberFormatException e ) {}
 			}
-			catch ( NumberFormatException e ) { }
 		}
 
-		// ... if neither
-		if ( description.howManyFramesPerOrientation () == 0 )
-			description.makeSequenceOFrames( 1 ) ; // then it’s static
+		// ... if neither then the item is static with the default
+		//     single 0th frame, and the length of { 0 } array is 1
+		if ( description.howManyFramesPerOrientation() < 1 )
+			throw new UnlikelyToHappenException (
+				"DescriptionOfItem guarantees that frames-per-orientation ≥ 1, how did it get to zero?" );
 
 		// how many various orientations
 		NodeList orientationsNodes = element.getElementsByTagName( "orientations" );
