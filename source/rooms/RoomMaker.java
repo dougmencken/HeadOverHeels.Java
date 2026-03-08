@@ -228,18 +228,14 @@ public class RoomMaker
 			///Door westnorthDoor = room.getDoorOn( "westnorth" );
 			///Door westsouthDoor = room.getDoorOn( "westsouth" );
 
-			StringBuilder tileFilename = new StringBuilder( room.getScenery() ) ;
-			tileFilename.append( '-' );
+			String tileFilename = room.getScenery() + '-' ;
 
-			if ( ! room.hasFloor() )
-				tileFilename.append( "nofloor" );
+			if ( room.hasFloor() )
+				tileFilename += room.isFloorMortal() ? "mortalfloor" : "floor" ;
 			else
-			if ( room.isFloorMortal() )
-				tileFilename.append( "mortalfloor" );
-			else
-				tileFilename.append( "floor" );
+				tileFilename += "nofloor" ;
 
-			tileFilename.append( ".png" );
+			tileFilename += ".png" ;
 
 			int lastCellX = room.getCellsAlongX() - 1 ;
 			int lastCellY = room.getCellsAlongY() - 1 ;
@@ -256,11 +252,11 @@ public class RoomMaker
 							addTile = false ;
 
 					if ( addTile ) {
-						NamedOffscreenImage tileImage = PoolOfPictures.getRecentPool().getPicture( tileFilename.toString() );
+						NamedOffscreenImage tileImage = PoolOfPictures.getRecentPool().getPicture( tileFilename );
 						if ( tileImage != null )
 							room.addFloorTile( new FloorTile( cell, tileImage ) );
 						else
-							System.out.println( "can’t get image " + tileFilename.toString() );
+							System.out.println( "can’t get image " + tileFilename );
 					}
 				}
 			}

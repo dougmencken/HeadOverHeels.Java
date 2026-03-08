@@ -12,6 +12,8 @@ import head.over.heels.NamedOffscreenImage ;
 import head.over.heels.Pictures ;
 import head.over.heels.PoolOfPictures ;
 import head.over.heels.Shady ;
+
+import head.over.heels.GrowingStrings ;
 import head.over.heels.StringUtilities ;
 
 import head.over.heels.NoSuchPictureException ;
@@ -158,8 +160,7 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 	protected NamedOffscreenImage getNthShadowIn ( String sequence, int n ) throws NoSuchPictureException
 	{
 		if ( ! hasShadow() ) {
-			StringBuilder message = new StringBuilder() ;
-			message.append( StringUtilities.putInQuotes( getUniqueName() ) ).append( " has no shadows" ) ;
+			String message = StringUtilities.putInQuotes( getUniqueName() ) + " has no shadows" ;
 			System.err.println( message );
 			throw new NoSuchPictureException( message );
 		}
@@ -169,9 +170,12 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 		if ( shadowsIn != null && n < shadowsIn.size() )
 			return shadowsIn.elementAt( n );
 
-		StringBuilder message = new StringBuilder() ;
-		message.append( "there’s no " ).append( StringUtilities.toStringWithOrdinalSuffix( n ) ).append( " shadow in " )
-				.append( StringUtilities.putInQuotes( sequence ) ).append( " for " ).append( StringUtilities.putInQuotes( getUniqueName() ) ) ;
+		String message =
+			GrowingStrings.newString( "there’s no " )
+				.append( StringUtilities.toStringWithOrdinalSuffix( n ) ).append( " shadow" )
+				.append( " in " ).append( StringUtilities.putInQuotes( sequence ) )
+				.append( " for " ).append( StringUtilities.putInQuotes( getUniqueName() ) )
+				.toString() ;
 		System.err.println( message );
 		throw new NoSuchPictureException( message );
 	}

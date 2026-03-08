@@ -23,6 +23,8 @@ import head.over.heels.gui.swing.DeferredReshaper ;
 import head.over.heels.gui.swing.FixedHeightLabel ;
 import head.over.heels.gui.swing.TabbedPaneWithTabsInOneRow ;
 
+import head.over.heels.GrowingString ;
+import head.over.heels.GrowingStrings ;
 import head.over.heels.StringUtilities ;
 
 
@@ -155,7 +157,7 @@ public class ListOfItemsWindow extends JFrame
 			this.itemWidthOfShadow.setText(String.valueOf( description.getWidthOfShadow() ));
 			this.itemHeightOfShadow.setText(String.valueOf( description.getHeightOfShadow() ));
 
-			StringBuilder sequenceOFrames = new StringBuilder() ;
+			GrowingString sequenceOFrames = GrowingStrings.newString() ;
 			int framesPerOrientation = description.howManyFramesPerOrientation() ;
 			for ( int n = 0 ; n < framesPerOrientation ; ) {
 				sequenceOFrames.append(String.valueOf( description.getFrameAt( n ) ));

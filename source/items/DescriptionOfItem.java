@@ -8,6 +8,9 @@
 
 package head.over.heels.items ;
 
+import head.over.heels.GrowingString ;
+import head.over.heels.GrowingStrings ;
+
 
 /**
  * The description of an item as read from items.xml
@@ -268,111 +271,69 @@ public class DescriptionOfItem implements Cloneable
 
 	public String toString ()
 	{
-		StringBuilder text = new StringBuilder( );
+		GrowingString text = GrowingStrings.newString() ;
 		String newline = System.getProperty( "line.separator" );
 		String indent = "    " ;
 
-		text.append( "<item kind=\"" + getKind () + "\">" );
-		text.append( newline );
+		text.append( "<item kind=\"" + getKind () + "\">" ).append( newline );
 
-		text.append( indent );
-		text.append( "<width-x>" + getWidthX () + "</width-x>" );
-		text.append( newline );
+		text.append( indent ).append( "<width-x>" + getWidthX () + "</width-x>" ).append( newline );
+		text.append( indent ).append( "<width-y>" + getWidthY () + "</width-y>" ).append( newline );
+		text.append( indent ).append( "<height>" + getHeight () + "</height>" ).append( newline );
 
-		text.append( indent );
-		text.append( "<width-y>" + getWidthY () + "</width-y>" );
-		text.append( newline );
+		if ( getWeight () > 0 )
+			text.append( indent ).append( "<weight>" + getWeight () + "</weight>" ).append( newline );
 
-		text.append( indent );
-		text.append( "<height>" + getHeight () + "</height>" );
-		text.append( newline );
+		if ( getSpeed () > 0 )
+			text.append( indent ).append( "<speed>" + getSpeed () + "</speed>" ).append( newline );
 
-		if ( getWeight () > 0 ) {
-			text.append( indent );
-			text.append( "<weight>" + getWeight () + "</weight>" );
-			text.append( newline );
-		}
-
-		if ( getSpeed () > 0 ) {
-			text.append( indent );
-			text.append( "<speed>" + getSpeed () + "</speed>" );
-			text.append( newline );
-		}
-
-		if ( isMortal () ) {
-			text.append( indent );
-			text.append( "<is-mortal>yes</is-mortal>" );
-			text.append( newline );
-		}
+		if ( isMortal () )
+			text.append( indent ).append( "<is-mortal>yes</is-mortal>" ).append( newline );
 
 		if ( getNameOfFramesFile().length() > 0 ) {
-			text.append( indent );
-			text.append( "<graphics file=\"" + getNameOfFramesFile () + "\">" );
-			text.append( newline );
+			text.append( indent ).append( "<graphics file=\"" + getNameOfFramesFile () + "\">" ).append( newline );
 
-			text.append( indent ); text.append( indent );
-			text.append( "<frame-width>" + getWidthOfFrame () + "</frame-width>" );
-			text.append( newline );
+			text.append( indent ).append( indent ).append( "<frame-width>" + getWidthOfFrame () + "</frame-width>" ).append( newline );
+			text.append( indent ).append( indent ).append( "<frame-height>" + getHeightOfFrame () + "</frame-height>" ).append( newline );
 
-			text.append( indent ); text.append( indent );
-			text.append( "<frame-height>" + getHeightOfFrame () + "</frame-height>" );
-			text.append( newline );
-
-			text.append( indent );
-			text.append( "</graphics>" );
-			text.append( newline );
+			text.append( indent ).append( "</graphics>" ).append( newline );
 		}
 
-		if ( getDelayBetweenFrames () > 0 ) {
-			text.append( indent );
-			text.append( "<delay-between-frames>" + getDelayBetweenFrames () + "</delay-between-frames>" );
-			text.append( newline );
-		}
+		if ( getDelayBetweenFrames () > 0 )
+			text.append( indent ).append( "<delay-between-frames>" + getDelayBetweenFrames () + "</delay-between-frames>" ).append( newline );
 
 		if ( getNameOfShadowsFile().length() > 0 ) {
-			text.append( indent );
-			text.append( "<shadows file=\"" + getNameOfShadowsFile () + "\">" );
-			text.append( newline );
+			text.append( indent ).append( "<shadows file=\"" + getNameOfShadowsFile () + "\">" ).append( newline );
 
-			text.append( indent ); text.append( indent );
-			text.append( "<width-of-shadow>" + getWidthOfShadow () + "</width-of-shadow>" );
-			text.append( newline );
+			text.append( indent ).append( indent ).append( "<width-of-shadow>" + getWidthOfShadow () + "</width-of-shadow>" ).append( newline );
+			text.append( indent ).append( indent ).append( "<height-of-shadow>" + getHeightOfShadow () + "</height-of-shadow>" ).append( newline );
 
-			text.append( indent ); text.append( indent );
-			text.append( "<height-of-shadow>" + getHeightOfShadow () + "</height-of-shadow>" );
-			text.append( newline );
-
-			text.append( indent );
-			text.append( "</shadows>" );
-			text.append( newline );
+			text.append( indent ).append( "</shadows>" ).append( newline );
 		}
 
 		if ( isSequenceOFramesSimple () ) {
-			if /* item is not static */ ( howManyFramesPerOrientation() > 1 ) {
-				text.append( indent );
-				text.append( "<frames>" + howManyFramesPerOrientation() + "</frames>" );
-				text.append( newline );
-			}
+			if /* item is not static */ ( howManyFramesPerOrientation() > 1 )
+				text.append( indent ).append( "<frames>" + howManyFramesPerOrientation() + "</frames>" ).append( newline );
 		} else
-			for ( int frame : this.sequenceOFrames ) {
-				text.append( indent );
-				text.append( "<frame>" + frame + "</frame>" );
-				text.append( newline );
-			}
+			for ( int frame : this.sequenceOFrames )
+				text.append( indent ).append( "<frame>" + frame + "</frame>" ).append( newline );
 
-		text.append( indent );
-		text.append( "<orientations>" + howManyOrientations () + "</orientations>" );
-		text.append( newline );
+		text.append( indent ).append( "<orientations>" + howManyOrientations () + "</orientations>" ).append( newline );
 
-		if ( howManyExtraFrames () > 0 ) {
-			text.append( indent );
-			text.append( "<extra-frames>" + howManyExtraFrames () + "</extra-frames>" );
-			text.append( newline );
-		}
+		if ( howManyExtraFrames () > 0 )
+			text.append( indent ).append( "<extra-frames>" + howManyExtraFrames () + "</extra-frames>" ).append( newline );
 
 		text.append( "</item>" );
 
 		return text.toString() ;
+	}
+
+	public static void main( String[] args )
+	{
+		String item = ( args != null && args.length > 0 ) ? args[ 0 ] : "headoverheels" ;
+
+		DescriptionOfItem description = ItemDescriptions.descriptions().getDescriptionByKind( item );
+		if ( description != null ) System.out.println( description.toString() );
 	}
 
 }

@@ -8,6 +8,8 @@
 
 package head.over.heels.gui ;
 
+import head.over.heels.GrowingString ;
+import head.over.heels.GrowingStrings ;
 import head.over.heels.StringUtilities ;
 
 
@@ -155,7 +157,7 @@ public class LettersFile
 	{
 		if ( this.letters == null ) return "null" ;
 
-		StringBuilder out = new StringBuilder( );
+		GrowingString out = GrowingStrings.newString() ;
 		String newline = System.getProperty( "line.separator" );
 
 		out.append( howManyLetters() ).append( " letters" ).append( newline );
@@ -620,13 +622,13 @@ public class LettersFile
 			oldLetters = new LettersFile( oldFile );
 			System.out.println( "old letters" );
 			System.out.println( "———————————" );
-			System.out.println( oldLetters );
+			System.out.println( oldLetters.toString() );
 		}
 
 		LettersFile newLetters = new LettersFile( );
 		System.out.println( "new letters" );
 		System.out.println( "———————————" );
-		System.out.println( newLetters );
+		System.out.println( newLetters.toString() );
 
 		newLetters.writeTo( new java.io.File( head.over.heels.Storage.getGameStorageInHome (), nameOfNewLettersFile ) );
 	}

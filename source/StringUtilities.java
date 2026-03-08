@@ -21,8 +21,7 @@ public class StringUtilities
 		int mod10 = number % 10 ;
 		int mod100 = number % 100 ;
 
-		StringBuilder result = new StringBuilder() ;
-		result.append( number );
+		GrowingString result = GrowingStrings.newString( Integer.toString( number ) );
 
 		if ( mod10 == 1 && mod100 != 11 )
 			result.append( "st" );
@@ -58,14 +57,14 @@ public class StringUtilities
 
 	public static String reverseString( String in )
 	{
-		/* StringBuilder out = new StringBuilder() ;
+		GrowingString out = GrowingStrings.newString() ;
 
 		for ( int c = in.length() - 1 ; c >= 0 ; -- c )
 			out.append( in.charAt( c ) );
 
-		return out.toString () ; */
+		return out.toString() ;
 
-		return ( new StringBuilder( in ) ).reverse().toString () ;
+		///return ( new StringBuffer( in ) ).reverse().toString() ;
 	}
 
 	public static String makeRandomString ( int length )
@@ -75,7 +74,7 @@ public class StringUtilities
 						+ "abcdefghijklmnopqrstuvwxyz" ;
 		int howManyChars = characters.length() ;
 
-		StringBuilder out = new StringBuilder() ;
+		GrowingString out = GrowingStrings.newString() ;
 		java.util.Random random = new java.util.Random() ;
 
 		for ( int i = 0 ; i < length; ++ i )
@@ -109,7 +108,9 @@ public class StringUtilities
 
 	public static void main( String[] ignored )
 	{
-		System.out.println( StringUtilities.makeRandomString( 67 ) );
+		String random = StringUtilities.makeRandomString( 67 );
+		System.out.println( random );
+		System.out.println( StringUtilities.reverseString( random ) );
 
 		System.out.println( StringUtilities.fillGaps( "   - -   " ) );
 		System.out.println( StringUtilities.fillGaps( " /     \\ " ) );

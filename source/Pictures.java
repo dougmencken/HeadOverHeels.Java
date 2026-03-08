@@ -364,7 +364,7 @@ public class Pictures
 			if ( indexOfEquality >= 0 && the1st.length() > indexOfEquality + 1 ) {
 				extraSuffix = the1st.substring( indexOfEquality + 1 );
 				extraSuffix.replace( "\"", "" ) ; // remove any double quotes from a suffix
-				extraSuffix = ( new StringBuilder() ).append( '.' ).append( extraSuffix ).toString() ; // precede with a dot
+				extraSuffix = "." + extraSuffix ; // precede with a dot
 			}
 
 			firstFileName = 2 ;

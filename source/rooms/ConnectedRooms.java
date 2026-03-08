@@ -8,6 +8,9 @@
 
 package head.over.heels.rooms ;
 
+import head.over.heels.GrowingString ;
+import head.over.heels.GrowingStrings ;
+
 import java.util.HashMap ;
 
 
@@ -53,7 +56,7 @@ public class ConnectedRooms
 
 	public String toString ()
 	{
-		StringBuilder out = new StringBuilder( );
+		GrowingString out = GrowingStrings.newString() ;
 
 		boolean first = true ;
 		for ( String where : this.connections.keySet() ) {

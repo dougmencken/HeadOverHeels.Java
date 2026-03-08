@@ -16,6 +16,8 @@ import head.over.heels.Pictures ;
 import head.over.heels.Storage ;
 import head.over.heels.TooManyColoursException ;
 
+import head.over.heels.GrowingString ;
+import head.over.heels.GrowingStrings ;
 import head.over.heels.StringUtilities ;
 
 
@@ -185,7 +187,7 @@ public class Font
 						&& imageOfLetter.getColorModel().getPixelSize() == 1 )
 			{
 				byte [] bitmap = ( (java.awt.image.DataBufferByte) imageOfLetter.getRaster().getDataBuffer() ).getData() ;
-				StringBuilder line = new StringBuilder( );
+				GrowingString line = GrowingStrings.newString() ;
 				for ( int b = 0 ; b < bitmap.length ; ++ b ) {
 					String binary = String.format( "%8s", Integer.toBinaryString( bitmap[ b ] & 0xff ) ).replace( ' ', '0' );
 
@@ -377,7 +379,7 @@ public class Font
 	{
 		if ( bitmap == null ) return "null" ;
 
-		StringBuilder out = new StringBuilder( );
+		GrowingString out = GrowingStrings.newString() ;
 
 		for ( int l = 0 ; l < bitmap.length ; ++ l )
 			out.append( prefix ).append( bitmap[ l ] ).append( suffix ).append( l )
@@ -464,7 +466,7 @@ public class Font
 		Font testFont = new Font( "vivid yellow" );
 
 		// print all the letters drawn in the font
-		StringBuilder letters = new StringBuilder( );
+		GrowingString letters = GrowingStrings.newString() ;
 		for ( String letter : Font.letterToImage.keySet() )
 			letters.append( letter );
 		System.out.println( letters );

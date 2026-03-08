@@ -10,6 +10,9 @@ package head.over.heels.rooms ;
 
 import head.over.heels.Storage ;
 
+import head.over.heels.GrowingString ;
+import head.over.heels.GrowingStrings ;
+
 import java.io.File ;
 
 import java.util.HashMap ;
@@ -182,7 +185,7 @@ public class GameMap
 	{
 		if ( this.linksBetweenRooms == null ) return "the game map hasn’t been read yet" ;
 
-		StringBuilder out = new StringBuilder( );
+		GrowingString out = GrowingStrings.newString() ;
 		String newline = System.getProperty( "line.separator" );
 
 		out.append( "the game map" );

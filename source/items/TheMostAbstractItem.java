@@ -10,8 +10,10 @@ package head.over.heels.items ;
 
 import head.over.heels.Mediated ;
 import head.over.heels.NamedOffscreenImage ;
-import head.over.heels.StringUtilities ;
 import head.over.heels.NoSuchPictureException ;
+
+import head.over.heels.GrowingStrings ;
+import head.over.heels.StringUtilities ;
 
 import head.over.heels.behaviors.Behaviour ;
 
@@ -135,9 +137,12 @@ public abstract class TheMostAbstractItem extends Mediated
 		if ( framesIn != null && n < framesIn.size() )
 			return framesIn.elementAt( n );
 
-		StringBuilder message = new StringBuilder() ;
-		message.append( "there’s no " ).append( StringUtilities.toStringWithOrdinalSuffix( n ) ).append( " frame in " )
-				.append( StringUtilities.putInQuotes( sequence ) ).append( " for " ).append( StringUtilities.putInQuotes( getUniqueName() ) ) ;
+		String message =
+			GrowingStrings.newString( "there’s no " )
+				.append( StringUtilities.toStringWithOrdinalSuffix( n ) ).append( " frame" )
+				.append( " in " ).append( StringUtilities.putInQuotes( sequence ) )
+				.append( " for " ).append( StringUtilities.putInQuotes( getUniqueName() ) )
+				.toString() ;
 		System.err.println( message );
 		throw new NoSuchPictureException( message );
 	}

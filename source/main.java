@@ -48,7 +48,7 @@ public final class main
 
 	public static String gameVersion ()
 	{
-		StringBuilder version = new StringBuilder( current_version );
+		GrowingString version = GrowingStrings.newString( main.current_version );
 		String gitHeadHash = System.getProperty( "GIT_HEAD_HASH" );
 		if ( gitHeadHash != null && gitHeadHash.length() > 0 )
 			version.append( "-" ).append( gitHeadHash );
