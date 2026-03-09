@@ -11,6 +11,7 @@ package head.over.heels.items ;
 import head.over.heels.Storage ;
 import head.over.heels.StringUtilities ;
 import head.over.heels.UnlikelyToHappenException ;
+import head.over.heels.XElement ;
 
 import java.util.TreeMap ;
 
@@ -182,32 +183,15 @@ public class ItemDescriptions
 		{
 			Node itemNode = itemNodes.item( i );
 			if ( itemNode.getNodeType() == Node.ELEMENT_NODE ) {
-				Element itemElement = (Element) itemNode ;
+				XElement itemElement = new XElement( (Element) itemNode );
 
 				final String kindOfItem = itemElement.getAttribute( "kind" ) ; // the kind of item
-				DescriptionOfItem newDescription = new DescriptionOfItem ( kindOfItem );
+				DescriptionOfItem newDescription = new DescriptionOfItem( kindOfItem ) ;
 
 				// spatial dimensions
-
-				Node xWidthNode = itemElement.getElementsByTagName( "width-x" ).item( 0 );
-				Node yWidthNode = itemElement.getElementsByTagName( "width-y" ).item( 0 );
-				Node heightNode = itemElement.getElementsByTagName( "height" ).item( 0 );
-
-				if ( xWidthNode != null ) {
-					try { // parseInt can throw NumberFormatException
-						newDescription.setWidthX( Integer.parseInt( xWidthNode.getTextContent () ) );
-					} catch ( NumberFormatException e ) { }
-				}
-				if ( yWidthNode != null ) {
-					try { // parseInt can throw NumberFormatException
-						newDescription.setWidthY( Integer.parseInt( yWidthNode.getTextContent () ) );
-					} catch ( NumberFormatException e ) { }
-				}
-				if ( heightNode != null ) {
-					try { // parseInt can throw NumberFormatException
-						newDescription.setHeight( Integer.parseInt( heightNode.getTextContent () ) );
-					} catch ( NumberFormatException e ) { }
-				}
+				newDescription.setWidthX( itemElement.getInt( "width-x", 0 ) );
+				newDescription.setWidthY( itemElement.getInt( "width-y", 0 ) );
+				newDescription.setHeight( itemElement.getInt( "height", 0 ) );
 
 				readDescriptionFurther( itemElement, newDescription );
 
@@ -251,75 +235,35 @@ public class ItemDescriptions
 		return true ;
 	}
 
-	private void readDescriptionFurther( Element element, DescriptionOfItem description )
+	private void readDescriptionFurther( XElement element, DescriptionOfItem description )
 	{
 		if ( element == null || description == null ) return ;
 
 		// how long, in milliseconds, it falls
-		int itemWeight = 0 ;
-
-		NodeList weightNodes = element.getElementsByTagName( "weight" );
-		if ( weightNodes.getLength () > 0 ) {
-			String weight = weightNodes.item( 0 ).getTextContent ();
-			try { // parseInt can throw NumberFormatException
-				itemWeight = Integer.parseInt( weight );
-			} catch ( NumberFormatException e ) { }
-		}
-
-		description.setWeight( itemWeight );
+		description.setWeight( element.getInt( "weight", 0 ) );
 
 		// how many milliseconds this item moves one free unit
-		int itemSpeed = 0 ;
-
-		NodeList speedNodes = element.getElementsByTagName( "speed" );
-		if ( speedNodes.getLength () > 0 ) {
-			String speed = speedNodes.item( 0 ).getTextContent ();
-			try { // parseInt can throw NumberFormatException
-				itemSpeed = Integer.parseInt( speed );
-			} catch ( NumberFormatException e ) { }
-		}
-
-		description.setSpeed( itemSpeed );
+		description.setSpeed( element.getInt( "speed", 0 ) );
 
 		// mortal or harmless
-		boolean isMortal = false ;
-
-		NodeList mortalityNodes = element.getElementsByTagName( "is-mortal" );
-		if ( mortalityNodes.getLength() > 0 ) {
-			if ( mortalityNodes.item( 0 ).getTextContent().equals( "yes" ) )
-				isMortal = true ;
-		}
-
-		description.setMortal( isMortal );
+		String mortality = element.getText( "is-mortal" ) ;
+		description.setMortal( mortality != null && mortality.equals( "yes" ) );
 
 		// graphics for this item
 
-		NodeList graphicsNodes = element.getElementsByTagName( "graphics" );
-		if ( graphicsNodes.getLength () > 0
-				&& graphicsNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
-		{
-			Element graphics = (Element) graphicsNodes.item( 0 ) ;
+		Element graphicsElement = element.firstElementByTag( "graphics" );
+		if ( graphicsElement != null ) {
+			XElement graphics = new XElement( graphicsElement );
 
 			// the name of file with graphics for this item
 			description.setNameOfFramesFile( graphics.getAttribute( "file" ) );
 
 			// the width and height in pixels of a single frame
-			Node widthNode = graphics.getElementsByTagName( "frame-width" ).item( 0 );
-			if ( widthNode != null ) {
-				try { // parseInt can throw NumberFormatException
-					description.setWidthOfFrame( Integer.parseInt( widthNode.getTextContent () ) );
-				} catch ( NumberFormatException e ) { }
-			}
-			Node heightNode = graphics.getElementsByTagName( "frame-height" ).item( 0 );
-			if ( heightNode != null ) {
-				try { // parseInt can throw NumberFormatException
-					description.setHeightOfFrame( Integer.parseInt( heightNode.getTextContent () ) );
-				} catch ( NumberFormatException e ) { }
-			}
-		} else
-		{
-			if ( description.getKind().startsWith( "invisible-wall" ) )
-			{
+			description.setWidthOfFrame( graphics.getInt( "frame-width", 0 ) );
+			description.setHeightOfFrame( graphics.getInt( "frame-height", 0 ) );
+		}
+		else {
+			if ( description.getKind().startsWith( "invisible-wall" ) ) {
 				description.setNameOfFramesFile( "" );
 				description.setWidthOfFrame( 64 );
 				description.setHeightOfFrame( 115 );
@@ -327,59 +271,34 @@ public class ItemDescriptions
 		}
 
 		// delay, in milliseconds, between frames in the animation sequence
-		int delayBetweenFrames = 0 ;
-
-		NodeList delayBetweenFramesNodes = element.getElementsByTagName( "delay-between-frames" );
-		if ( delayBetweenFramesNodes.getLength () > 0 ) {
-			String delayInMilliseconds = delayBetweenFramesNodes.item( 0 ).getTextContent ();
-			try { // parseInt can throw NumberFormatException
-				delayBetweenFrames = Integer.parseInt( delayInMilliseconds );
-			} catch ( NumberFormatException e ) { }
-		}
-
-		description.setDelayBetweenFrames( delayBetweenFrames );
+		description.setDelayBetweenFrames( element.getInt( "delay-between-frames", 0 ) );
 
 		// shadows for this item
 
-		NodeList shadowsNodes = element.getElementsByTagName( "shadows" );
-		if ( shadowsNodes.getLength () > 0
-				&& shadowsNodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
-		{
-			Element shadows = (Element) shadowsNodes.item( 0 ) ;
+		Element shadowsElement = element.firstElementByTag( "shadows" );
+		if ( shadowsElement != null ) {
+			XElement shadows = new XElement( shadowsElement );
 
 			// the name of file with shadows for this item
 			description.setNameOfShadowsFile( shadows.getAttribute( "file" ) );
 
 			// the width and height in pixels of a single frame of the item’s shadow
-			Node widthNode = shadows.getElementsByTagName( "width-of-shadow" ).item( 0 );
-			if ( widthNode != null ) {
-				try { // parseInt can throw NumberFormatException
-					description.setWidthOfShadow( Integer.parseInt( widthNode.getTextContent () ) );
-				} catch ( NumberFormatException e ) { }
-			}
-			Node heightNode = shadows.getElementsByTagName( "height-of-shadow" ).item( 0 );
-			if ( heightNode != null ) {
-				try { // parseInt can throw NumberFormatException
-					description.setHeightOfShadow( Integer.parseInt( heightNode.getTextContent () ) );
-				} catch ( NumberFormatException e ) { }
-			}
+			description.setWidthOfShadow( shadows.getInt( "width-of-shadow", 0 ) );
+			description.setHeightOfShadow( shadows.getInt( "height-of-shadow", 0 ) );
 		}
 
 		// the sequence of frames for an orientation may be either simple 0,1,2,... or custom
-		Node framesNode = element.getElementsByTagName( "frames" ).item( 0 );
-		if ( framesNode != null ) {
-			try { // parseInt can throw NumberFormatException
-				description.setSimpleSequenceOFrames( Integer.parseInt( framesNode.getTextContent() ) ) ;
-			} catch ( NumberFormatException e ) { }
-		}
+		int frames = element.getInt( "frames", 0 );
+		if ( frames > 0 )
+			description.setSimpleSequenceOFrames( frames );
 		else {
-			NodeList frameNodes = element.getElementsByTagName( "frame" );
+			NodeList frameNodes = element.nodesByTag( "frame" );
 			int howManyFrames = frameNodes.getLength() ;
 			if ( howManyFrames > 1 ) {
 				int[] customSequence = new int[ howManyFrames ] ;
 				try {
 					for ( int i = 0 ; i < howManyFrames ; ++ i )
-						customSequence[ i ] = Integer.parseInt( frameNodes.item( i ).getTextContent() );
+						customSequence[ i ] = Integer.parseInt(XElement.getTextContent( frameNodes.item( i ) ));
 
 					description.setSequenceOFrames( customSequence ) ;
 				}
@@ -394,22 +313,10 @@ public class ItemDescriptions
 				"DescriptionOfItem guarantees that frames-per-orientation ≥ 1, how did it get to zero?" );
 
 		// how many various orientations
-		NodeList orientationsNodes = element.getElementsByTagName( "orientations" );
-		if ( orientationsNodes.getLength () > 0 ) {
-			String orientations = orientationsNodes.item( 0 ).getTextContent ();
-			try { // parseByte can throw NumberFormatException
-				description.setHowManyOrientations( Byte.parseByte( orientations ) );
-			} catch ( NumberFormatException e ) { }
-		}
+		description.setHowManyOrientations( (byte) element.getInt( "orientations", 0 ) );
 
 		// how many extra frames, such as for jumping or blinking character
-		NodeList extraFramesNodes = element.getElementsByTagName( "extra-frames" );
-		if ( extraFramesNodes.getLength () > 0 ) {
-			String extraFrames = extraFramesNodes.item( 0 ).getTextContent ();
-			try { // parseInt can throw NumberFormatException
-				description.setHowManyExtraFrames( Integer.parseInt( extraFrames ) );
-			} catch ( NumberFormatException e ) { }
-		}
+		description.setHowManyExtraFrames( element.getInt( "extra-frames", 0 ) );
 	}
 
 }
