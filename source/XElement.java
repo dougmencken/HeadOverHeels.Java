@@ -13,20 +13,16 @@ import org.w3c.dom.Element ;
 import org.w3c.dom.Node ;
 import org.w3c.dom.NodeList ;
 
-import java.lang.reflect.Method ;
-
+/**
+ * Abstraction layer over DOM
+ *
+ * Example of use
+ *    XElement root = new XElement( xml.getDocumentElement() );
+ *    String heading = root.firstChild( "starring" ).firstChild( "character" ).getText( "heading" );
+ *    int lives = root.firstChild( "starring" ).firstChild( "character" ).getInt( "lives", 0 );
+ */
 
 public class XElement {
-
-	private static final Method getTextContent_method = get_getTextContent_method_of_Node() ;
-
-	private static Method get_getTextContent_method_of_Node () {
-		try {
-			return org.w3c.dom.Node.class.getMethod( "getTextContent", new Class[0] );
-		} catch ( Exception e ) {
-			return null ;
-		}
-	}
 
 	private Element element ;
 
@@ -35,38 +31,35 @@ public class XElement {
 		this.element = e ;
 	}
 
+	/** @return the attribute value as a string, or the empty string */
 	public String getAttribute( String name ) {
 		return this.element.getAttribute( name );
 	}
 
-	public NodeList nodesByTag( String tag ) {
+	/** @return a NodeList of elements (ELEMENT_NODEs only) with the given tag name */
+	public NodeList elementNodesByTag( String tag ) {
 		return this.element.getElementsByTagName( tag );
 	}
 
-	public Element firstElementByTag( String tag )
-	{
-		NodeList nodes = nodesByTag( tag );
-
-		if ( nodes.getLength() > 0 && nodes.item( 0 ).getNodeType() == Node.ELEMENT_NODE )
-			return (Element) nodes.item( 0 ) ;
-
-		return null ;
+	/** @return the first element with the given tag name, or null if there are no such elements */
+	public Element firstElementByTag( String tag ) {
+		NodeList nodes = elementNodesByTag( tag );
+		return ( nodes.getLength() > 0 ) ? (Element) nodes.item( 0 ) : null ;
 	}
 
-	public String getText( String tag )
-	{
-		Node node = nodesByTag( tag ).item( 0 );
-		if ( node == null ) return null ;
-
-		if ( getTextContent_method != null ) {
-			try {
-				return (String) getTextContent_method.invoke( node, new Object[0] );
-			} catch ( Exception e ) {}
-		}
-
-		return XElement.getTextContent( node ) ;
+	/** @return the first child XElement with that tag name, or the NullXElement instance */
+	public XElement firstChild( String tag ) {
+		Element element = firstElementByTag( tag );
+		return ( element != null ) ? new XElement( element ) : nullXElement ;
 	}
 
+	/** @return the text content of the first element with that tag name, or null */
+	public String getText( String tag ) {
+		Element element = firstElementByTag( tag );
+		return ( element != null ) ? XElement.getTextContentOf( element ) : null ;
+	}
+
+	/** @return the integer value of getText(tag), or def if it can’t be parsed into an integer */
 	public int getInt( String tag, int def ) {
 		try {
 			return Integer.parseInt( getText( tag ) );
@@ -75,11 +68,56 @@ public class XElement {
 		}
 	}
 
+	/** @return true if this element is not an instance of NullXElement */
+	public boolean exists() {  return true ;  }
+
+	private static final XElement nullXElement = new NullXElement() ;
+
+	private XElement() {  this.element = null ;  } // for use by the NullXElement private subclass only
+
+	/**
+	 * The very special case of a non-existent XElement
+	 */
+	private static final class NullXElement extends XElement {
+
+		private NullXElement() {  super() ;  }
+
+		public boolean exists() {  return false ;  }
+
+		public String getAttribute( String name ) {  return "" ;  }
+
+		public NodeList elementNodesByTag( String tag ) {
+			return NullXElement.emptyNodeList ;
+		}
+
+		public Element firstElementByTag( String tag ) {  return null ;  }
+
+		public XElement firstChild( String tag ) {
+			return this ; // keep propagating the null object down the chain
+		}
+
+		public String getText( String tag ) {  return null ;  }
+
+		public int getInt( String tag, int def ) {  return def ;  }
+
+		public String toString() {  return "NullXElement, The" ;  }
+
+		private static final NodeList emptyNodeList = new EmptyNodeList() ;
+
+	}
+
+	private static final class EmptyNodeList implements NodeList {
+
+		public Node item( int i ) {  return null ;  }
+		public int getLength() {  return 0 ;  }
+
+	}
+
 	/**
 	 * Implements the DOM Level 3 getTextContent() method for a node
 	 * @return the text content of the node and its descendants
 	 */
-	public static String getTextContent( Node node )
+	public static String getTextContentOf( Node node )
 	{
 		GrowingString out = GrowingStrings.newString() ;
 		XElement.collectTextContent( node, out );

@@ -18,6 +18,8 @@ import head.over.heels.IntegerPoint2D ;
 import head.over.heels.NamedOffscreenImage ;
 import head.over.heels.PoolOfPictures ;
 
+import head.over.heels.XElement ;
+
 import javax.xml.parsers.DocumentBuilder ;
 
 import org.w3c.dom.Document ;
@@ -79,61 +81,41 @@ public class RoomMaker
 		Element rootElement = roomXml.getDocumentElement() ;
 		if ( rootElement == null || ! rootElement.getTagName().equals( "room" ) ) return null ;
 
+		XElement root = new XElement( rootElement );
+
 		// the scenery that defines the room’s graphics
-		String scenery = rootElement.getAttribute( "scenery" );
+		String scenery = root.getAttribute( "scenery" );
 
-		short xCells = 0 ;
-		short yCells = 0 ;
-		String xCellsString = null ;
-		String yCellsString = null ;
-
-		// how many cells does it take up from north to south
-		Node xCellsNode = rootElement.getElementsByTagName( "xTiles" ).item( 0 ); //// <-- rename "xTiles" to "cells-x" in room xmls
-		if ( xCellsNode != null ) xCellsString = xCellsNode.getTextContent() ;
-		try {
-			if ( xCellsString != null ) xCells = Short.parseShort( xCellsString );
-		} catch ( NumberFormatException e ) {}
-
-		// how many cells does it take up from east to west
-		Node yCellsNode = rootElement.getElementsByTagName( "yTiles" ).item( 0 ); //// <-- rename "yTiles" to "cells-y" in room xmls
-		if ( yCellsNode != null ) yCellsString = yCellsNode.getTextContent() ;
-		try {
-			if ( yCellsString != null ) yCells = Short.parseShort( yCellsString );
-		} catch ( NumberFormatException e ) {}
+		// how many cells it takes up from north to south
+		int xCells = root.getInt( "xTiles", 0 ); //// <-- rename "xTiles" to "cells-x" in room xmls
+		// how many cells it takes up from east to west
+		int yCells = root.getInt( "yTiles", 0 ); //// <-- rename "yTiles" to "cells-y" in room xmls
 
 		// the kind of floor may be "plain", "mortal" or "absent"
-		String whichFloor = null ;
-		Node floorKindNode = rootElement.getElementsByTagName( "floorKind" ).item( 0 );
-		if ( floorKindNode != null ) whichFloor = floorKindNode.getTextContent() ;
+		String whichFloor = root.getText( "floorKind" ) ;
 
 		// now the room can be constructed
 		boolean isTriple = ( xCells > Room.max_single_room_size ) && ( yCells > Room.max_single_room_size );
 		Room room = isTriple ? new TripleRoom( roomFile.getName(), xCells, yCells, scenery, whichFloor )
 				     : new Room( roomFile.getName(), xCells, yCells, scenery, whichFloor );
 
-		// room color as in the original Spectrum game
-		Node colorNode = rootElement.getElementsByTagName( "color" ).item( 0 );
-		if ( colorNode != null ) room.setColour( colorNode.getTextContent() );
+		// room colour as in the original Spectrum game
+		String roomColour = root.getText( "color" ) ;
+		if ( roomColour != null ) room.setColour( roomColour );
 
 		// ...
 
 		// the floor
-		RoomMaker.makeFloor( room, rootElement );
+		RoomMaker.makeFloor( room, root );
 
 		// the walls
-		Node wallsNode = rootElement.getElementsByTagName( "walls" ).item( 0 );
-		if ( wallsNode != null && wallsNode.getNodeType() == Node.ELEMENT_NODE ) {
-			Element wallsElement = (Element) wallsNode ;
-
-			NodeList wallNodes = wallsElement.getElementsByTagName( "wall" );
+		XElement wallsElement = root.firstChild( "walls" ) ;
+		if ( wallsElement.exists() ) {
+			NodeList wallNodes = wallsElement.elementNodesByTag( "wall" );
 			for ( int i = 0 ; i < wallNodes.getLength() ; ++ i ) {
-				Node wallNode = wallNodes.item( i );
-				if ( wallNode.getNodeType() == Node.ELEMENT_NODE ) {
-					Element wallElement = (Element) wallNode ;
-
-					WallPiece piece = RoomMaker.makeWallPiece( wallElement );
-					if ( piece != null ) room.addWallSegment( piece );
-				}
+				Element wallElement = (Element) wallNodes.item( i ) ;
+				WallPiece piece = RoomMaker.makeWallPiece( new XElement( wallElement ) );
+				if ( piece != null ) room.addWallSegment( piece );
 			}
 		}
 
@@ -157,31 +139,22 @@ public class RoomMaker
 		return null ;
 	}
 
-	private static WallPiece makeWallPiece( Element wallElement )
+	private static WallPiece makeWallPiece( XElement wallElement )
 	{
 		String xy = wallElement.getAttribute( "along" );
 		if ( xy == null || xy.isEmpty() ) return null ;
 		if ( ! xy.equals( "x" ) && ! xy.equals( "y" ) ) return null ;
 
-		Node positionNode = wallElement.getElementsByTagName( "position" ).item( 0 );
-		if ( positionNode == null ) return null ;
+		int position = wallElement.getInt( "position", far_far_away );
+		if ( far_far_away == position ) return null ;
 
-		Node pictureNode = wallElement.getElementsByTagName( "picture" ).item( 0 );
-		if ( pictureNode == null ) return null ;
+		String picture = wallElement.getText( "picture" ) ;
+		if ( picture == null ) return null ;
 
-		String picture = pictureNode.getTextContent() ;
-
-		try {
-			int position = Integer.parseInt( positionNode.getTextContent() );
-
-			return new WallPiece( xy.equals( "x" ), position, picture );
-		}
-		catch ( NumberFormatException e ) {}
-
-		return null ;
+		return new WallPiece( xy.equals( "x" ), position, picture );
 	}
 
-	private static void makeFloor( Room room, Element rootElement )
+	private static void makeFloor( Room room, XElement rootElement )
 	{
 		if ( room == null ) throw new IllegalArgumentException( "null room in RoomMaker.makeFloor" );
 		if ( rootElement == null ) throw new IllegalArgumentException( "null rootElement in RoomMaker.makeFloor" );
@@ -190,19 +163,16 @@ public class RoomMaker
 		if ( room instanceof TripleRoom ) {
 			java.util.Set< IntegerPoint2D > floorlessCells = new java.util.HashSet< IntegerPoint2D >() ;
 
-			NodeList nofloorNodes = rootElement.getElementsByTagName( "nofloor" );
+			NodeList nofloorNodes = rootElement.elementNodesByTag( "nofloor" );
 			for ( int i = 0 ; i < nofloorNodes.getLength() ; ++ i ) {
-				Node nofloorNode = nofloorNodes.item( i );
-				if ( nofloorNode.getNodeType() == Node.ELEMENT_NODE ) {
-					Element nofloorElement = (Element) nofloorNode ;
+				Element nofloorElement = (Element) nofloorNodes.item( i ) ;
 
-					String x = nofloorElement.getAttribute( "x" ) ;
-					String y = nofloorElement.getAttribute( "y" ) ;
+				String x = nofloorElement.getAttribute( "x" ) ;
+				String y = nofloorElement.getAttribute( "y" ) ;
 
-					try { // Integer.parseInt can throw NumberFormatException
-						floorlessCells.add( new IntegerPoint2D( Integer.parseInt( x ), Integer.parseInt( y ) ) );
-					} catch ( NumberFormatException e ) { }
-				}
+				try { // Integer.parseInt can throw NumberFormatException
+					floorlessCells.add( new IntegerPoint2D( Integer.parseInt( x ), Integer.parseInt( y ) ) );
+				} catch ( NumberFormatException e ) { }
 			}
 
 			if ( ! floorlessCells.isEmpty () ) {
@@ -264,35 +234,26 @@ public class RoomMaker
 		else {
 			// for each floor tile its position (x,y) and image file name are listed
 
-			Node floorNode = rootElement.getElementsByTagName( "floor" ).item( 0 );
-			if ( floorNode != null && floorNode.getNodeType() == Node.ELEMENT_NODE ) {
-				Element floorElement = (Element) floorNode ;
-
-				NodeList tileNodes = floorElement.getElementsByTagName( "tile" );
+			XElement floorElement = rootElement.firstChild( "floor" ) ;
+			if ( floorElement.exists() ) {
+				NodeList tileNodes = floorElement.elementNodesByTag( "tile" );
 				for ( int i = 0 ; i < tileNodes.getLength() ; ++ i ) {
-					Node tileNode = tileNodes.item( i );
-					if ( tileNode.getNodeType() == Node.ELEMENT_NODE ) {
-						Element tileElement = (Element) tileNode ;
+					XElement tileElement = new XElement( (Element) tileNodes.item( i ) );
 
-						Node xNode = tileElement.getElementsByTagName( "x" ).item( 0 );
-						Node yNode = tileElement.getElementsByTagName( "y" ).item( 0 );
-						Node pictureNode = tileElement.getElementsByTagName( "picture" ).item( 0 );
+					int x = tileElement.getInt( "x", far_far_away );
+					int y = tileElement.getInt( "y", far_far_away );
+					String picture = tileElement.getText( "picture" );
 
-						if ( xNode != null && yNode != null && pictureNode != null ) {
-							try { // Integer.parseInt can throw NumberFormatException
-								int x = Integer.parseInt( xNode.getTextContent() );
-								int y = Integer.parseInt( yNode.getTextContent() );
-
-								NamedOffscreenImage tileImage = PoolOfPictures.getRecentPool().getPicture( pictureNode.getTextContent() );
-								if ( tileImage != null )
-									room.addFloorTile( new FloorTile( new IntegerPoint2D( x, y ), tileImage ) );
-							}
-							catch ( NumberFormatException e ) {}
-						}
+					if ( x != far_far_away && y != far_far_away && picture != null ) {
+						NamedOffscreenImage tileImage = PoolOfPictures.getRecentPool().getPicture( picture );
+						if ( tileImage != null )
+							room.addFloorTile( new FloorTile( new IntegerPoint2D( x, y ), tileImage ) );
 					}
 				}
 			}
 		}
 	}
+
+	private static final int far_far_away = 1 << 20 ;
 
 }

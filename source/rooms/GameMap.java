@@ -13,6 +13,8 @@ import head.over.heels.Storage ;
 import head.over.heels.GrowingString ;
 import head.over.heels.GrowingStrings ;
 
+import head.over.heels.XElement ;
+
 import java.io.File ;
 
 import java.util.HashMap ;
@@ -82,30 +84,23 @@ public class GameMap
 		System.out.print( " consisting of " + howManyRooms + " rooms" );
 		System.out.println( " from " + mapFile.getAbsolutePath() );
 
-		for ( int roomNth = 0; roomNth < howManyRooms; ++ roomNth )
-		{
-			Node roomNode = roomNodes.item( roomNth );
-			if ( roomNode.getNodeType() == Node.ELEMENT_NODE ) {
-				Element roomElement = (Element) roomNode ;
+		for ( int roomNth = 0; roomNth < howManyRooms; ++ roomNth ) {
+			XElement roomElement = new XElement( (Element) roomNodes.item( roomNth ) );
 
-				String fileOfRoom = roomElement.getAttribute( "file" ) ;
-				ConnectedRooms connections = new ConnectedRooms() ;
+			ConnectedRooms connections = new ConnectedRooms() ;
 
-				String [] howLinked = {	"north", "east", "south", "west",
-							"above", "below", "teleport", "teleport2",
-							"northeast", "northwest", "southeast", "southwest",
-							"eastnorth", "eastsouth", "westnorth", "westsouth" } ;
+			String [] howLinked = {	"north", "east", "south", "west",
+						"above", "below", "teleport", "teleport2",
+						"northeast", "northwest", "southeast", "southwest",
+						"eastnorth", "eastsouth", "westnorth", "westsouth" } ;
 
-				for ( int h = 0; h < howLinked.length; ++ h ) {
-					NodeList linkedRoomNodes = roomElement.getElementsByTagName( howLinked[ h ] );
-					if ( linkedRoomNodes.getLength () > 0 ) {
-						String linkedRoom = linkedRoomNodes.item( 0 ).getTextContent ();
-						connections.setConnectedRoomAt( howLinked[ h ], linkedRoom );
-					}
-				}
-
-				this.linksBetweenRooms.put( fileOfRoom, connections );
+			for ( int h = 0 ; h < howLinked.length ; ++ h ) {
+				String linkedRoom = roomElement.getText( howLinked[ h ] ) ;
+				if ( linkedRoom != null )
+					connections.setConnectedRoomAt( howLinked[ h ], linkedRoom );
 			}
+
+			this.linksBetweenRooms.put( roomElement.getAttribute( "file" ), connections );
 		}
 
 		return true ;
@@ -114,9 +109,9 @@ public class GameMap
 	private boolean checkCoherence () {  return checkCoherence( null ) ;  }
 
 	/**
-	 * When there’s room B below some room A, then for coherence
-	 * room A needs to be above B as well. The same for a room
-	 * on the east | north | west | south of some room C : that room
+	 * When there’s a room B below some room A, then for coherence
+	 * room A needs to be above B as well. Same for a room on
+	 * the east | north | west | south of some room C, that room
 	 * accordingly has C on the west | south | east | north
 	 */
 	private boolean checkCoherence ( java.io.PrintStream out )

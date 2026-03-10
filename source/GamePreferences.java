@@ -12,8 +12,10 @@ import java.io.File ;
 
 import javax.xml.parsers.DocumentBuilder ;
 
-import org.w3c.dom.Element ;
 import org.w3c.dom.Node ;
+import org.w3c.dom.Element ;
+
+import head.over.heels.XElement ;
 
 
 public class GamePreferences
@@ -108,37 +110,24 @@ public class GamePreferences
 		Element root = preferences.getDocumentElement() ;
 		if ( root == null || ! root.getTagName().equals( "preferences" ) ) return false ;
 
-		Node videoNode = root.getElementsByTagName( "video" ).item( 0 );
-		if ( videoNode != null && videoNode.getNodeType() == Node.ELEMENT_NODE ) {
-			Element videoElement = (Element) videoNode ;
+		XElement xroot = new XElement( root );
 
-			String width = "0" ;
-			Node widthNode = videoElement.getElementsByTagName( "width" ).item( 0 );
-			if ( widthNode != null ) width = widthNode.getTextContent ();
+		XElement video = xroot.firstChild( "video" );
+		if ( video.exists() ) {
+			int width = video.getInt( "width", 0 );
+			int height = video.getInt( "height", 0 );
 
-			int theWidth = 0 ;
-			try { // parseInt can throw NumberFormatException
-				theWidth = Integer.parseInt( width );
-			} catch ( NumberFormatException e ) { }
+			if ( width != 0 && height != 0 ) {
+				if ( GamePreferences.keepTheCurrentWidthOfScreen )
+					GamePreferences.keepTheCurrentWidthOfScreen = false ;
+				else
+					this.setScreenWidth( width );
 
-			String height = "0" ;
-			Node heightNode = videoElement.getElementsByTagName( "height" ).item( 0 );
-			if ( heightNode != null ) height = heightNode.getTextContent ();
-
-			int theHeight = 0 ;
-			try { // parseInt can throw NumberFormatException
-				theHeight = Integer.parseInt( height );
-			} catch ( NumberFormatException e ) { }
-
-			if ( GamePreferences.keepTheCurrentWidthOfScreen )
-				GamePreferences.keepTheCurrentWidthOfScreen = false ;
-			else
-				this.setScreenWidth( theWidth );
-
-			if ( GamePreferences.keepTheCurrentHeightOfScreen )
-				GamePreferences.keepTheCurrentHeightOfScreen = false ;
-			else
-				this.setScreenHeight( theHeight );
+				if ( GamePreferences.keepTheCurrentHeightOfScreen )
+					GamePreferences.keepTheCurrentHeightOfScreen = false ;
+				else
+					this.setScreenHeight( height );
+			}
 		}
 
 		return true ;

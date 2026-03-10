@@ -181,28 +181,25 @@ public class ItemDescriptions
 		NodeList itemNodes = root.getElementsByTagName( "item" );
 		for ( int i = 0 ; i < itemNodes.getLength() ; i ++ )
 		{
-			Node itemNode = itemNodes.item( i );
-			if ( itemNode.getNodeType() == Node.ELEMENT_NODE ) {
-				XElement itemElement = new XElement( (Element) itemNode );
+			XElement itemElement = new XElement( (Element) itemNodes.item( i ) );
 
-				final String kindOfItem = itemElement.getAttribute( "kind" ) ; // the kind of item
-				DescriptionOfItem newDescription = new DescriptionOfItem( kindOfItem ) ;
+			final String kindOfItem = itemElement.getAttribute( "kind" ) ;
+			DescriptionOfItem newDescription = new DescriptionOfItem( kindOfItem ) ;
 
-				// spatial dimensions
-				newDescription.setWidthX( itemElement.getInt( "width-x", 0 ) );
-				newDescription.setWidthY( itemElement.getInt( "width-y", 0 ) );
-				newDescription.setHeight( itemElement.getInt( "height", 0 ) );
+			// spatial dimensions
+			newDescription.setWidthX( itemElement.getInt( "width-x", 0 ) );
+			newDescription.setWidthY( itemElement.getInt( "width-y", 0 ) );
+			newDescription.setHeight( itemElement.getInt( "height", 0 ) );
 
-				readDescriptionFurther( itemElement, newDescription );
+			readDescriptionFurther( itemElement, newDescription );
 
-				if ( ItemDescriptions.write_new_items_xml && newItemsXml != null ) {
-					newItemsXml.println( newDescription.toString() );
-					newItemsXml.println() ;
-				}
-
-				// and at last
-				this.descriptionsOfItems.put( kindOfItem, newDescription );
+			if ( ItemDescriptions.write_new_items_xml && newItemsXml != null ) {
+				newItemsXml.println( newDescription.toString() );
+				newItemsXml.println() ;
 			}
+
+			// and at last
+			this.descriptionsOfItems.put( kindOfItem, newDescription );
 		}
 
 		// now make the descriptions of doors
@@ -292,13 +289,13 @@ public class ItemDescriptions
 		if ( frames > 0 )
 			description.setSimpleSequenceOFrames( frames );
 		else {
-			NodeList frameNodes = element.nodesByTag( "frame" );
+			NodeList frameNodes = element.elementNodesByTag( "frame" );
 			int howManyFrames = frameNodes.getLength() ;
 			if ( howManyFrames > 1 ) {
 				int[] customSequence = new int[ howManyFrames ] ;
 				try {
 					for ( int i = 0 ; i < howManyFrames ; ++ i )
-						customSequence[ i ] = Integer.parseInt(XElement.getTextContent( frameNodes.item( i ) ));
+						customSequence[ i ] = Integer.parseInt(XElement.getTextContentOf( frameNodes.item( i ) ));
 
 					description.setSequenceOFrames( customSequence ) ;
 				}
