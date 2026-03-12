@@ -87,9 +87,9 @@ public class RoomMaker
 		String scenery = root.getAttribute( "scenery" );
 
 		// how many cells it takes up from north to south
-		int xCells = root.getInt( "xTiles", 0 ); //// <-- rename "xTiles" to "cells-x" in room xmls
+		int xCells = root.getInt( "cells-x", 0 );
 		// how many cells it takes up from east to west
-		int yCells = root.getInt( "yTiles", 0 ); //// <-- rename "yTiles" to "cells-y" in room xmls
+		int yCells = root.getInt( "cells-y", 0 );
 
 		// the kind of floor may be "plain", "mortal" or "absent"
 		String whichFloor = root.getText( "floorKind" ) ;

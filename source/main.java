@@ -181,16 +181,23 @@ public final class main
 	}
 	/**/// ❌ ✔️
 
+		final java.awt.Rectangle screenBounds = java.awt.GraphicsEnvironment
+								.getLocalGraphicsEnvironment()
+								.getDefaultScreenDevice()
+								.getDefaultConfiguration()
+								.getBounds() ;
+
+		if ( width > screenBounds.width ) width = screenBounds.width ;
+		if ( height > screenBounds.height ) height = screenBounds.height ;
+
 		final GameWindow window = new GameWindow( width, height ) ;
 
-		javax.swing.SwingUtilities.invokeLater (
-			new Runnable() {
-				public void run()
-				{
-					window.setVisible( true );
-					window.randomPixelFadeIn( java.awt.Color.black );
-				}
-			} );
+		javax.swing.SwingUtilities.invokeLater( new Runnable() {
+			public void run() {
+				window.setVisible( true );
+				window.randomPixelFadeIn( java.awt.Color.black );
+			}
+		} );
 
 		final head.over.heels.items.ListOfItemsWindow itemsWindow = new head.over.heels.items.ListOfItemsWindow() ;
 
@@ -199,16 +206,10 @@ public final class main
 			{
 				itemsWindow.pack() ;
 
-				// the window is not yet realized (not visible)
+				// the window is not visible yet
 				// and getGraphicsConfiguration() may return a default/uninitialized config
 				// giving the bounds like (0,0)
 				///java.awt.Rectangle screenBounds = itemsWindow.getGraphicsConfiguration().getBounds() ;
-
-				java.awt.Rectangle screenBounds = java.awt.GraphicsEnvironment
-										.getLocalGraphicsEnvironment()
-										.getDefaultScreenDevice()
-										.getDefaultConfiguration()
-										.getBounds() ;
 
 				java.awt.Point desiredLocation = new java.awt.Point( ( screenBounds.width << 1 ) / 3, screenBounds.height >> 2 );
 				itemsWindow.setLocation( desiredLocation );
