@@ -25,7 +25,7 @@ import head.over.heels.rooms.Room ;
 public class FloorTile extends ShadyMediated implements Drawable, Comparable
 {
 	/**
-	 * @param cell the grid cell where where the tile is
+	 * @param cell the grid cell where the tile is
 	 * @param graphicsOfTile the picture of the tile
 	 */
 	public FloorTile( IntegerPoint2D cell, NamedOffscreenImage graphicsOfTile )

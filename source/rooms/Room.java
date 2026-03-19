@@ -220,6 +220,7 @@ public class Room extends Mediated implements Drawable
 
 		door.setMediator( getMediator() );
 
+		System.out.println( "🚪adding door " + head.over.heels.StringUtilities.putInQuotes( door.getKind() ) + " on the " + door.getRoomSide() );
 		// ....
 	}
 

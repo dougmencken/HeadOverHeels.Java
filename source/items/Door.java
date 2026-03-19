@@ -9,6 +9,7 @@
 package head.over.heels.items ;
 
 import head.over.heels.Mediated ;
+import head.over.heels.IntegerPoint2D ;
 
 
 /**
@@ -17,14 +18,45 @@ import head.over.heels.Mediated ;
 
 public class Door extends Mediated
 {
-
-	private String kindOfDoor ;
+	// the door item’s kind is %scenery%-door-%on%
+	private final String kindOfDoor ;
 
 	public String getKind () {  return this.kindOfDoor ;  }
 
-	public Door( String kind )
+	// the room’s grid cell where this door is located
+	private final IntegerPoint2D cell ;
+
+	public IntegerPoint2D getCell () {  return this.cell ;  }
+
+	// how far is this door from the ground
+	private final int elevation ;
+
+	public int getElevation () {  return this.elevation ;  }
+
+	// on which side of the room is this door located
+	// for a single room, the sides are south, west, north or east
+	private final String onWhichSide ;
+
+	public String getRoomSide () {  return this.onWhichSide ;  }
+
+	/**
+	 * @param kind the kind of the door
+	 * @param cell the grid cell of the door
+	 * @param z the position on Z, that’s how far from the ground
+	 * @param on the side of the room where the door is
+	 */
+	public Door( String kind, IntegerPoint2D cell, int z, String on )
 	{
+		if ( kind == null ) throw new IllegalArgumentException( "null kind" );
+		if ( cell == null ) throw new IllegalArgumentException( "null cell" );
+		if ( on == null ) throw new IllegalArgumentException( "null on" );
+
+		if ( kind.indexOf( "door" ) < 0 ) throw new IllegalArgumentException( "not a door kind" );
+
 		this.kindOfDoor = kind ;
+		this.cell = cell ;
+		this.elevation = z ;
+		this.onWhichSide = on ;
 	}
 
 }

@@ -50,6 +50,9 @@ public class RoomMaker
 		this.roomToMake = RoomMaker.makeRoom( this.roomFile ) ;
 	}
 
+	// layer of the floor
+	public static final int floor_z = -1 ;
+
 	/**
 	 * Construct the room by the description from file
 	 *
@@ -99,24 +102,37 @@ public class RoomMaker
 		Room room = isTriple ? new TripleRoom( roomFile.getName(), xCells, yCells, scenery, whichFloor )
 				     : new Room( roomFile.getName(), xCells, yCells, scenery, whichFloor );
 
-		// room colour as in the original Spectrum game
-		String roomColour = root.getText( "color" ) ;
-		if ( roomColour != null ) room.setColour( roomColour );
+		// the room colour as in the original Spectrum game
+		String roomColor = root.getText( "color" ) ;
+		if ( roomColor != null ) room.setColour( roomColor );
 
-		// ...
+		// the items
+
+		NodeList itemNodes = root.firstChild( "items" ).elementNodesByTag( "item" );
+		for ( int i = 0 ; i < itemNodes.getLength() ; ++ i ) {
+			XElement item = new XElement( (Element) itemNodes.item( i ) );
+
+			String itemClass = item.getText( "class" );
+			if ( itemClass.equals( "door" ) ) {
+				Door door = RoomMaker.makeDoor( item );
+
+				if ( door != null )
+					room.addDoor( door );
+				else
+					System.out.println( "oops, can’t make door " + item.getText( "kind" ) );
+			}
+			// ....
+		}
 
 		// the floor
 		RoomMaker.makeFloor( room, root );
 
 		// the walls
-		XElement wallsElement = root.firstChild( "walls" ) ;
-		if ( wallsElement.exists() ) {
-			NodeList wallNodes = wallsElement.elementNodesByTag( "wall" );
-			for ( int i = 0 ; i < wallNodes.getLength() ; ++ i ) {
-				Element wallElement = (Element) wallNodes.item( i ) ;
-				WallPiece piece = RoomMaker.makeWallPiece( new XElement( wallElement ) );
-				if ( piece != null ) room.addWallSegment( piece );
-			}
+		NodeList wallNodes = root.firstChild( "walls" ).elementNodesByTag( "wall" );
+		for ( int i = 0 ; i < wallNodes.getLength() ; ++ i ) {
+			Element wallElement = (Element) wallNodes.item( i ) ;
+			WallPiece piece = RoomMaker.makeWallPiece( new XElement( wallElement ) );
+			if ( piece != null ) room.addWallSegment( piece );
 		}
 
 		// ....
@@ -134,9 +150,36 @@ public class RoomMaker
 		return null ;
 	}
 
-	private static Door makeDoor( Element itemElement )
+	private static Door makeDoor( XElement doorElement )
 	{
-		return null ;
+		int cellX = 0 ;
+		int cellY = 0 ;
+		int cellZ = RoomMaker.floor_z ;
+		try {
+			cellX = Integer.parseInt( doorElement.getAttribute( "x" ) );
+			cellY = Integer.parseInt( doorElement.getAttribute( "y" ) );
+			cellZ = Integer.parseInt( doorElement.getAttribute( "z" ) );
+		}
+		catch ( NumberFormatException x ) {
+			return null ;
+		}
+
+		// elevation can’t be below the floor, that’s less than floor_z = -1
+		int elevation = ( cellZ > RoomMaker.floor_z ) ? cellZ * Room.layer_height : RoomMaker.floor_z ;
+
+		// the door item’s kind is %scenery%-door-%on%
+		String kind = doorElement.getText( "kind" ) ;
+		int doorInKind = kind.indexOf( "door-" );
+		if ( doorInKind < 0 ) return null ;
+
+		String doorOn = kind.substring( doorInKind + 5 );
+
+		// for a narrow room, both doors have the same kind for “non-in-wall” graphics
+		// for a triple room, the location of door is more specific
+		String where = doorElement.getText( "where" );
+		if ( where != null && where.length() > 0 ) doorOn = where ;
+
+		return new Door( kind, new IntegerPoint2D( cellX, cellY ), elevation, doorOn );
 	}
 
 	private static WallPiece makeWallPiece( XElement wallElement )
