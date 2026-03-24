@@ -24,7 +24,7 @@ public class Pictures
 		if ( picture == null ) throw new IllegalArgumentException ();
 
 		java.awt.image.ColorModel colorModel = picture.getColorModel() ;
-		return new BufferedImage( colorModel, picture.copyData( null ), colorModel.isAlphaPremultiplied (), null );
+		return new BufferedImage( colorModel, picture.copyData( null ), colorModel.isAlphaPremultiplied(), null );
 	}
 
 	public static boolean saveAsPNG ( BufferedImage picture, java.io.File file )
@@ -81,59 +81,61 @@ public class Pictures
 		}
 	}
 
-	public static void colorizeWhite( BufferedImage picture, Color to )
+	public static void colouriseWhite( BufferedImage picture, Color to )
 	{
-		Pictures.replaceColor( picture, Color.white, to );
+		Pictures.replaceColour( picture, Color.white, to );
 	}
 
-	public static void colorizeBlack( BufferedImage picture, Color to )
+	public static void colouriseBlack( BufferedImage picture, Color to )
 	{
-		Pictures.replaceColor( picture, Color.black, to );
+		Pictures.replaceColour( picture, Color.black, to );
 	}
 
-	public static void replaceColor( BufferedImage picture, Color from, Color to )
+	public static void replaceColour( BufferedImage picture, Color from, Color to )
 	{
 		if ( picture == null || to == null || from == null ) throw new IllegalArgumentException ();
 
 		if ( to.equals( from ) ) return ;
 
-		synchronized ( picture ) {
-			for ( int y = 0 ; y < picture.getHeight () ; y ++ ) {
-				for ( int x = 0 ; x < picture.getWidth () ; x ++ )
-				{
-					Color pixel = new Color( picture.getRGB( x, y ) );
-					if ( pixel.equals( from ) )
-						picture.setRGB( x, y, to.getRGB() );
+		int fromARGB = from.getRGB() ;
+		int toARGB = to.getRGB() ;
 
-					/* if ( pixel.getRed() == from.getRed()
-							&& pixel.getGreen() == from.getGreen()
-								&& pixel.getBlue() == from.getBlue() ) {
-						Color alphaKept = new Color( to.getRed(), to.getGreen(), to.getBlue(), pixel.getAlpha() );
-						picture.setRGB( x, y, alphaKept.getRGB() );
-					} */
+		synchronized ( picture ) {
+			int width = picture.getWidth() ;
+			int height = picture.getHeight() ;
+
+			for ( int y = 0 ; y < height ; y ++ ) {
+				for ( int x = 0 ; x < width ; x ++ )
+				{
+					if ( picture.getRGB( x, y ) == fromARGB )
+						picture.setRGB( x, y, toARGB );
 			}	}
 		}
 	}
 
-	public static BufferedImage cloneAsARGBWithReplacingColor( BufferedImage picture, Color from, Color to )
+	public static BufferedImage cloneAsARGBWithReplacingColour( BufferedImage in, Color from, Color to )
 	{
-		if ( picture == null || from == null || to == null ) throw new IllegalArgumentException ();
+		if ( in == null || from == null || to == null ) throw new IllegalArgumentException() ;
 
-		BufferedImage copy = new BufferedImage( picture.getWidth (), picture.getHeight (), BufferedImage.TYPE_INT_ARGB );
+		int fromARGB = from.getRGB() ;
+		int toARGB = to.getRGB() ;
 
-		synchronized ( picture ) {
-			for ( int y = 0 ; y < picture.getHeight () ; y ++ ) {
-				for ( int x = 0 ; x < picture.getWidth () ; x ++ )
+		BufferedImage out ;
+		synchronized ( in ) {
+			int width = in.getWidth() ;
+			int height = in.getHeight() ;
+
+			out = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+
+			for ( int y = 0 ; y < height ; y ++ ) {
+				for ( int x = 0 ; x < width ; x ++ )
 				{
-					int argb = picture.getRGB( x, y );
-					if ( argb == from.getRGB() )
-						copy.setRGB( x, y, to.getRGB() );
-					else
-						copy.setRGB( x, y, argb );
+					int pixel = in.getRGB( x, y );
+					out.setRGB( x, y, ( pixel == fromARGB ) ? toARGB : pixel );
 			}	}
 		}
 
-		return copy ;
+		return out ;
 	}
 
 	public static BufferedImage cloneAsARGB ( BufferedImage picture )
@@ -142,10 +144,13 @@ public class Pictures
 
 		BufferedImage copy ;
 		synchronized ( picture ) {
-			copy = new BufferedImage( picture.getWidth (), picture.getHeight (),
-							/* picture.getType () */ BufferedImage.TYPE_INT_ARGB );
-			for ( int y = 0 ; y < picture.getHeight () ; y ++ )
-				for ( int x = 0 ; x < picture.getWidth () ; x ++ )
+			int width = picture.getWidth() ;
+			int height = picture.getHeight() ;
+
+			copy = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+
+			for ( int y = 0 ; y < height ; y ++ )
+				for ( int x = 0 ; x < width ; x ++ )
 					copy.setRGB( x, y, picture.getRGB( x, y ) );
 		}
 
@@ -310,11 +315,18 @@ public class Pictures
 
 	private static void dumpIndexColorModelTo ( java.awt.image.IndexColorModel indexedColours, java.io.PrintStream out )
 	{
-		int [] colorMapRGBs = new int[ indexedColours.getMapSize() ];
+		int colors = indexedColours.getMapSize() ;
+		int [] colorMapRGBs = new int[ colors ];
 		indexedColours.getRGBs( colorMapRGBs );
 
-		for ( int i = 0 ; i < colorMapRGBs.length ; ++ i ) {
-			out.print( "indexed colors [ " + i + " ] = " + String.format( "0x%08x", colorMapRGBs[ i ] ) );
+		int indexWidth = Integer.toString( colors - 1 ).length() ;
+
+		for ( int i = 0 ; i < colors ; ++ i ) {
+			out.print( "indexed colors [ " );
+			out.print( StringUtilities.padLeft( Integer.toString( i ), indexWidth, ' ' ) );
+			out.print( " ] = 0x" );
+			String hex = Integer.toHexString( colorMapRGBs[ i ] );
+			out.print( StringUtilities.padLeft( hex, 8, '0' ) );
 			if ( i == indexedColours.getTransparentPixel () ) out.print( " *transparent*" );
 			out.println() ;
 		}
@@ -358,16 +370,18 @@ public class Pictures
 		int firstFileName = 1 ;
 		String extraSuffix = "" ; // to append to the output file names before ".png"
 
-		String the1st = arguments[ 1 ] ;
-		if ( the1st.startsWith( "--suffix=" ) ) {
-			int indexOfEquality = the1st.indexOf( '=' );
-			if ( indexOfEquality >= 0 && the1st.length() > indexOfEquality + 1 ) {
-				extraSuffix = the1st.substring( indexOfEquality + 1 );
-				extraSuffix.replace( "\"", "" ) ; // remove any double quotes from a suffix
-				extraSuffix = "." + extraSuffix ; // precede with a dot
-			}
+		if ( arguments.length > 1 ) {
+			String the1st = arguments[ 1 ] ;
+			if ( the1st.startsWith( "--suffix=" ) ) {
+				int indexOfEquals = the1st.indexOf( '=' );
+				if ( indexOfEquals >= 0 && the1st.length() > indexOfEquals + 1 ) {
+					extraSuffix = the1st.substring( indexOfEquals + 1 );
+					extraSuffix = extraSuffix.replace( "\"", "" ) ; // remove any double quotes from a suffix
+					extraSuffix = "." + extraSuffix ; // precede with a dot
+				}
 
-			firstFileName = 2 ;
+				firstFileName = 2 ;
+			}
 		}
 
 		int howManyFileNames = arguments.length - firstFileName ;
@@ -420,13 +434,17 @@ public class Pictures
 				BufferedImage newImage = image ;
 
 				if ( what2do.equals( "transparent gray" ) ) {
-					// replace the opaque magenta background with transparent 50% gray
-					newImage = Pictures.cloneAsARGBWithReplacingColor( image,
-								Color.magenta, Colours.makeTransparent( Colours.gray50 ) );
+					// opaque magenta -> transparent magenta
+					newImage = Pictures.cloneAsARGBWithReplacingColour( image,
+								Color.magenta, Colours.makeTransparent( Colours.magenta ) );
+					// transparent magenta -> transparent 50% gray
+					newImage = Pictures.cloneAsARGBWithReplacingColour( newImage,
+								Colours.makeTransparent( Colours.magenta ),
+								Colours.makeTransparent( Colours.gray50 ) );
 				}
 				else if ( what2do.equals( "transparent magenta" ) ) {
-					// replace the transparent 50% gray with transparent magenta
-					newImage = Pictures.cloneAsARGBWithReplacingColor( image,
+					// transparent 50% gray -> transparent magenta
+					newImage = Pictures.cloneAsARGBWithReplacingColour( image,
 								Colours.makeTransparent( Colours.gray50 ),
 								Colours.makeTransparent( Colours.magenta ) );
 				}
@@ -513,9 +531,9 @@ public class Pictures
 				.append( indent ).append( "✔ " ).append( "lc" ).append( " or " ).append( "list-colo(u)rs" )
 					.append( " - to " ).append( "list the colours of an indexed palette" ).append( newline )
 				.append( indent ).append( "✔ " ).append( "tg" ).append( " or " ).append( "transparent-gray" )
-					.append( " - to " ).append( "replace the opaque magenta background with transparent 50% gray" ).append( newline )
+					.append( " - to " ).append( "replace the opaque or transparent magenta background with transparent 50% gray" ).append( newline )
 				.append( indent ).append( "✔ " ).append( "tm" ).append( " or " ).append( "transparent-magenta" )
-					.append( " - to " ).append( "replace the transparent 50% gray with transparent magenta" ).append( newline )
+					.append( " - to " ).append( "replace the transparent 50% gray background with transparent magenta" ).append( newline )
 				.append( indent ).append( "✔ " ).append( "btw" ).append( " or " ).append( "black-on-transparent-white" )
 					.append( " - to " ).append( "convert a white-on-magenta image to black-on-transparent-white" ).append( newline )
 				.append( indent ).append( "✔ " ).append( "diff" ).append( " or " ).append( "difference" )
@@ -534,9 +552,9 @@ public class Pictures
 	private static BufferedImage whiteOnMagentaToBlackOnTransparentWhite ( BufferedImage in )
 	{
 		// replace the opaque magenta background with transparent white
-		BufferedImage withRealTransparency = Pictures.cloneAsARGBWithReplacingColor( in, Color.magenta, Colours.makeTransparent( Color.white ) );
+		BufferedImage withRealTransparency = Pictures.cloneAsARGBWithReplacingColour( in, Color.magenta, Colours.makeTransparent( Color.white ) );
 		// and then the foreground white with black
-		return Pictures.cloneAsARGBWithReplacingColor( withRealTransparency, Color.white, Color.black );
+		return Pictures.cloneAsARGBWithReplacingColour( withRealTransparency, Color.white, Color.black );
 	}
 
 }
