@@ -169,7 +169,8 @@ public class LettersFile
 			out.append( "\"" );
 			if ( utf16.length > 0 && utf16[ 0 ] != 0 )
 				for ( int c = 0 ; c < utf16.length ; c ++ )
-					out.append( "\\u" + String.format("%04x", new Object[]{ Short.valueOf( utf16[ c ] ) }) );
+					out.append( "\\u" )
+					   .append( StringUtilities.padLeft( Integer.toHexString( utf16[ c ] & 0xffff ), 4, '0' ) );
 			out.append( "\"" );
 			out.append( " );" );
 
@@ -182,7 +183,8 @@ public class LettersFile
 			out.append( " // utf8 { " );
 			byte [] bytesUtf8 = LettersFile.letterToUtf8( letter );
 			for ( int b = 0 ; b < bytesUtf8.length ; b ++ ) {
-				out.append( "0x" + String.format("%02x", new Object[]{ Byte.valueOf( bytesUtf8[ b ] ) }) );
+				out.append( "0x" )
+				   .append( StringUtilities.padLeft( Integer.toHexString( bytesUtf8[ b ] & 0xff ), 2, '0' ) );
 				if ( b + 1 < bytesUtf8.length ) out.append( ", " );
 			}
 			out.append( " }" );

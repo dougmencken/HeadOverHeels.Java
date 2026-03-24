@@ -189,7 +189,7 @@ public class Font
 				byte [] bitmap = ( (java.awt.image.DataBufferByte) imageOfLetter.getRaster().getDataBuffer() ).getData() ;
 				GrowingString line = GrowingStrings.newString() ;
 				for ( int b = 0 ; b < bitmap.length ; ++ b ) {
-					String binary = String.format( "%8s", Integer.toBinaryString( bitmap[ b ] & 0xff ) ).replace( ' ', '0' );
+					String binary = StringUtilities.padLeft( Integer.toBinaryString( bitmap[ b ] & 0xff ), 8, '0' );
 
 					int transPixel = ( (java.awt.image.IndexColorModel) imageOfLetter.getColorModel() ).getTransparentPixel ();
 					if ( transPixel == 0 )

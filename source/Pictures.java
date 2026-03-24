@@ -322,13 +322,14 @@ public class Pictures
 		int indexWidth = Integer.toString( colors - 1 ).length() ;
 
 		for ( int i = 0 ; i < colors ; ++ i ) {
-			out.print( "indexed colors [ " );
-			out.print( StringUtilities.padLeft( Integer.toString( i ), indexWidth, ' ' ) );
-			out.print( " ] = 0x" );
-			String hex = Integer.toHexString( colorMapRGBs[ i ] );
-			out.print( StringUtilities.padLeft( hex, 8, '0' ) );
-			if ( i == indexedColours.getTransparentPixel () ) out.print( " *transparent*" );
-			out.println() ;
+			GrowingString line = GrowingStrings.newString( "indexed colors [ " );
+			line.append( StringUtilities.padRight( Integer.toString( i ), indexWidth, ' ' ) )
+			    .append( " ] = 0x" )
+			    .append( StringUtilities.padLeft( Integer.toHexString( colorMapRGBs[ i ] ), 8, '0' ) );
+
+			if ( i == indexedColours.getTransparentPixel () ) line.append( " *transparent*" );
+
+			out.println( line.toString() ) ;
 		}
 	}
 
