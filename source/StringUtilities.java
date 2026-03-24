@@ -55,32 +55,82 @@ public class StringUtilities
 		return ( howMany == 1 ) ? singular : singular + "s" ;
 	}
 
+	/**
+	 * Adds a padding character (usually ' ' or '0') to the left of the string
+	 * to make it the specified ‘width’ characters wide
+	 */
+	public static String padLeft( String in, int width, char pad )
+	{
+		if ( in == null ) in = "null" ;
+
+		int length = in.length() ;
+		int pads = width - length ;
+		if ( pads < 1 ) return in ;
+
+		char[] out = new char[ width ];
+
+		// fill the left side with the padding character
+		for ( int c = 0 ; c < pads ; ++ c ) out[ c ] = pad ;
+
+		// copy the original string into the right side
+		in.getChars( 0, length, out, pads );
+
+		return new String( out ) ;
+	}
+
+	/**
+	 * Adds a padding character (usually ' ' or '0') to the right of the string
+	 * to make it the specified ‘width’ characters wide
+	 */
+	public static String padRight( String in, int width, char pad )
+	{
+		if ( in == null ) in = "null" ;
+
+		int length = in.length() ;
+		if ( length >= width ) return in ;
+
+		char[] out = new char[ width ];
+
+		// copy the original string first
+		in.getChars( 0, length, out, 0 );
+
+		// fill the rest with the padding character
+		for ( int c = length ; c < width ; ++ c ) out[ c ] = pad ;
+
+		return new String( out ) ;
+	}
+
 	public static String reverseString( String in )
 	{
-		GrowingString out = GrowingStrings.newString() ;
+		if ( in == null ) /* in = "null" */ return "llun" ; // 😄
 
-		for ( int c = in.length() - 1 ; c >= 0 ; -- c )
-			out.append( in.charAt( c ) );
+		int length = in.length() ;
+		char[] out = new char[ length ];
 
-		return out.toString() ;
+		for ( int c = length - 1, i = 0 ; c >= 0 ; -- c, ++ i )
+			out[ i ] = in.charAt( c );
+
+		return new String( out ) ;
 
 		///return ( new StringBuffer( in ) ).reverse().toString() ;
 	}
 
 	public static String makeRandomString ( int length )
 	{
+		if ( length < 1 ) return "" ;
+
 		String characters = "0123456789"
 					+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 						+ "abcdefghijklmnopqrstuvwxyz" ;
 		int howManyChars = characters.length() ;
 
-		GrowingString out = GrowingStrings.newString() ;
+		char[] out = new char[ length ];
 		java.util.Random random = new java.util.Random() ;
 
 		for ( int i = 0 ; i < length; ++ i )
-			out.append( characters.charAt( random.nextInt( howManyChars ) ) );
+			out[ i ] = characters.charAt( random.nextInt( howManyChars ) );
 
-		return out.toString() ;
+		return new String( out ) ;
 	}
 
 	private static String fillGaps( String in ) {  return fillGaps( in, '×' );  }
@@ -108,15 +158,21 @@ public class StringUtilities
 
 	public static void main( String[] ignored )
 	{
-		String random = StringUtilities.makeRandomString( 67 );
-		System.out.println( random );
-		System.out.println( StringUtilities.reverseString( random ) );
-
 		System.out.println( StringUtilities.fillGaps( "   - -   " ) );
 		System.out.println( StringUtilities.fillGaps( " /     \\ " ) );
 		System.out.println( StringUtilities.fillGaps( "|       |" ) );
 		System.out.println( StringUtilities.fillGaps( " \\     / " ) );
 		System.out.println( StringUtilities.fillGaps( "   - -   " ) );
+
+		String random = StringUtilities.makeRandomString( 67 );
+		System.out.println( random );
+		System.out.println( StringUtilities.reverseString( random ) );
+
+		for ( int i = 1 ; i <= 25 ; i += 2 )
+			System.out.println( StringUtilities.padLeft( StringUtilities.makeRandomString( i ), 24, '·' ) );
+
+		for ( int i = 2 ; i <= 25 ; i += 2 )
+			System.out.println( StringUtilities.padRight( StringUtilities.makeRandomString( i ), 24, '·' ) );
 	}
 
 	private StringUtilities() {  super() ;  } // no instances
