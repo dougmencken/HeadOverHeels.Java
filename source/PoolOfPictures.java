@@ -38,18 +38,25 @@ public class PoolOfPictures
 		PoolOfPictures.recentPool = this ;
 	}
 
+	public void putPicture( NamedOffscreenImage image )
+	{
+		this.putPicture( image != null ? image.getName() : null, image );
+	}
+
 	public void putPicture( String name, NamedOffscreenImage image )
 	{
 		if ( image != null ) {
-			this.pictures.put( PoolOfPictures.keyByFileName( name ), image );
-			System.out.println( "image " + StringUtilities.putInQuotes( image.getName() ) + " added to the pool" );
+			String key = PoolOfPictures.keyByName( name ) ;
+			this.pictures.put( key, image );
+			System.out.println( "image " + StringUtilities.putInQuotes( image.getName() ) + " added to the pool"
+						+ " as " + StringUtilities.putInSingleQuotes( key ) );
 		} else
-			this.forgetPicture( name ); // putPicture( name, null ) is the same as forgetPicture( name )
+			this.forgetPicture( name ); // putPicture( name, null ) does forgetPicture( name )
 	}
 
 	public NamedOffscreenImage getPicture( String name )
 	{
-		NamedOffscreenImage picture = this.pictures.get( PoolOfPictures.keyByFileName( name ) ) ;
+		NamedOffscreenImage picture = this.pictures.get( PoolOfPictures.keyByName( name ) ) ;
 
 		if ( picture == null ) {
 		// try to read it from file
@@ -62,7 +69,7 @@ public class PoolOfPictures
 
 				if ( picture != null ) {
 					///picture.setName( name ); // (redundant) name is already set by the constructor
-					this.putPicture( name, picture ); // add the read image to the pool
+					this.putPicture( picture ); // add the read image to the pool
 				}
 			}
 		}
@@ -75,14 +82,15 @@ public class PoolOfPictures
 	 */
 	public NamedOffscreenImage forgetPicture( String name )
 	{
-		System.out.println( "removing " + StringUtilities.putInQuotes( name ) + " from the image pool" );
-		return this.pictures.remove( PoolOfPictures.keyByFileName( name ) );
+		String key = PoolOfPictures.keyByName( name );
+		System.out.println( "removing " + StringUtilities.putInSingleQuotes( key ) + " from the image pool" );
+		return this.pictures.remove( key );
 	}
 
 	public boolean hasPicture( String name )
 	{
-		return this.pictures.get( PoolOfPictures.keyByFileName( name ) ) != null ;
-		//  or this.pictures.containsKey( keyByFileName( name ) )
+		return this.pictures.get( PoolOfPictures.keyByName( name ) ) != null ;
+		//  or this.pictures.containsKey( keyByName( name ) )
 	}
 
 	public void clear () {  this.pictures.clear() ;  }
@@ -92,9 +100,10 @@ public class PoolOfPictures
 		return GameManager.getInstance().getChosenGraphicsSet() ;
 	}
 
-	private static String keyByFileName ( String fileName )
+	private static String keyByName ( String name )
 	{
-		return PoolOfPictures.whichGraphicsSet() + ":" + fileName ;
+		if ( name == null ) name = "null" ;
+		return PoolOfPictures.whichGraphicsSet() + ":" + name ;
 	}
 
 	public static final File gfx_in_gamedata = new File( Storage.getPathToGameData(), "gfx" );

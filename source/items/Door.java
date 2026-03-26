@@ -10,6 +10,10 @@ package head.over.heels.items ;
 
 import head.over.heels.Mediated ;
 import head.over.heels.IntegerPoint2D ;
+import head.over.heels.NamedOffscreenImage ;
+import head.over.heels.PoolOfPictures ;
+import head.over.heels.StringUtilities ;
+import head.over.heels.UnlikelyToHappenException ;
 
 
 /**
@@ -57,6 +61,30 @@ public class Door extends Mediated
 		this.cell = cell ;
 		this.elevation = z ;
 		this.onWhichSide = on ;
+
+		// make sure the door graphics is on hand
+
+		DescriptionOfItem whatIsLintel = ItemDescriptions.descriptions().getDescriptionByKind( kind + "~lintel" );
+
+		if ( whatIsLintel == null ) {
+			String message = "no description for the parts of " + kind ;
+			System.err.println( message );
+			throw new UnlikelyToHappenException( message ) ;
+		}
+
+		String doorImageFile = whatIsLintel.getNameOfFramesFile() ;
+		NamedOffscreenImage pictureOfDoor = PoolOfPictures.getRecentPool().getPicture( doorImageFile );
+
+		if ( pictureOfDoor == null ) {
+			System.out.println( "the door graphics " + StringUtilities.putInQuotes( doorImageFile ) + " is absent" );
+
+			// make an image filled with the transparency grid
+			pictureOfDoor = new NamedOffscreenImage( DescriptionOfDoor.WIDTH_OF_DOOR_IMAGE, DescriptionOfDoor.HEIGHT_OF_DOOR_IMAGE );
+			pictureOfDoor.fillWithTransparencyGrid() ;
+			pictureOfDoor.setName( "transparency grid for absent image " + doorImageFile );
+
+			PoolOfPictures.getRecentPool().putPicture( doorImageFile, pictureOfDoor );
+		}
 	}
 
 }
