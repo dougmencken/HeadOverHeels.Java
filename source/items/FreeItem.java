@@ -21,10 +21,10 @@ public class FreeItem extends DescribedItem implements Drawable, Masky
 {
 	/**
 	 * @param description the description of this item
-	 * @param x the position on X
-	 * @param y the position on Y
-	 * @param z the position on Z, or how far is the floor
-	 * @param where the angular orientation
+	 * @param x the X of the northernmost point
+	 * @param y the Y of the westernmost point
+	 * @param z the Z of the lowest point, or how far is the floor
+	 * @param where the initial heading (angular orientation)
 	 */
 	public FreeItem( DescriptionOfItem description, int x, int y, int z, String where )
 	{

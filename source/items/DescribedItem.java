@@ -67,9 +67,7 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 
 	public DescriptionOfItem getDescriptionOfItem () {  return this.descriptionOfItem ;  }
 
-	/**
-	 * The three spatial dimensions (widths) of the item, along the x, along the y, and height along the z
-	 */
+	// the three spatial dimensions (widths) of the item, along the x, along the y, and height along the z
 	public int getWidthX () {  return this.descriptionOfItem.getWidthX() ;  }
 	public int getWidthY () {  return this.descriptionOfItem.getWidthY() ;  }
 	public int getHeight () {  return this.descriptionOfItem.getHeight() ;  }
@@ -211,15 +209,6 @@ public abstract class DescribedItem extends AnimatedItem implements Shady
 		super.clearFrames() ;
 		if ( this.shadows != null ) this.shadows.clear() ;
         }
-
-	// the position in 3-dimensional space of this item’s lower north-west point, in free units
-	public abstract int getX () ;
-	public abstract int getY () ;
-	public abstract int getZ () ;
-
-	public abstract void setX ( int newX ) ;
-	public abstract void setY ( int newY ) ;
-	public abstract void setZ ( int newZ ) ;
 
 	public boolean overlapsWith ( DescribedItem anotherItem )
 	{

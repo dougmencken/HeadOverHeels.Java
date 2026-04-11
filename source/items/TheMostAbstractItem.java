@@ -83,6 +83,20 @@ public abstract class TheMostAbstractItem extends Mediated
 		return ( this.behavior != null ) ? this.behavior.update() : true ;
 	}
 
+	// the position in 3-dimensional space of this item’s lower north-west point, in free units
+	public abstract int getX () ;
+	public abstract int getY () ;
+	public abstract int getZ () ;
+
+	public abstract void setX ( int newX ) ;
+	public abstract void setY ( int newY ) ;
+	public abstract void setZ ( int newZ ) ;
+
+	// the three spatial dimensions (widths) of the item, along the x, along the y, and height along the z
+	public abstract int getWidthX () ;
+	public abstract int getWidthY () ;
+	public abstract int getHeight () ;
+
 	// the sequences of pictures of item
 	private Map< String, Vector< NamedOffscreenImage > > frames = new java.util.HashMap< String, Vector< NamedOffscreenImage > > () ;
 

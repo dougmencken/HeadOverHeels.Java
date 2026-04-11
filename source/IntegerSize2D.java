@@ -38,6 +38,9 @@ public final class IntegerSize2D
 
 	public IntegerSize2D( int first, int second )
 	{
+		if (  first < 0 ) throw new IllegalArgumentException( "negative first dimension" );
+		if ( second < 0 ) throw new IllegalArgumentException( "negative second dimension" );
+
 		this.widthX = first ;
 		this.widthY = second ;
 	}
