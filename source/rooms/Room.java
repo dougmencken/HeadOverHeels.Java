@@ -11,6 +11,7 @@ package head.over.heels.rooms ;
 import head.over.heels.Drawable ;
 import head.over.heels.Mediated ;
 
+import head.over.heels.items.TheMostAbstractItem ;
 import head.over.heels.items.GridItem ;
 import head.over.heels.items.FreeItem ;
 import head.over.heels.items.Door ;
@@ -19,6 +20,10 @@ import head.over.heels.items.FloorTile ;
 
 import head.over.heels.IntegerPoint2D ;
 import head.over.heels.IntegerSize2D ;
+
+import head.over.heels.GrowingString ;
+import head.over.heels.GrowingStrings ;
+import head.over.heels.StringUtilities ;
 
 import java.util.Vector ;
 import java.util.Set ;
@@ -133,7 +138,7 @@ public class Room extends Mediated implements Drawable
 	public Vector< Vector< GridItem > > getGridItems () {  return this.gridItems ;  }
 
 	// the doors
-	private Map < String, Door > doors = new java.util.HashMap< String, Door > ();
+	private Map< String, Door > doors = new java.util.HashMap< String, Door > ();
 
 	public Door getDoorOn ( String side ) {  return this.doors.get( side ) ;  }
 	public boolean hasDoorOn ( String side ) {  return getDoorOn( side ) != null ;  }
@@ -221,7 +226,32 @@ public class Room extends Mediated implements Drawable
 		door.setMediator( getMediator() );
 
 		System.out.println( "🚪adding door " + head.over.heels.StringUtilities.putInQuotes( door.getKind() ) + " on the " + door.getRoomSide() );
+		this.doors.put( door.getRoomSide(), door );
+
+		// each door is actually three free items
+		addFreeItem( door.getLeftJamb() );
+		addFreeItem( door.getRightJamb() );
+		addFreeItem( door.getLintel() );
+
+		/////this.camera.recenterRoom() ;
+	}
+
+	public void addGridItem ( GridItem gridItem )
+	{
+		if ( gridItem == null ) return ;
+
+		dumpItemInsideThisRoom( gridItem );
+
 		// ....
+	}
+
+	public void addFreeItem ( FreeItem freeItem )
+	{
+		if ( freeItem == null ) return ;
+
+		dumpItemInsideThisRoom( freeItem );
+
+		// .....
 	}
 
 	public void removeFreeItemByUniqueName ( String whatName )
@@ -271,6 +301,30 @@ public class Room extends Mediated implements Drawable
 				getMediator().wantToMaskWithGridItem( foundGridItem );
 			}
 		}
+	}
+
+	private void dumpItemInsideThisRoom( TheMostAbstractItem item )
+	{
+		String newline = System.getProperty( "line.separator" );
+		String indent = "   " ;
+
+		GrowingString dump = GrowingStrings.newString( indent );
+		if ( item != null )
+			dump.append( item.whichClassOfItem() ).append( ' ' ).append( StringUtilities.putInQuotes( item.getUniqueName() ) )
+				.append( " at " )
+				.append( item.getX() ).append( ' ' ).append( item.getY() ).append( ' ' ).append( item.getZ() )
+				.append( " with dimensions " )
+				.append( item.getWidthX() ).append( " × " ).append( item.getWidthY() ).append( " × " ).append( item.getHeight() );
+		else
+			dump.append( "null item" );
+
+		dump.append( newline )
+			.append( indent ).append( "inside room " ).append( getNameOfRoomDescriptionFile() )
+			.append( " of " ).append( getCellsAlongX() ).append( " × " ).append( getCellsAlongY() ).append( " cells" )
+			.append(" each cell of " ).append( getSizeOfOneCell() ).append( " pixels" )
+			.append( newline );
+
+		System.out.print( dump.toString() );
 	}
 
 }

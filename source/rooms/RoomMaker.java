@@ -297,6 +297,6 @@ public class RoomMaker
 		}
 	}
 
-	private static final int far_far_away = 1 << 20 ;
+	private static final int far_far_away = 1 << 21 ;
 
 }

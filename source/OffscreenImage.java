@@ -111,4 +111,23 @@ public class OffscreenImage extends BufferedImage
 		g.dispose ();
 	}
 
+	public void copyThePartOf( BufferedImage from, int fromX, int fromY, int toX, int toY, int width, int height )
+	{
+		if ( from == null ) return ;
+
+		Graphics2D g = super.createGraphics() ;
+
+		// copy the part of image to this one
+		g.drawImage( from,
+			toX, toY, toX + width, toY + height,
+			fromX, fromY, fromX + width, fromY + height,
+			null );
+
+		g.dispose() ;
+	}
+
+	public int getPixelAt( int x, int y ) {  return super.getRGB( x, y );  }
+
+	public void setPixelAt( int x, int y, int argb ) {  super.setRGB( x, y, argb );  }
+
 }
