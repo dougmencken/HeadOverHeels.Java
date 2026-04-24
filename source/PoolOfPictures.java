@@ -9,6 +9,7 @@
 package head.over.heels ;
 
 import java.util.HashMap ;
+import java.util.Vector ;
 import java.io.File ;
 
 
@@ -30,12 +31,19 @@ public class PoolOfPictures
 	/* pictures are stored here as name-image pairs */
 	private final HashMap< String, NamedOffscreenImage > pictures ;
 
+	public HashMap< String, NamedOffscreenImage > getAllPictures () {  return this.pictures ;  }
+
 	private PoolOfPictures ()
 	{
 		this.pictures = new HashMap< String, NamedOffscreenImage > () ;
 
 		// the last created pool is the recent
 		PoolOfPictures.recentPool = this ;
+	}
+
+	public NamedOffscreenImage pictureByKey( String key )
+	{
+		return this.pictures.get( key );
 	}
 
 	public void putPicture( NamedOffscreenImage image )
@@ -48,6 +56,7 @@ public class PoolOfPictures
 		if ( image != null ) {
 			String key = PoolOfPictures.keyByName( name ) ;
 			this.pictures.put( key, image );
+			this.firePoolChanged( new PoolEvent( this, "put" ) );
 			System.out.println( "image " + StringUtilities.putInQuotes( image.getName() ) + " added to the pool"
 						+ " as " + StringUtilities.putInSingleQuotes( key ) );
 		} else
@@ -56,7 +65,7 @@ public class PoolOfPictures
 
 	public NamedOffscreenImage getPicture( String name )
 	{
-		NamedOffscreenImage picture = this.pictures.get( PoolOfPictures.keyByName( name ) ) ;
+		NamedOffscreenImage picture = this.pictureByKey( PoolOfPictures.keyByName( name ) );
 
 		if ( picture == null ) {
 		// try to read it from file
@@ -84,13 +93,21 @@ public class PoolOfPictures
 	{
 		String key = PoolOfPictures.keyByName( name );
 		System.out.println( "removing " + StringUtilities.putInSingleQuotes( key ) + " from the image pool" );
-		return this.pictures.remove( key );
+		NamedOffscreenImage forgotten = this.pictures.remove( key );
+		this.firePoolChanged( new PoolEvent( this, "forget" ) );
+		return forgotten ;
 	}
 
 	public boolean hasPicture( String name )
 	{
 		return this.pictures.get( PoolOfPictures.keyByName( name ) ) != null ;
 		//  or this.pictures.containsKey( keyByName( name ) )
+	}
+
+	public int howManyPictures ()
+	{
+		if ( this.pictures == null ) return 0 ;
+		return this.pictures.size() ;
 	}
 
 	public void clear () {  this.pictures.clear() ;  }
@@ -104,6 +121,16 @@ public class PoolOfPictures
 	{
 		if ( name == null ) name = "null" ;
 		return PoolOfPictures.whichGraphicsSet() + ":" + name ;
+	}
+
+	private Vector< PoolListener > poolListeners = new Vector< PoolListener >() ;
+
+	public void addPoolListener ( PoolListener l ) {  this.poolListeners.add( l );  }
+	public void removePoolListener ( PoolListener l ) {  this.poolListeners.remove( l );  }
+
+	private void firePoolChanged ( PoolEvent e ) {
+		for ( PoolListener l : this.poolListeners )
+			l.poolChanged( e );
 	}
 
 	public static final File gfx_in_gamedata = new File( Storage.getPathToGameData(), "gfx" );

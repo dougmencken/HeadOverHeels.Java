@@ -218,6 +218,20 @@ public final class main
 			}
 		} );
 
+		final head.over.heels.PoolPicturesWindow picturesWindow = new head.over.heels.PoolPicturesWindow( PoolOfPictures.getRecentPool() ) ;
+
+		javax.swing.SwingUtilities.invokeLater( new Runnable() {
+			public void run()
+			{
+				picturesWindow.pack() ;
+
+				java.awt.Point desiredLocation = new java.awt.Point( screenBounds.width / 6, screenBounds.height >> 2 );
+				picturesWindow.setLocation( desiredLocation );
+
+				picturesWindow.setVisible( true );
+			}
+		} );
+
 	String musicFile = "music" + java.io.File.separator + "freedom.ogg" ;
 	SoundManager.getInstance().play( new java.io.File( Storage.getPathToGameData(), musicFile ), /* loop */ true );
 
