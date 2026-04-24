@@ -31,7 +31,7 @@ import head.over.heels.StringUtilities ;
 public class ListOfItemsWindow extends JFrame
 {
 
-	private JComboBox< String > theList ;
+	private JComboBox theList ;
 
 	private FixedHeightLabel itemWidthX = new FixedHeightLabel() ;
 	private FixedHeightLabel itemWidthY = new FixedHeightLabel() ;
@@ -69,7 +69,7 @@ public class ListOfItemsWindow extends JFrame
 		panel.setLayout( new javax.swing.BoxLayout( panel, javax.swing.BoxLayout.Y_AXIS ) );
 		panel.setBorder( new javax.swing.border.EmptyBorder( 20, 20, 20, 20 ) ) ;
 
-		this.theList = new JComboBox< String >( ItemDescriptions.descriptions().getAllKindsOfItems() );
+		this.theList = new JComboBox( ItemDescriptions.descriptions().getAllKindsOfItems() );
 		this.theList.setMaximumRowCount( 16 );
 		this.theList.setSelectedItem( "headoverheels" );
 		this.theList.addActionListener( new ActionListener( )

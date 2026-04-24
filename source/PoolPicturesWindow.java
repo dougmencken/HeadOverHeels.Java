@@ -20,7 +20,7 @@ public class PoolPicturesWindow extends JFrame implements PoolListener, java.awt
 {
 	private PoolOfPictures thePool ;
 
-	private JComboBox< String > listOfNames ;
+	private JComboBox listOfNames ;
 
 	private JLabel picture ;
 	private JLabel nameOfPicture ;
@@ -42,7 +42,7 @@ public class PoolPicturesWindow extends JFrame implements PoolListener, java.awt
 			allNames = sortedKeys.toArray( allNames );
 		}
 
-		this.listOfNames = new JComboBox< String >( allNames );
+		this.listOfNames = new JComboBox( allNames );
 
 		this.listOfNames.setMaximumRowCount( 20 );
 		this.listOfNames.setSelectedIndex( allNames.length - 1 );
@@ -82,7 +82,7 @@ public class PoolPicturesWindow extends JFrame implements PoolListener, java.awt
 			newNames = sortedKeys.toArray( newNames );
 		}
 
-		javax.swing.DefaultComboBoxModel< String > newModel = new javax.swing.DefaultComboBoxModel< String >( newNames );
+		javax.swing.DefaultComboBoxModel newModel = new javax.swing.DefaultComboBoxModel( newNames );
 		newModel.setSelectedItem( this.listOfNames.getSelectedItem() );
 		this.listOfNames.setModel( newModel );
 	}
