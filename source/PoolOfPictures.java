@@ -94,7 +94,7 @@ public class PoolOfPictures
 		String key = PoolOfPictures.keyByName( name );
 		System.out.println( "removing " + StringUtilities.putInSingleQuotes( key ) + " from the image pool" );
 		NamedOffscreenImage forgotten = this.pictures.remove( key );
-		this.firePoolChanged( new PoolEvent( this, "forget" ) );
+		if ( forgotten != null ) this.firePoolChanged( new PoolEvent( this, "forget" ) );
 		return forgotten ;
 	}
 

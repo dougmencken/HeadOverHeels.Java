@@ -54,10 +54,12 @@ public class Pictures
 			for ( int y = 0 ; y < picture.getHeight () ; y ++ ) {
 				for ( int x = 0 ; x < picture.getWidth () ; x ++ )
 				{
-					Color original = new Color( picture.getRGB( x, y ) );
+					int argb = picture.getRGB( x, y );
 
-					// skip the fully transparent pixels
-					if ( Colours.isFullyTransparent( original ) ) continue ;
+					int r = ( argb >> 16 ) & 0xff ;
+					int g = ( argb >> 8 ) & 0xff ;
+					int b = argb & 0xff ;
+					int a = ( argb >> 24 ) & 0xff ;
 
 					/* imagine the color as the linear geometric vector c { r, g, b }
 					   this color turns into the shade of gray r=g=b =w with vector b { w, w, w }
@@ -68,15 +70,15 @@ public class Pictures
 							sqrt( rr + gg + bb ) = sqrt( 3 ) * w
 							w = sqrt( ( rr + gg + bb ) / 3 )
 					*/
-					double   red = (double) original.getRed() ;
-					double green = (double) original.getGreen() ;
-					double  blue = (double) original.getBlue() ;
+					double   red = (double) r ;
+					double green = (double) g ;
+					double  blue = (double) b ;
 					double    ww = ( red * red + green * green + blue * blue ) / 3.0 ;
 
 					int gray = (int) Math.round( Math.sqrt( ww ) );
-					Color grayed = new Color( gray, gray, gray, original.getAlpha() );
+					int awww = ( a << 24 ) | ( gray << 16 ) | ( gray << 8 ) | gray ;
 
-					picture.setRGB( x, y, grayed.getRGB() );
+					picture.setRGB( x, y, awww );
 			}	}
 		}
 	}

@@ -61,7 +61,7 @@ public class Colours
 
 	public static boolean isFullyTransparent( Color c )
 	{
-		return c.getAlpha() == 0 ; /// || /* the "pure" magenta */ ( c.getRed() == 255 && c.getGreen() == 0 && c.getBlue() == 255 ) ;
+		return c.getAlpha() == 0 ;
 	}
 
 	public static Color makeTransparent ( Color in )

@@ -424,7 +424,7 @@ public class Font
 									BufferedImage.TYPE_BYTE_BINARY, colorModel );
 		// fill it with transparency
 		java.awt.Graphics2D g = imageOFont.createGraphics ();
-		g.setColor( new Color( palette[ 1 ] ) );
+		g.setColor( new Color( palette[ 1 ], /* has alpha */ true ) );
 		g.fillRect( 0, 0, imageOFont.getWidth (), imageOFont.getHeight () );
 		g.dispose ();
 

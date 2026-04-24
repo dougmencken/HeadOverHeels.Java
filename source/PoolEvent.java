@@ -9,12 +9,11 @@
 package head.over.heels ;
 
 
-public class PoolEvent extends java.util.EventObject
-{
+public class PoolEvent extends java.util.EventObject {
 
 	private final String message ;
 
-	public String getMessage() {  return message ;  }
+	public String getMessage() {  return this.message ;  }
 
 	public PoolEvent( Object source, String message ) {
 		super( source );
