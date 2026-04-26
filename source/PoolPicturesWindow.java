@@ -15,6 +15,8 @@ import javax.swing.JComboBox ;
 import javax.swing.JLabel ;
 import javax.swing.ImageIcon ;
 
+import head.over.heels.gui.swing.SmoothResizer ;
+
 
 public class PoolPicturesWindow extends JFrame implements PoolListener, java.awt.event.ActionListener
 {
@@ -68,11 +70,6 @@ public class PoolPicturesWindow extends JFrame implements PoolListener, java.awt
 		this.thePool = pool ;
 	}
 
-	public void resizeToPreferred () {
-		java.awt.Dimension preferred = super.getPreferredSize() ;
-		super.setSize( preferred.width, preferred.height );
-	}
-
 	public void poolChanged( PoolEvent event ) {
 		if ( event == null ) return ;
 
@@ -91,7 +88,8 @@ public class PoolPicturesWindow extends JFrame implements PoolListener, java.awt
 		NamedOffscreenImage selectedImage = this.thePool.pictureByKey( this.listOfNames.getSelectedItem().toString() );
 		this.picture.setIcon( new ImageIcon( selectedImage ) );
 		this.nameOfPicture.setText( selectedImage.getName() );
-		resizeToPreferred() ;
+
+		SmoothResizer.smoothlyResize( this, super.getPreferredSize(), 250, true /* center anchoring */ );
 	}
 
 	public void dispose () {

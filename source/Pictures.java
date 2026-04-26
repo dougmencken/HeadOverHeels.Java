@@ -56,27 +56,23 @@ public class Pictures
 				{
 					int argb = picture.getRGB( x, y );
 
-					int r = ( argb >> 16 ) & 0xff ;
-					int g = ( argb >> 8 ) & 0xff ;
-					int b = argb & 0xff ;
-					int a = ( argb >> 24 ) & 0xff ;
+					int   red = ( argb >> 16 ) & 0xff ;
+					int green = ( argb >> 8 ) & 0xff ;
+					int  blue = argb & 0xff ;
+					int alpha = ( argb >> 24 ) & 0xff ;
 
 					/* imagine the color as the linear geometric vector c { r, g, b }
-					   this color turns into the shade of gray r=g=b =w with vector b { w, w, w }
-					   the lengths of vectors are c•c = rr + gg + bb and b•b = ww + ww + ww = 3ww
+					   this color turns into the shade of gray r=g=b =w with vector d { w, w, w }
+					   the lengths of vectors are c•c = rr + gg + bb and d•d = ww + ww + ww = 3ww
 					   the converted vector has the same length as the original
 					   for the same lengths
-							sqrt ( c•c ) = sqrt ( b•b )
+							sqrt ( c•c ) = sqrt ( d•d )
 							sqrt( rr + gg + bb ) = sqrt( 3 ) * w
 							w = sqrt( ( rr + gg + bb ) / 3 )
 					*/
-					double   red = (double) r ;
-					double green = (double) g ;
-					double  blue = (double) b ;
-					double    ww = ( red * red + green * green + blue * blue ) / 3.0 ;
-
-					int gray = (int) Math.round( Math.sqrt( ww ) );
-					int awww = ( a << 24 ) | ( gray << 16 ) | ( gray << 8 ) | gray ;
+					int dd = red * red + green * green + blue * blue ;
+					int grey = (int) Math.round( Math.sqrt( (double)dd / 3.0 ) );
+					int awww = ( alpha << 24 ) | ( grey << 16 ) | ( grey << 8 ) | grey ;
 
 					picture.setRGB( x, y, awww );
 			}	}

@@ -19,9 +19,9 @@ import java.awt.event.ActionEvent ;
 import java.awt.event.ActionListener ;
 
 import head.over.heels.gui.swing.CuteSwingButton ;
-import head.over.heels.gui.swing.DeferredReshaper ;
 import head.over.heels.gui.swing.FixedHeightLabel ;
 import head.over.heels.gui.swing.TabbedPaneWithTabsInOneRow ;
+import head.over.heels.gui.swing.SmoothResizer ;
 
 import head.over.heels.GrowingString ;
 import head.over.heels.GrowingStrings ;
@@ -75,8 +75,9 @@ public class ListOfItemsWindow extends JFrame
 		this.theList.addActionListener( new ActionListener( )
 		{
 			public void actionPerformed( ActionEvent e ) {
-				updateLabels() ;
-				smoothlyResizeTo( getPreferredSize(), 333, false /* top-left anchoring */ );
+				ListOfItemsWindow window = ListOfItemsWindow.this ;
+				window.updateLabels() ;
+				SmoothResizer.smoothlyResize( window, window.getPreferredSize(), 333, false /* top-left anchoring */ );
 			}
 		} );
 
@@ -206,85 +207,6 @@ public class ListOfItemsWindow extends JFrame
 		this.itemSequenceOFrames.setText( "𝓼𝓮𝓺𝓾𝓮𝓷𝓬𝓮-𝓸𝓯-𝓯𝓻𝓪𝓶𝓮𝓼" );
 		this.itemOrientations.setText( "𝓸𝓻𝓲𝓮𝓷𝓽𝓪𝓽𝓲𝓸𝓷𝓼" );
 		this.itemExtraFrames.setText( "𝓮𝔁𝓽𝓻𝓪-𝓯𝓻𝓪𝓶𝓮𝓼" );
-	}
-
-	public void resizeToPreferred ()
-	{
-		java.awt.Dimension preferred = super.getPreferredSize() ;
-		super.setSize( preferred.width, preferred.height );
-	}
-
-	private javax.swing.Timer smoothResizeTimer = null ;
-
-	/**
-	 * @param  desiredSize      the desired final size of the frame
-	 * @param  duration         transition duration in milliseconds
-	 * @param  anchorToCenter   center anchoring if true, top-left anchoring if false
-	 */
-	public void smoothlyResizeTo (	java.awt.Dimension desiredSize,
-					int duration /* in milliseconds */,
-					final boolean anchorToCenter )
-	{
-		if ( this.smoothResizeTimer != null )
-			if ( this.smoothResizeTimer.isRunning() )
-				this.smoothResizeTimer.stop() ; // stop previous transition
-
-		final java.awt.Rectangle from = super.getBounds() ;
-
-		java.awt.Point toPoint = from.getLocation() ;
-
-		// optional center anchoring
-		if ( anchorToCenter ) {
-			toPoint.x += ( from.width - desiredSize.width ) >> 1 ;
-			toPoint.y += ( from.height - desiredSize.height ) >> 1 ;
-		}
-
-		final java.awt.Rectangle to = new java.awt.Rectangle( toPoint, desiredSize );
-
-		final int fps = 50 ;
-		final int delay = 1000 / fps ;
-		final int steps = Math.max( 1, duration / delay );
-
-		this.smoothResizeTimer = new javax.swing.Timer( delay, new ActionListener() {
-
-				private int step = 0 ;
-
-				public void actionPerformed( ActionEvent ae ) {
-					this.step ++ ;
-					float t = this.step / (float) steps ;
-
-					// easing with slope(t)
-					///float slope = t ; // linear
-					///float slope = (float)( -Math.cos(Math.PI * t) / 2.0 + 0.5 ) ;
-					float slope = 1 - (1 - t)*(1 - t) ;
-
-					///int x = (int)( from.x + (to.x - from.x) * slope );
-					///int y = (int)( from.y + (to.y - from.y) * slope );
-					int x = from.x ;
-					int y = from.y ;
-					int w = (int)( from.width  + ( to.width - from.width ) * slope );
-					int h = (int)( from.height + (to.height - from.height) * slope );
-
-					if ( anchorToCenter ) {
-						x += ( from.width - w ) >> 1 ;
-						y += ( from.height - h ) >> 1 ;
-					}
-
-					setBounds( x, y, w, h );
-
-					if ( this.step >= steps ) {
-						// timer is the source of the event
-						( (javax.swing.Timer) ae.getSource() ).stop() ;
-
-						// final deferred correction
-						javax.swing.SwingUtilities.invokeLater(
-							new DeferredReshaper( ListOfItemsWindow.this, to.getLocation(), to.getSize() )
-						) ;
-					}
-				}
-		} );
-
-		this.smoothResizeTimer.start () ;
 	}
 
 	public void showItemGraphics ()
