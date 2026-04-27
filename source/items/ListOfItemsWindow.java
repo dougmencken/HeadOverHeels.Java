@@ -28,7 +28,7 @@ import head.over.heels.GrowingStrings ;
 import head.over.heels.StringUtilities ;
 
 
-public class ListOfItemsWindow extends JFrame
+public class ListOfItemsWindow extends JFrame implements ActionListener
 {
 
 	private JComboBox< String > theList ;
@@ -72,14 +72,7 @@ public class ListOfItemsWindow extends JFrame
 		this.theList = new JComboBox< String >( ItemDescriptions.descriptions().getAllKindsOfItems() );
 		this.theList.setMaximumRowCount( 16 );
 		this.theList.setSelectedItem( "headoverheels" );
-		this.theList.addActionListener( new ActionListener( )
-		{
-			public void actionPerformed( ActionEvent e ) {
-				ListOfItemsWindow window = ListOfItemsWindow.this ;
-				window.updateLabels() ;
-				SmoothResizer.smoothlyResize( window, window.getPreferredSize(), 333, false /* top-left anchoring */ );
-			}
-		} );
+		this.theList.addActionListener( this );
 
 		panel.add( this.theList );
 		panel.add( javax.swing.Box.createVerticalStrut( 10 ) );
@@ -116,12 +109,7 @@ public class ListOfItemsWindow extends JFrame
 		panel.add( javax.swing.Box.createVerticalStrut( 10 ) );
 
 		this.graphicsButton = new CuteSwingButton( "🖼 graphics" );
-		this.graphicsButton.addActionListener( new ActionListener ()
-		{
-			public void actionPerformed( ActionEvent ae ) {
-				showItemGraphics() ;
-			}
-		} );
+		this.graphicsButton.addActionListener( this );
 
 		panel.add( this.graphicsButton );
 
@@ -220,6 +208,16 @@ public class ListOfItemsWindow extends JFrame
 					graphicsWindow.setVisible( true );
 				}
 			} );
+		}
+	}
+
+	public void actionPerformed( ActionEvent ae ) {
+		if ( ae.getSource() == this.theList ) {
+			this.updateLabels() ;
+			SmoothResizer.smoothlyResize( this, super.getPreferredSize(), 333, false /* top-left anchoring */ );
+		}
+		else if ( ae.getSource() == this.graphicsButton ) {
+			this.showItemGraphics() ;
 		}
 	}
 
